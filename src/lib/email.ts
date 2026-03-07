@@ -1,8 +1,14 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "hello@mwalimuwangu.com";
 const FROM = "Mwalimu Wangu <noreply@mwalimuwangu.com>";
+
+function getResend() {
+  if (!process.env.RESEND_API_KEY) {
+    throw new Error("RESEND_API_KEY is not set");
+  }
+  return new Resend(process.env.RESEND_API_KEY);
+}
 
 // ─── Contact Form ──────────────────────────────────────────────────────────
 
@@ -13,7 +19,7 @@ export async function sendContactNotification(data: {
   message: string;
   phone?: string;
 }) {
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM,
     to: ADMIN_EMAIL,
     subject: `[Contact] ${data.subject} — ${data.name}`,
@@ -34,7 +40,7 @@ export async function sendContactConfirmation(data: {
   name: string;
   email: string;
 }) {
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM,
     to: data.email,
     subject: "We received your message — Mwalimu Wangu",
@@ -55,7 +61,7 @@ export async function sendApplicationNotification(data: {
   rate_expectation?: number;
   available_hours?: number;
 }) {
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM,
     to: ADMIN_EMAIL,
     subject: `[Application] New teacher application — ${data.name}`,
@@ -74,7 +80,7 @@ export async function sendApplicationConfirmation(data: {
   name: string;
   email: string;
 }) {
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM,
     to: data.email,
     subject: "Application received — Mwalimu Wangu",
@@ -99,7 +105,7 @@ export async function sendInquiryNotification(data: {
 }) {
   const promises = [
     // Admin notification
-    resend.emails.send({
+    getResend().emails.send({
       from: FROM,
       to: ADMIN_EMAIL,
       subject: `[Inquiry] ${data.student_name} → ${data.teacher_name}`,
@@ -114,7 +120,7 @@ export async function sendInquiryNotification(data: {
       `,
     }),
     // Student confirmation
-    resend.emails.send({
+    getResend().emails.send({
       from: FROM,
       to: data.student_email,
       subject: `Your inquiry to ${data.teacher_name} — Mwalimu Wangu`,
