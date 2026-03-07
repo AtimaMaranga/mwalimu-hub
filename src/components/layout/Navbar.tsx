@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, User, LogOut, LayoutDashboard, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Button from "@/components/ui/Button";
+import { createClient } from "@/lib/supabase/client";
+import type { User as SupabaseUser } from "@supabase/supabase-js";
 
 const navLinks = [
   { label: "Find a Teacher", href: "/teachers" },
@@ -23,9 +25,12 @@ const greetings = [
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [greetingIndex, setGreetingIndex] = useState(0);
   const [scrolled, setScrolled] = useState(false);
+  const [user, setUser] = useState<SupabaseUser | null>(null);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   useEffect(() => {
     const id = setInterval(
@@ -41,14 +46,38 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleSignOut = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    setUser(null);
+    setUserMenuOpen(false);
+    router.push("/");
+    router.refresh();
+  };
+
+  const userInitials = user?.user_metadata?.full_name
+    ? user.user_metadata.full_name
+        .split(" ")
+        .map((n: string) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2)
+    : user?.email?.[0].toUpperCase() ?? "U";
+
   return (
     <div className="sticky top-0 z-50">
-      {/* ── Announcement / greeting bar ── */}
+      {/* ── Announcement bar ── */}
       <div className="bg-indigo-950 text-indigo-300 text-xs py-2 text-center overflow-hidden tracking-wide">
-        <span
-          key={greetingIndex}
-          className="inline-block animate-fade-in font-medium"
-        >
+        <span key={greetingIndex} className="inline-block animate-fade-in font-medium">
           {greetings[greetingIndex]}
         </span>
       </div>
@@ -87,8 +116,7 @@ export default function Navbar() {
             <ul className="hidden md:flex items-center gap-0.5" role="list">
               {navLinks.map((link) => {
                 const isActive =
-                  pathname === link.href ||
-                  pathname.startsWith(link.href + "/");
+                  pathname === link.href || pathname.startsWith(link.href + "/");
                 return (
                   <li key={link.href}>
                     <Link
@@ -112,16 +140,66 @@ export default function Navbar() {
 
             {/* Desktop CTAs */}
             <div className="hidden md:flex items-center gap-3">
-              <Link href="/become-a-teacher">
-                <Button variant="outline" size="sm">
-                  Become a Teacher
-                </Button>
-              </Link>
-              <Link href="/contact">
-                <Button variant="primary" size="sm">
-                  Get Started
-                </Button>
-              </Link>
+              {user ? (
+                /* Logged-in user menu */
+                <div className="relative">
+                  <button
+                    onClick={() => setUserMenuOpen((v) => !v)}
+                    className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-xl hover:bg-slate-50 transition-colors"
+                  >
+                    <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xs font-bold">
+                      {userInitials}
+                    </div>
+                    <span className="text-sm font-medium text-slate-700">
+                      {user.user_metadata?.full_name?.split(" ")[0] ?? "Account"}
+                    </span>
+                    <ChevronDown className={cn("h-3.5 w-3.5 text-slate-400 transition-transform", userMenuOpen && "rotate-180")} />
+                  </button>
+
+                  {userMenuOpen && (
+                    <div className="absolute right-0 top-full mt-2 w-52 bg-white border border-slate-200 rounded-2xl shadow-lg py-2 z-50">
+                      <div className="px-4 py-2 border-b border-slate-100 mb-1">
+                        <p className="text-xs font-medium text-slate-500 truncate">{user.email}</p>
+                      </div>
+                      <Link
+                        href="/dashboard"
+                        onClick={() => setUserMenuOpen(false)}
+                        className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
+                      >
+                        <LayoutDashboard className="h-4 w-4 text-slate-400" />
+                        My Dashboard
+                      </Link>
+                      <Link
+                        href="/dashboard/teacher/profile"
+                        onClick={() => setUserMenuOpen(false)}
+                        className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
+                      >
+                        <User className="h-4 w-4 text-slate-400" />
+                        Edit Profile
+                      </Link>
+                      <div className="border-t border-slate-100 mt-1 pt-1">
+                        <button
+                          onClick={handleSignOut}
+                          className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                        >
+                          <LogOut className="h-4 w-4" />
+                          Sign out
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                /* Guest CTAs */
+                <>
+                  <Link href="/auth/login">
+                    <Button variant="ghost" size="sm">Log in</Button>
+                  </Link>
+                  <Link href="/auth/signup">
+                    <Button variant="primary" size="sm">Sign up free</Button>
+                  </Link>
+                </>
+              )}
             </div>
 
             {/* Mobile menu button */}
@@ -146,7 +224,7 @@ export default function Navbar() {
             id="mobile-menu"
             className={cn(
               "md:hidden overflow-hidden transition-all duration-300",
-              mobileOpen ? "max-h-96 pb-4" : "max-h-0"
+              mobileOpen ? "max-h-screen pb-4" : "max-h-0"
             )}
           >
             <ul className="flex flex-col gap-1 pt-2" role="list">
@@ -157,8 +235,7 @@ export default function Navbar() {
                     onClick={() => setMobileOpen(false)}
                     className={cn(
                       "block px-4 py-3 rounded-xl text-sm font-medium transition-colors",
-                      pathname === link.href ||
-                        pathname.startsWith(link.href + "/")
+                      pathname === link.href || pathname.startsWith(link.href + "/")
                         ? "text-indigo-700 bg-indigo-50 font-semibold"
                         : "text-slate-600 hover:text-indigo-700 hover:bg-slate-50"
                     )}
@@ -169,16 +246,28 @@ export default function Navbar() {
               ))}
             </ul>
             <div className="flex flex-col gap-2 pt-3 border-t border-slate-100 mt-2">
-              <Link href="/become-a-teacher" onClick={() => setMobileOpen(false)}>
-                <Button variant="outline" fullWidth>
-                  Become a Teacher
-                </Button>
-              </Link>
-              <Link href="/contact" onClick={() => setMobileOpen(false)}>
-                <Button variant="primary" fullWidth>
-                  Get Started
-                </Button>
-              </Link>
+              {user ? (
+                <>
+                  <Link href="/dashboard" onClick={() => setMobileOpen(false)}>
+                    <Button variant="outline" fullWidth>My Dashboard</Button>
+                  </Link>
+                  <button
+                    onClick={() => { setMobileOpen(false); handleSignOut(); }}
+                    className="w-full text-center text-sm text-red-600 py-2 font-medium"
+                  >
+                    Sign out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link href="/auth/login" onClick={() => setMobileOpen(false)}>
+                    <Button variant="outline" fullWidth>Log in</Button>
+                  </Link>
+                  <Link href="/auth/signup" onClick={() => setMobileOpen(false)}>
+                    <Button variant="primary" fullWidth>Sign up free</Button>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </nav>
