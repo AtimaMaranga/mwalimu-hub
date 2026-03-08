@@ -8,6 +8,7 @@ import {
   Search, Bell, Settings, LogOut, Menu, X,
   LayoutDashboard, User, MessageCircle, BookOpen, Users,
 } from "lucide-react";
+import DeleteAccountButton from "./DeleteAccountButton";
 
 const NAV_ITEMS = {
   student: [
@@ -99,6 +100,7 @@ export default function DashboardShell({
             Log Out
           </button>
         </form>
+        <DeleteAccountButton />
       </div>
     </>
   );
