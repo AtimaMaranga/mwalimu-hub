@@ -16,29 +16,13 @@ const navLinks = [
   { label: "About", href: "/about" },
 ];
 
-const greetings = [
-  "Karibu · Learn Swahili from native speakers",
-  "Habari? — Start your Swahili journey today",
-  "Expert native teachers · Flexible schedules",
-  "Join learners across 14+ countries · Asante",
-];
-
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [greetingIndex, setGreetingIndex] = useState(0);
   const [scrolled, setScrolled] = useState(false);
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const id = setInterval(
-      () => setGreetingIndex((i) => (i + 1) % greetings.length),
-      3500
-    );
-    return () => clearInterval(id);
-  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -75,20 +59,13 @@ export default function Navbar() {
 
   return (
     <div className="sticky top-0 z-50">
-      {/* ── Announcement bar ── */}
-      <div className="bg-indigo-950 text-indigo-300 text-xs py-2 text-center overflow-hidden tracking-wide">
-        <span key={greetingIndex} className="inline-block animate-fade-in font-medium">
-          {greetings[greetingIndex]}
-        </span>
-      </div>
-
       {/* ── Main nav ── */}
       <header
         className={cn(
-          "border-b transition-all duration-200",
+          "bg-[#f0ebe3] transition-all duration-200",
           scrolled
-            ? "bg-white border-slate-200 shadow-md"
-            : "bg-white border-slate-100 shadow-sm"
+            ? "shadow-sm border-b border-[#d8cfc4]"
+            : "border-b border-transparent"
         )}
       >
         <nav
@@ -102,7 +79,7 @@ export default function Navbar() {
               className="flex items-center gap-2.5 group"
               aria-label="Mwalimu Wangu — Home"
             >
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-violet-700 shadow-sm shadow-indigo-200 group-hover:shadow-indigo-300 transition-shadow duration-200">
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-violet-700 shadow-sm">
                 <span className="text-white font-bold text-sm font-heading italic tracking-tight select-none">
                   MW
                 </span>
@@ -122,16 +99,13 @@ export default function Navbar() {
                     <Link
                       href={link.href}
                       className={cn(
-                        "relative px-4 py-2 text-sm font-medium transition-all duration-150 rounded-lg",
+                        "px-4 py-2 text-sm rounded-lg transition-all duration-150",
                         isActive
-                          ? "text-indigo-700 font-semibold bg-indigo-50"
-                          : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                          ? "font-semibold text-indigo-600"
+                          : "text-slate-700 hover:text-indigo-600 font-medium"
                       )}
                     >
                       {link.label}
-                      {isActive && (
-                        <span className="absolute bottom-1 left-4 right-4 h-0.5 bg-indigo-600 rounded-full" />
-                      )}
                     </Link>
                   </li>
                 );
@@ -139,13 +113,13 @@ export default function Navbar() {
             </ul>
 
             {/* Desktop CTAs */}
-            <div className="hidden md:flex items-center gap-3">
+            <div className="hidden md:flex items-center gap-2">
               {user ? (
                 /* Logged-in user menu */
                 <div className="relative">
                   <button
                     onClick={() => setUserMenuOpen((v) => !v)}
-                    className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-xl hover:bg-slate-50 transition-colors"
+                    className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-xl hover:bg-black/5 transition-colors"
                   >
                     <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xs font-bold">
                       {userInitials}
@@ -193,10 +167,14 @@ export default function Navbar() {
                 /* Guest CTAs */
                 <>
                   <Link href="/auth/login">
-                    <Button variant="ghost" size="sm">Log in</Button>
+                    <button className="px-5 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:bg-black/5 transition-all">
+                      Log in
+                    </button>
                   </Link>
                   <Link href="/auth/signup">
-                    <Button variant="primary" size="sm">Sign up free</Button>
+                    <button className="px-5 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition-all">
+                      Sign up
+                    </button>
                   </Link>
                 </>
               )}
@@ -206,7 +184,7 @@ export default function Navbar() {
             <button
               type="button"
               onClick={() => setMobileOpen((v) => !v)}
-              className="md:hidden p-2 rounded-lg text-slate-600 hover:text-indigo-700 hover:bg-slate-50 transition-colors"
+              className="md:hidden p-2 rounded-lg text-slate-600 hover:text-indigo-700 hover:bg-black/5 transition-colors"
               aria-expanded={mobileOpen}
               aria-controls="mobile-menu"
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
@@ -237,7 +215,7 @@ export default function Navbar() {
                       "block px-4 py-3 rounded-xl text-sm font-medium transition-colors",
                       pathname === link.href || pathname.startsWith(link.href + "/")
                         ? "text-indigo-700 bg-indigo-50 font-semibold"
-                        : "text-slate-600 hover:text-indigo-700 hover:bg-slate-50"
+                        : "text-slate-600 hover:text-indigo-700 hover:bg-black/5"
                     )}
                   >
                     {link.label}
@@ -245,7 +223,7 @@ export default function Navbar() {
                 </li>
               ))}
             </ul>
-            <div className="flex flex-col gap-2 pt-3 border-t border-slate-100 mt-2">
+            <div className="flex flex-col gap-2 pt-3 border-t border-slate-200 mt-2">
               {user ? (
                 <>
                   <Link href="/dashboard" onClick={() => setMobileOpen(false)}>

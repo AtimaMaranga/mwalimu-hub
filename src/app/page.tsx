@@ -1,21 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Fragment } from "react";
-import {
-  Search,
-  MessageCircle,
-  Video,
-  Globe,
-  TrendingUp,
-  Heart,
-  Briefcase,
-  GraduationCap,
-  Users,
-  Star,
-  ArrowRight,
-  CheckCircle,
-  Play,
-} from "lucide-react";
+import { Search, MessageCircle, Video, Globe, TrendingUp, Heart, Briefcase, GraduationCap, Users, Star, ArrowRight, CheckCircle } from "lucide-react";
 import PageWrapper from "@/components/layout/PageWrapper";
 import Button from "@/components/ui/Button";
 import AnimatedStat from "@/components/ui/AnimatedStat";
@@ -26,8 +12,7 @@ import { getFeaturedTeachers, getBlogPosts } from "@/lib/supabase/queries";
 
 export const metadata: Metadata = {
   title: "Mwalimu Wangu — Your Gateway to Swahili Fluency",
-  description:
-    "Connect with qualified native Swahili teachers for personalised online lessons. Learn Swahili for travel, business, culture, or family. Start your journey today.",
+  description: "Connect with qualified native Swahili teachers for personalised online lessons. Learn Swahili for travel, business, culture, or family. Start your journey today.",
 };
 
 const stats = [
@@ -37,120 +22,24 @@ const stats = [
   { value: "14",    label: "Countries reached" },
 ];
 
-const steps = [
-  {
-    step: "01",
-    icon: Search,
-    title: "Browse Teachers",
-    desc: "Explore profiles of verified native Swahili teachers. Filter by specialisation, price, and availability.",
-  },
-  {
-    step: "02",
-    icon: MessageCircle,
-    title: "Contact & Schedule",
-    desc: "Send a message to your preferred teacher, discuss your goals, and agree on a schedule that works for you.",
-  },
-  {
-    step: "03",
-    icon: Video,
-    title: "Start Learning",
-    desc: "Begin your personalised Swahili lessons via video call. Track your progress and build real fluency.",
-  },
-];
+const goals = ["Travel", "Business", "Culture", "Family & Roots", "Academic", "Beginners", "Kids", "Advanced"];
 
-const reasons = [
-  {
-    icon: Globe,
-    title: "200M+ Speakers",
-    desc: "Swahili is Africa's most widely spoken language — the gateway to 14 East and Central African countries.",
-  },
-  {
-    icon: Briefcase,
-    title: "Business Advantage",
-    desc: "East Africa is one of the world's fastest-growing economic regions. Swahili fluency is a career differentiator.",
-  },
-  {
-    icon: Heart,
-    title: "Rich Culture",
-    desc: "Unlock centuries of Swahili literature, music, poetry, and oral tradition — inaccessible in translation.",
-  },
-  {
-    icon: TrendingUp,
-    title: "Fast to Learn",
-    desc: "Swahili has no tones and a phonetic spelling system. Most learners reach conversational level in 3–6 months.",
-  },
-  {
-    icon: Users,
-    title: "Diaspora Connection",
-    desc: "Reconnect with your East African heritage, family, and community through the language of your roots.",
-  },
-  {
-    icon: GraduationCap,
-    title: "Academic Value",
-    desc: "Swahili is an official African Union language and increasingly offered in universities worldwide.",
-  },
+const steps = [
+  { step: "01", icon: Search,        title: "Browse Teachers",      desc: "Explore verified native Swahili teachers. Filter by specialisation, price, and availability to find your perfect match." },
+  { step: "02", icon: MessageCircle, title: "Contact & Schedule",   desc: "Message your preferred teacher, share your goals, and agree on a schedule that works around your life." },
+  { step: "03", icon: Video,         title: "Start Learning",       desc: "Begin personalised lessons via video call. Track your progress and build real Swahili fluency fast." },
 ];
 
 const testimonials = [
-  {
-    quote:
-      "Within three months of lessons with my Mwalimu Wangu teacher, I was ordering food and navigating Nairobi without relying on anyone. Absolutely life-changing.",
-    name: "James T.",
-    role: "Traveller, United Kingdom",
-    initials: "JT",
-    rating: 5,
-  },
-  {
-    quote:
-      "As a diaspora Kenyan, I had always felt disconnected from my heritage. Learning Swahili through this platform helped me rebuild that bond with my family.",
-    name: "Aisha N.",
-    role: "Software Engineer, USA",
-    initials: "AN",
-    rating: 5,
-  },
-  {
-    quote:
-      "My company expanded into East Africa and I needed business Swahili fast. The teachers here understood exactly what I needed — professional, focused, and effective.",
-    name: "Marcus L.",
-    role: "Business Development, Netherlands",
-    initials: "ML",
-    rating: 5,
-  },
+  { quote: "Within three months I was ordering food and navigating Nairobi without relying on anyone. Absolutely life-changing.", name: "James T.", role: "Traveller, United Kingdom", initials: "JT", color: "bg-amber-300" },
+  { quote: "As a diaspora Kenyan, learning Swahili here helped me rebuild that bond with my family I had lost for years.", name: "Aisha N.", role: "Software Engineer, USA", initials: "AN", color: "bg-violet-300" },
+  { quote: "My company expanded into East Africa and I needed business Swahili fast. Professional, focused, and effective.", name: "Marcus L.", role: "Business Development, Netherlands", initials: "ML", color: "bg-indigo-300" },
 ];
 
-const goals = ["Travel", "Business", "Culture", "Family", "Academic"];
-
 const heroTeachers = [
-  {
-    initial: "A",
-    name: "Amina Odhiambo",
-    spec: "Business Swahili",
-    location: "Mombasa, Kenya",
-    rating: 4.9,
-    reviews: 124,
-    price: "$25",
-    gradient: "from-amber-400 to-orange-500",
-  },
-  {
-    initial: "D",
-    name: "David Kariuki",
-    spec: "Conversational",
-    location: "Nairobi, Kenya",
-    rating: 5.0,
-    reviews: 89,
-    price: "$20",
-    gradient: "from-emerald-400 to-teal-600",
-  },
-  {
-    initial: "F",
-    name: "Fatuma Mwangi",
-    spec: "Kids & Beginners",
-    location: "Dar es Salaam",
-    rating: 4.8,
-    reviews: 201,
-    price: "$18",
-    gradient: "from-violet-400 to-purple-600",
-  },
+  { initial: "A", name: "Amina Odhiambo", spec: "Business Swahili", rating: 4.9, reviews: 124, price: "$25", gradient: "from-amber-400 to-orange-500" },
+  { initial: "D", name: "David Kariuki",  spec: "Conversational",   rating: 5.0, reviews: 89,  price: "$20", gradient: "from-emerald-400 to-teal-600" },
+  { initial: "F", name: "Fatuma Mwangi", spec: "Kids & Beginners", rating: 4.8, reviews: 201, price: "$18", gradient: "from-violet-400 to-purple-600" },
 ];
 
 export default async function HomePage() {
@@ -162,197 +51,96 @@ export default async function HomePage() {
   return (
     <PageWrapper>
 
-      {/* ─────────────────────────────────────────────── HERO ── */}
-      <section
-        className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-indigo-950 to-indigo-900 text-white"
-        aria-label="Hero"
-      >
-        {/* Dot grid texture */}
-        <div aria-hidden="true" className="absolute inset-0 pointer-events-none">
-          <svg className="absolute inset-0 w-full h-full opacity-[0.06]" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <pattern id="hero-dots" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
-                <circle cx="2" cy="2" r="1.5" fill="white" />
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#hero-dots)" />
-          </svg>
-          {/* Glow orbs */}
-          <div className="absolute -top-48 -right-48 w-[600px] h-[600px] bg-indigo-500/20 rounded-full blur-3xl" />
-          <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-violet-600/20 rounded-full blur-3xl" />
-          <div className="absolute top-1/3 left-1/4 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl" />
+      {/* ── HERO ── */}
+      <section className="relative bg-[#f0ebe3] overflow-hidden" aria-label="Hero">
+        {/* Decorative shapes */}
+        <div aria-hidden="true" className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-amber-300/50" />
+          <div className="absolute top-20 right-48 w-64 h-64 rounded-full bg-violet-300/40" />
+          <div className="absolute -bottom-24 right-24 w-80 h-80 rounded-full bg-indigo-200/30" />
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 lg:pt-24 lg:pb-28">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8 lg:pt-24 lg:pb-12">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
-            {/* ── Left column ── */}
+            {/* Left */}
             <div>
-              {/* Trust badge */}
-              <div className="inline-flex items-center gap-2 bg-white/8 rounded-full px-4 py-2 text-sm text-indigo-200 mb-8 border border-white/10">
-                <Star className="h-3.5 w-3.5 text-amber-400 fill-amber-400" aria-hidden="true" />
-                <span className="font-medium">Trusted by learners in 14+ countries</span>
-              </div>
-
-              {/* Headline */}
-              <h1 className="text-5xl sm:text-6xl lg:text-[4.5rem] xl:text-7xl font-bold font-heading leading-[1.05] tracking-tight mb-6">
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black font-heading leading-[1.0] tracking-[-0.03em] text-slate-900 mb-6">
                 Learn Swahili<br />
                 from{" "}
-                <em className="text-amber-400 not-italic">Native<br />Speakers</em>
+                <span className="text-indigo-600">Native<br />Speakers</span>
               </h1>
-
-              <p className="text-lg text-indigo-200 leading-relaxed mb-8 max-w-md">
-                Connect with qualified native Swahili teachers for personalised online lessons — anytime, anywhere.
+              <p className="text-lg text-slate-600 leading-relaxed mb-8 max-w-lg">
+                Connect with qualified native Swahili teachers for personalised online lessons — anytime, anywhere in the world.
               </p>
-
-              {/* Goal selector */}
-              <div className="mb-10">
-                <p className="text-xs text-indigo-400 font-semibold uppercase tracking-widest mb-3">
-                  I want to learn for
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {goals.map((goal) => (
-                    <Link
-                      key={goal}
-                      href="/teachers"
-                      className="px-4 py-2 bg-white/8 hover:bg-white/15 border border-white/15 hover:border-white/30 rounded-full text-sm text-indigo-100 hover:text-white transition-all duration-200 font-medium"
-                    >
-                      {goal}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-
-              {/* CTA buttons */}
               <div className="flex flex-col sm:flex-row gap-3 mb-10">
                 <Link href="/teachers">
-                  <Button variant="accent" size="lg" className="active:scale-95 font-semibold">
-                    Find a Teacher
-                    <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                  </Button>
+                  <button className="px-8 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-base rounded-xl transition-all active:scale-95 flex items-center gap-2">
+                    Find a Teacher <ArrowRight className="h-4 w-4" />
+                  </button>
                 </Link>
                 <Link href="/become-a-teacher">
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="border-white/25 text-white hover:bg-white/8 active:scale-95"
-                  >
+                  <button className="px-8 py-3.5 bg-white hover:bg-slate-50 text-slate-800 font-bold text-base rounded-xl border border-slate-200 transition-all">
                     Become a Teacher
-                  </Button>
+                  </button>
                 </Link>
               </div>
-
-              {/* Social proof */}
               <div className="flex items-center gap-3">
                 <div className="flex -space-x-2" aria-hidden="true">
-                  {["#818cf8", "#a78bfa", "#f472b6", "#fbbf24", "#34d399"].map((color) => (
-                    <div
-                      key={color}
-                      className="h-8 w-8 rounded-full ring-2 ring-indigo-900"
-                      style={{ background: color }}
-                    />
+                  {["#818cf8","#a78bfa","#f472b6","#fbbf24","#34d399"].map((c) => (
+                    <div key={c} className="h-8 w-8 rounded-full ring-2 ring-[#f0ebe3]" style={{ background: c }} />
                   ))}
                 </div>
-                <p className="text-sm text-indigo-300">
-                  <span className="text-white font-semibold">2,000+</span> learners already started
-                </p>
+                <p className="text-sm text-slate-500"><span className="text-slate-900 font-semibold">2,000+</span> learners already started</p>
               </div>
             </div>
 
-            {/* ── Right column — teacher preview cards ── */}
+            {/* Right — teacher cards with decorative shapes */}
             <div className="hidden lg:flex justify-center items-center" aria-hidden="true">
               <div className="relative w-80 h-[460px]">
-                {/* Glow behind cards */}
-                <div className="absolute inset-0 bg-indigo-400/15 rounded-full blur-3xl scale-90" />
-
-                {/* Card 1 */}
-                <div className="absolute top-0 left-2 w-64 bg-white rounded-2xl shadow-2xl p-4 rotate-[-3deg] z-30">
-                  <div className="flex items-center gap-3">
-                    <div className={`h-12 w-12 rounded-xl bg-gradient-to-br ${heroTeachers[0].gradient} flex items-center justify-center text-white font-bold text-lg shrink-0`}>
-                      {heroTeachers[0].initial}
-                    </div>
-                    <div className="min-w-0">
-                      <p className="font-semibold text-slate-900 text-sm">{heroTeachers[0].name}</p>
-                      <p className="text-xs text-slate-500 truncate">{heroTeachers[0].spec} · {heroTeachers[0].location}</p>
-                      <div className="flex items-center gap-1 mt-1">
-                        <Star className="h-3 w-3 text-amber-400 fill-amber-400" />
-                        <span className="text-xs font-bold text-slate-800">{heroTeachers[0].rating}</span>
-                        <span className="text-xs text-slate-400">({heroTeachers[0].reviews})</span>
+                <div className="absolute inset-0 bg-violet-200/20 rounded-full blur-3xl scale-90" />
+                {heroTeachers.map((t, i) => (
+                  <div
+                    key={t.name}
+                    className="absolute w-64 bg-white rounded-2xl shadow-xl shadow-slate-200/80 p-4"
+                    style={{ top: i === 0 ? 0 : i === 1 ? 160 : 310, left: i === 1 ? "auto" : 8, right: i === 1 ? 0 : "auto", rotate: i === 0 ? "-3deg" : i === 1 ? "2.5deg" : "-1deg", zIndex: 30 - i * 10 }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`h-11 w-11 rounded-xl bg-gradient-to-br ${t.gradient} flex items-center justify-center text-white font-bold shrink-0`}>{t.initial}</div>
+                      <div className="min-w-0">
+                        <p className="font-semibold text-slate-900 text-sm">{t.name}</p>
+                        <p className="text-xs text-slate-500">{t.spec}</p>
+                        <div className="flex items-center gap-1 mt-0.5">
+                          <Star className="h-3 w-3 text-amber-400 fill-amber-400" />
+                          <span className="text-xs font-bold text-slate-800">{t.rating}</span>
+                          <span className="text-xs text-slate-400">({t.reviews})</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between">
-                    <span className="text-xs bg-indigo-50 text-indigo-700 rounded-full px-2.5 py-1 font-medium">Native speaker</span>
-                    <span className="text-sm font-bold text-slate-900">{heroTeachers[0].price}<span className="text-xs font-normal text-slate-400">/hr</span></span>
-                  </div>
-                </div>
-
-                {/* Card 2 */}
-                <div className="absolute top-40 right-0 w-64 bg-white rounded-2xl shadow-2xl p-4 rotate-[2.5deg] z-20">
-                  <div className="flex items-center gap-3">
-                    <div className={`h-12 w-12 rounded-xl bg-gradient-to-br ${heroTeachers[1].gradient} flex items-center justify-center text-white font-bold text-lg shrink-0`}>
-                      {heroTeachers[1].initial}
-                    </div>
-                    <div className="min-w-0">
-                      <p className="font-semibold text-slate-900 text-sm">{heroTeachers[1].name}</p>
-                      <p className="text-xs text-slate-500 truncate">{heroTeachers[1].spec} · {heroTeachers[1].location}</p>
-                      <div className="flex items-center gap-1 mt-1">
-                        <Star className="h-3 w-3 text-amber-400 fill-amber-400" />
-                        <span className="text-xs font-bold text-slate-800">{heroTeachers[1].rating}</span>
-                        <span className="text-xs text-slate-400">({heroTeachers[1].reviews})</span>
-                      </div>
+                    <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between">
+                      <span className="text-xs bg-indigo-50 text-indigo-700 rounded-full px-2.5 py-1 font-medium">Native speaker</span>
+                      <span className="text-sm font-bold text-slate-900">{t.price}<span className="text-xs font-normal text-slate-400">/hr</span></span>
                     </div>
                   </div>
-                  <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between">
-                    <span className="text-xs bg-indigo-50 text-indigo-700 rounded-full px-2.5 py-1 font-medium">Native speaker</span>
-                    <span className="text-sm font-bold text-slate-900">{heroTeachers[1].price}<span className="text-xs font-normal text-slate-400">/hr</span></span>
-                  </div>
-                </div>
-
-                {/* Card 3 */}
-                <div className="absolute top-[308px] left-4 w-64 bg-white rounded-2xl shadow-2xl p-4 rotate-[-1deg] z-10">
-                  <div className="flex items-center gap-3">
-                    <div className={`h-12 w-12 rounded-xl bg-gradient-to-br ${heroTeachers[2].gradient} flex items-center justify-center text-white font-bold text-lg shrink-0`}>
-                      {heroTeachers[2].initial}
-                    </div>
-                    <div className="min-w-0">
-                      <p className="font-semibold text-slate-900 text-sm">{heroTeachers[2].name}</p>
-                      <p className="text-xs text-slate-500 truncate">{heroTeachers[2].spec} · {heroTeachers[2].location}</p>
-                      <div className="flex items-center gap-1 mt-1">
-                        <Star className="h-3 w-3 text-amber-400 fill-amber-400" />
-                        <span className="text-xs font-bold text-slate-800">{heroTeachers[2].rating}</span>
-                        <span className="text-xs text-slate-400">({heroTeachers[2].reviews})</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between">
-                    <span className="text-xs bg-indigo-50 text-indigo-700 rounded-full px-2.5 py-1 font-medium">Native speaker</span>
-                    <span className="text-sm font-bold text-slate-900">{heroTeachers[2].price}<span className="text-xs font-normal text-slate-400">/hr</span></span>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
 
           </div>
         </div>
-
       </section>
 
-      {/* ─────────────────────────────────────────── STATS BAND ── */}
-      <section className="bg-white border-b border-slate-100" aria-label="Platform statistics">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-0 lg:divide-x lg:divide-slate-200">
+      {/* ── STATS BAR ── */}
+      <section className="bg-white border-y border-slate-100" aria-label="Platform statistics">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-0 lg:divide-x lg:divide-slate-100">
             {stats.map(({ value, label }, i) => (
-              <ScrollReveal
-                key={label}
-                delay={i * 80}
-                className={`text-center ${i > 0 ? "lg:pl-10" : ""}`}
-              >
+              <ScrollReveal key={label} delay={i * 80} className={`text-center ${i > 0 ? "lg:pl-8" : ""}`}>
                 <AnimatedStat
                   value={value}
                   label={label}
-                  valueClassName="text-4xl sm:text-5xl font-bold text-indigo-600 font-heading"
-                  labelClassName="text-slate-500 text-sm mt-2 font-medium"
+                  valueClassName="text-3xl sm:text-4xl font-black font-heading text-slate-900"
+                  labelClassName="text-slate-500 text-sm mt-1"
                 />
               </ScrollReveal>
             ))}
@@ -360,84 +148,123 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ──────────────────────────────────── HOW IT WORKS ── */}
-      <section className="py-28 bg-white" aria-labelledby="how-it-works-heading">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <ScrollReveal className="text-center mb-16">
-            <span className="inline-block bg-indigo-50 text-indigo-600 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full mb-5">
-              Simple process
-            </span>
-            <h2
-              id="how-it-works-heading"
-              className="text-4xl sm:text-5xl font-bold font-heading text-slate-900 mb-5"
-            >
-              Start Learning in 3 Simple Steps
+      {/* ── GOALS / SPECIALISATIONS ── */}
+      <section className="py-24 bg-[#f0ebe3]" aria-labelledby="goals-heading">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <ScrollReveal>
+            <h2 id="goals-heading" className="text-4xl sm:text-5xl lg:text-6xl font-black font-heading text-slate-900 tracking-[-0.03em] mb-12">
+              Pick a goal to get started
             </h2>
-            <p className="text-slate-500 text-lg max-w-2xl mx-auto leading-relaxed">
-              Getting started on Mwalimu Wangu is effortless. Find your perfect teacher and begin your Swahili journey today.
-            </p>
           </ScrollReveal>
+          <ScrollReveal delay={80}>
+            <div className="flex flex-wrap gap-3 justify-center">
+              {goals.map((goal) => (
+                <Link
+                  key={goal}
+                  href="/teachers"
+                  className="px-6 py-3 bg-white border border-slate-200 rounded-xl font-semibold text-slate-800 hover:border-indigo-400 hover:text-indigo-700 hover:bg-indigo-50 transition-all text-sm"
+                >
+                  {goal}
+                </Link>
+              ))}
+              <Link
+                href="/teachers"
+                className="px-6 py-3 bg-slate-100 border border-slate-200 rounded-xl font-semibold text-slate-600 hover:border-indigo-300 hover:text-indigo-600 transition-all text-sm"
+              >
+                All specialisations →
+              </Link>
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
 
-          <div className="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-0">
-            {steps.map(({ step, icon: Icon, title, desc }, index) => (
-              <Fragment key={step}>
-                <ScrollReveal delay={index * 120} className="text-center flex-1 group px-6">
-                  {/* Large editorial step number */}
-                  <div className="relative mb-1">
-                    <span className="block text-[5.5rem] font-black leading-none text-indigo-50 select-none font-heading" aria-hidden="true">
-                      {step}
-                    </span>
-                    <div className="-mt-9 relative z-10 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-600 shadow-lg shadow-indigo-200/80 group-hover:scale-110 group-hover:shadow-indigo-300/60 transition-all duration-300">
-                      <Icon className="h-5 w-5 text-white" aria-hidden="true" />
+      {/* ── TESTIMONIALS ── */}
+      <section className="py-24 bg-[#f0ebe3]" aria-labelledby="testimonials-heading">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <ScrollReveal className="mb-14">
+            <h2 id="testimonials-heading" className="text-4xl sm:text-5xl lg:text-6xl font-black font-heading text-slate-900 tracking-[-0.03em] leading-tight max-w-2xl">
+              Learners around the world have rated us 4.9/5
+            </h2>
+          </ScrollReveal>
+          <div className="grid md:grid-cols-3 gap-6">
+            {testimonials.map(({ quote, name, role, initials, color }, i) => (
+              <ScrollReveal key={name} delay={i * 100}>
+                <div className="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col">
+                  {/* Colored shape + avatar */}
+                  <div className={`relative h-40 ${color} flex items-end justify-center pb-0 overflow-hidden`}>
+                    <div className="absolute bottom-0 translate-y-1/2 h-20 w-20 rounded-2xl bg-indigo-600 flex items-center justify-center text-white font-black text-2xl shadow-lg z-10">
+                      {initials}
                     </div>
                   </div>
-                  <h3 className="text-lg font-semibold text-slate-900 mb-3 mt-5">{title}</h3>
-                  <p className="text-slate-500 text-sm leading-relaxed">{desc}</p>
-                </ScrollReveal>
-
-                {index < steps.length - 1 && (
-                  <div className="hidden md:flex shrink-0 items-center justify-center self-start mt-20" aria-hidden="true">
-                    <ArrowRight className="h-5 w-5 text-slate-200" />
+                  <div className="pt-14 pb-8 px-6 text-center flex flex-col flex-1">
+                    <p className="font-bold text-slate-900 text-lg">{name}</p>
+                    <p className="text-slate-500 text-sm mb-5">{role}</p>
+                    <div className="flex gap-1 justify-center mb-4">
+                      {Array.from({ length: 5 }).map((_, j) => (
+                        <Star key={j} className="h-4 w-4 text-amber-400 fill-amber-400" />
+                      ))}
+                    </div>
+                    <p className="text-slate-600 text-sm leading-relaxed flex-1">&ldquo;{quote}&rdquo;</p>
                   </div>
-                )}
-              </Fragment>
+                </div>
+              </ScrollReveal>
             ))}
           </div>
+        </div>
+      </section>
 
-          <div className="text-center mt-14">
+      {/* ── HOW IT WORKS ── */}
+      <section className="py-24 bg-white" aria-labelledby="steps-heading">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <ScrollReveal className="text-center mb-14">
+            <h2 id="steps-heading" className="text-4xl sm:text-5xl lg:text-6xl font-black font-heading text-slate-900 tracking-[-0.03em]">
+              Start learning in 3 steps
+            </h2>
+          </ScrollReveal>
+          <div className="grid md:grid-cols-3 gap-6">
+            {steps.map(({ step, icon: Icon, title, desc }, i) => (
+              <ScrollReveal key={step} delay={i * 120}>
+                <div className="bg-[#f0ebe3] rounded-3xl p-8 h-full">
+                  {/* Visual area */}
+                  <div className="h-40 mb-8 flex items-center justify-center relative">
+                    <div className={`w-28 h-28 rounded-full flex items-center justify-center ${
+                      i === 0 ? "bg-amber-300" : i === 1 ? "bg-indigo-300" : "bg-violet-300"
+                    }`}>
+                      <Icon className="h-12 w-12 text-white" strokeWidth={1.5} />
+                    </div>
+                    <span className="absolute top-0 right-0 text-7xl font-black text-slate-200 leading-none font-heading select-none">{step}</span>
+                  </div>
+                  <h3 className="text-xl font-bold font-heading text-slate-900 mb-3">{title}</h3>
+                  <p className="text-slate-600 leading-relaxed">{desc}</p>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+          <div className="text-center mt-10">
             <Link href="/how-it-works">
-              <Button variant="outline">Learn how it works →</Button>
+              <button className="px-8 py-3 bg-white border border-slate-200 rounded-xl font-semibold text-slate-700 hover:border-indigo-300 hover:text-indigo-600 transition-all text-sm">
+                Learn how it works →
+              </button>
             </Link>
           </div>
         </div>
       </section>
 
-      {/* ──────────────────────────────── FEATURED TEACHERS ── */}
-      <section
-        className={featuredTeachers.length > 0 ? "py-28 bg-slate-50" : "py-16 bg-slate-50"}
-        aria-labelledby="teachers-heading"
-      >
+      {/* ── FEATURED TEACHERS ── */}
+      <section className={`bg-[#f0ebe3] ${featuredTeachers.length > 0 ? "py-24" : "py-16"}`} aria-labelledby="teachers-heading">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <ScrollReveal className="mb-14">
-            <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-6">
-              <div>
-                <span className="inline-block bg-indigo-50 text-indigo-600 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full mb-5">
-                  Expert teachers
-                </span>
-                <h2
-                  id="teachers-heading"
-                  className="text-4xl sm:text-5xl font-bold font-heading text-slate-900"
-                >
-                  Meet Our Teachers
-                </h2>
-                <p className="text-slate-500 mt-3 text-lg">
-                  Qualified, experienced, and passionate about Swahili
-                </p>
-              </div>
-              <Link href="/teachers" className="shrink-0">
-                <Button variant="outline">Browse all teachers →</Button>
-              </Link>
+          <ScrollReveal className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-6 mb-12">
+            <div>
+              <h2 id="teachers-heading" className="text-4xl sm:text-5xl font-black font-heading text-slate-900 tracking-[-0.03em]">
+                Meet our teachers
+              </h2>
+              <p className="text-slate-600 mt-2 text-lg">Verified, native, and passionate about Swahili</p>
             </div>
+            <Link href="/teachers">
+              <button className="px-6 py-3 bg-white border border-slate-200 rounded-xl font-semibold text-slate-700 hover:border-indigo-300 hover:text-indigo-600 transition-all text-sm shrink-0">
+                Browse all teachers →
+              </button>
+            </Link>
           </ScrollReveal>
 
           {featuredTeachers.length > 0 ? (
@@ -449,149 +276,91 @@ export default async function HomePage() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-8">
-              <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-indigo-50 mb-4">
-                <Users className="h-7 w-7 text-indigo-300" aria-hidden="true" />
+            <div className="bg-white rounded-3xl p-12 text-center">
+              <div className="inline-flex h-20 w-20 items-center justify-center rounded-full bg-indigo-50 mb-5">
+                <Users className="h-8 w-8 text-indigo-300" />
               </div>
-              <p className="text-lg font-semibold text-slate-600 mb-1">Teachers coming soon</p>
-              <p className="text-sm text-slate-400 max-w-xs mx-auto mb-6">
-                We are currently onboarding our first teachers. Check back shortly.
-              </p>
+              <p className="text-xl font-bold text-slate-700 mb-2">Teachers coming soon</p>
+              <p className="text-slate-500 max-w-xs mx-auto mb-6">We are onboarding our first teachers. Check back shortly.</p>
               <Link href="/become-a-teacher">
-                <Button variant="outline" size="sm">Become one of our first teachers →</Button>
+                <button className="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-all text-sm">
+                  Become one of our first teachers →
+                </button>
               </Link>
             </div>
           )}
         </div>
       </section>
 
-      {/* ───────────────────────────── WHY LEARN SWAHILI ── */}
-      <section className="py-28 bg-white" aria-labelledby="why-swahili-heading">
+      {/* ── FEATURE: NATIVE TEACHERS ── */}
+      <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <ScrollReveal className="text-center mb-16">
-            <span className="inline-block bg-amber-50 text-amber-600 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full mb-5">
-              Why Swahili
-            </span>
-            <h2
-              id="why-swahili-heading"
-              className="text-4xl sm:text-5xl font-bold font-heading text-slate-900 mb-5"
-            >
-              Why Learn Swahili?
-            </h2>
-            <p className="text-slate-500 text-lg max-w-2xl mx-auto leading-relaxed">
-              Swahili is more than a language — it is a key to one of the world&apos;s most dynamic regions and cultures.
-            </p>
-          </ScrollReveal>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {reasons.map(({ icon: Icon, title, desc }, i) => (
-              <ScrollReveal key={title} delay={i * 70}>
-                <div className="group relative bg-white rounded-2xl p-7 border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 overflow-hidden h-full">
-                  {/* Faint background number */}
-                  <span className="absolute -top-3 -right-2 text-8xl font-black text-slate-50 leading-none select-none font-heading" aria-hidden="true">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <div className="relative mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50 group-hover:bg-indigo-100 transition-colors duration-200">
-                    <Icon className="h-6 w-6 text-indigo-600" aria-hidden="true" />
-                  </div>
-                  <h3 className="font-semibold text-slate-900 mb-2 text-base">{title}</h3>
-                  <p className="text-sm text-slate-500 leading-relaxed">{desc}</p>
-                  {/* Hover accent */}
-                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-indigo-500 to-violet-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-                </div>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ─────────────────────────────────── TESTIMONIALS ── */}
-      <section className="py-28 bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 relative overflow-hidden" aria-labelledby="testimonials-heading">
-        {/* Background texture */}
-        <div aria-hidden="true" className="absolute inset-0 pointer-events-none">
-          <svg className="absolute inset-0 w-full h-full opacity-[0.04]" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <pattern id="test-dots" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
-                <circle cx="2" cy="2" r="1.5" fill="white" />
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#test-dots)" />
-          </svg>
-          <div className="absolute -top-32 -right-32 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl" />
-          <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-violet-500/10 rounded-full blur-3xl" />
-        </div>
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <ScrollReveal className="text-center mb-16">
-            <span className="inline-block bg-white/8 text-indigo-300 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full border border-white/10 mb-5">
-              Student stories
-            </span>
-            <h2
-              id="testimonials-heading"
-              className="text-4xl sm:text-5xl font-bold font-heading text-white mb-5"
-            >
-              What Our Students Say
-            </h2>
-            <p className="text-slate-400 text-lg max-w-xl mx-auto">
-              Real stories from learners around the world who transformed their lives with Swahili.
-            </p>
-          </ScrollReveal>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {testimonials.map(({ quote, name, role, initials, rating }, i) => (
-              <ScrollReveal key={name} delay={i * 100}>
-                <blockquote className="bg-white/5 border border-white/8 rounded-2xl p-7 backdrop-blur-sm h-full flex flex-col hover:bg-white/8 transition-colors duration-200">
-                  {/* Stars */}
-                  <div className="flex gap-1 mb-5">
-                    {Array.from({ length: rating }).map((_, j) => (
-                      <Star key={j} className="h-4 w-4 text-amber-400 fill-amber-400" aria-hidden="true" />
-                    ))}
-                  </div>
-                  <p className="text-slate-300 text-sm leading-relaxed mb-6 flex-1 italic">
-                    &ldquo;{quote}&rdquo;
-                  </p>
-                  <footer className="flex items-center gap-3 pt-5 border-t border-white/10">
-                    <div className="h-10 w-10 rounded-full bg-indigo-700 flex items-center justify-center text-white font-bold text-sm shrink-0">
-                      {initials}
-                    </div>
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left: visual */}
+            <ScrollReveal className="relative">
+              <div className="relative h-80 flex items-center justify-center">
+                <div className="absolute w-72 h-72 rounded-full bg-amber-200/60" />
+                <div className="absolute w-48 h-48 rounded-full bg-violet-200/50 translate-x-16 translate-y-8" />
+                <div className="relative z-10 bg-white rounded-2xl shadow-xl p-6 max-w-xs">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white font-bold text-lg shrink-0">A</div>
                     <div>
-                      <cite className="not-italic font-semibold text-white text-sm block">{name}</cite>
-                      <span className="text-xs text-slate-500">{role}</span>
+                      <p className="font-bold text-slate-900">Amina Odhiambo</p>
+                      <p className="text-xs text-slate-500">Business Swahili · Mombasa</p>
                     </div>
-                  </footer>
-                </blockquote>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ─────────────────────────────────── BLOG POSTS ── */}
-      {latestPosts.length > 0 && (
-        <section className="py-28 bg-white" aria-labelledby="blog-heading">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <ScrollReveal className="mb-14">
-              <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-6">
-                <div>
-                  <span className="inline-block bg-indigo-50 text-indigo-600 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full mb-5">
-                    From the blog
-                  </span>
-                  <h2
-                    id="blog-heading"
-                    className="text-4xl sm:text-5xl font-bold font-heading text-slate-900"
-                  >
-                    From Our Blog
-                  </h2>
-                  <p className="text-slate-500 mt-3 text-lg">
-                    Tips, guides, and stories to fuel your Swahili journey
-                  </p>
+                  </div>
+                  <div className="flex gap-1 mb-2">
+                    {Array.from({length: 5}).map((_,j) => <Star key={j} className="h-3.5 w-3.5 text-amber-400 fill-amber-400" />)}
+                  </div>
+                  <p className="text-xs text-slate-500 italic">&ldquo;Amina is fantastic — I went from zero to holding business meetings in 6 months.&rdquo;</p>
+                  <div className="mt-4 flex items-center justify-between">
+                    <span className="text-xs bg-indigo-50 text-indigo-600 rounded-full px-3 py-1 font-medium">Native speaker</span>
+                    <span className="font-bold text-slate-900 text-sm">$25/hr</span>
+                  </div>
                 </div>
-                <Link href="/blog" className="shrink-0">
-                  <Button variant="outline">Read all articles →</Button>
-                </Link>
               </div>
             </ScrollReveal>
+            {/* Right: text */}
+            <ScrollReveal delay={100}>
+              <h2 className="text-4xl sm:text-5xl font-black font-heading text-slate-900 tracking-[-0.03em] leading-tight mb-6">
+                Handpicked native teachers from $15/hour
+              </h2>
+              <p className="text-slate-600 leading-relaxed mb-6 text-lg">
+                We are very selective about who we accept as teachers — only qualified, native Swahili speakers who are passionate educators make it onto our platform.
+              </p>
+              <div className="space-y-3 mb-8">
+                {["All teachers are verified native Swahili speakers", "Flexible scheduling around your timezone", "One-on-one personalised lessons", "No subscription — pay per lesson"].map((item) => (
+                  <div key={item} className="flex items-center gap-3 text-slate-700">
+                    <CheckCircle className="h-5 w-5 text-indigo-600 shrink-0" />
+                    <span className="text-sm font-medium">{item}</span>
+                  </div>
+                ))}
+              </div>
+              <Link href="/teachers">
+                <button className="px-8 py-3.5 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-all flex items-center gap-2 text-sm">
+                  Find a teacher <ArrowRight className="h-4 w-4" />
+                </button>
+              </Link>
+            </ScrollReveal>
+          </div>
+        </div>
+      </section>
 
+      {/* ── BLOG POSTS ── */}
+      {latestPosts.length > 0 && (
+        <section className="py-24 bg-[#f0ebe3]" aria-labelledby="blog-heading">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <ScrollReveal className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-6 mb-12">
+              <div>
+                <h2 id="blog-heading" className="text-4xl sm:text-5xl font-black font-heading text-slate-900 tracking-[-0.03em]">From our blog</h2>
+                <p className="text-slate-600 mt-2 text-lg">Tips, guides, and stories to fuel your Swahili journey</p>
+              </div>
+              <Link href="/blog">
+                <button className="px-6 py-3 bg-white border border-slate-200 rounded-xl font-semibold text-slate-700 hover:border-indigo-300 hover:text-indigo-600 transition-all text-sm shrink-0">
+                  Read all articles →
+                </button>
+              </Link>
+            </ScrollReveal>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {latestPosts.map((post, i) => (
                 <ScrollReveal key={post.id} delay={i * 90}>
@@ -603,59 +372,37 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* ─────────────────────────────────── FINAL CTA ── */}
-      <section className="py-32 bg-indigo-600 relative overflow-hidden" aria-labelledby="cta-heading">
-        {/* Background texture */}
-        <div aria-hidden="true" className="absolute inset-0 pointer-events-none">
-          <svg className="absolute inset-0 w-full h-full opacity-[0.08]" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <pattern id="cta-dots" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
-                <circle cx="2" cy="2" r="1.5" fill="white" />
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#cta-dots)" />
-          </svg>
-          <div className="absolute -top-32 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
-          <div className="absolute -bottom-32 left-0 w-80 h-80 bg-indigo-800/40 rounded-full blur-3xl" />
+      {/* ── FINAL CTA ── */}
+      <section className="py-32 bg-[#f0ebe3] relative overflow-hidden" aria-labelledby="cta-heading">
+        <div aria-hidden="true" className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute -left-20 top-0 w-80 h-80 rounded-full bg-violet-300/40" />
+          <div className="absolute -right-20 bottom-0 w-96 h-96 rounded-full bg-amber-300/40" />
+          <div className="absolute left-1/3 top-1/2 -translate-y-1/2 w-48 h-48 rounded-full bg-indigo-200/30" />
         </div>
-
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 text-center">
+        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 text-center">
           <ScrollReveal>
-            <h2
-              id="cta-heading"
-              className="text-4xl sm:text-5xl lg:text-6xl font-bold font-heading text-white mb-6 leading-tight"
-            >
-              Ready to speak Swahili<em className="not-italic text-amber-300"> fluently?</em>
+            <h2 id="cta-heading" className="text-4xl sm:text-5xl lg:text-6xl font-black font-heading text-slate-900 tracking-[-0.03em] leading-tight mb-6">
+              Find your teacher and start today
             </h2>
-            <p className="text-indigo-100 text-lg mb-10 leading-relaxed max-w-xl mx-auto">
+            <p className="text-slate-600 text-lg mb-10 leading-relaxed max-w-xl mx-auto">
               Join thousands of learners worldwide discovering the beauty of Swahili with expert native teachers on Mwalimu Wangu.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
               <Link href="/teachers">
-                <Button variant="accent" size="lg" className="active:scale-95 font-semibold">
-                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                  Find My Teacher
-                </Button>
+                <button className="px-10 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-base rounded-xl transition-all active:scale-95 flex items-center gap-2 justify-center">
+                  Find a Teacher <ArrowRight className="h-4 w-4" />
+                </button>
               </Link>
               <Link href="/contact">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="border-white/30 text-white hover:bg-white/8 active:scale-95"
-                >
+                <button className="px-10 py-4 bg-white hover:bg-slate-50 text-slate-800 font-bold text-base rounded-xl border border-slate-200 transition-all">
                   Contact Us
-                </Button>
+                </button>
               </Link>
             </div>
-
-            <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-indigo-200">
-              {[
-                "No subscription required",
-                "Pay per lesson",
-                "Free trial lesson available",
-              ].map((item) => (
+            <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-slate-500">
+              {["No subscription required", "Pay per lesson", "Free first consultation"].map((item) => (
                 <span key={item} className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-amber-400" aria-hidden="true" />
+                  <CheckCircle className="h-4 w-4 text-indigo-500" />
                   {item}
                 </span>
               ))}

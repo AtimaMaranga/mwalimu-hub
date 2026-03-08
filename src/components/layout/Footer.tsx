@@ -25,52 +25,43 @@ const footerLinks = {
   ],
 };
 
-/** Only real social links — placeholders are excluded */
 const socialLinks = [
   { label: "Email", href: "mailto:hello@mwalimuwangu.com", Icon: Mail },
-  // Add Twitter, Facebook, Instagram, YouTube URLs here when live:
-  // { label: "Twitter",   href: "https://twitter.com/mwalimuwangu",   Icon: Twitter   },
-  // { label: "Facebook",  href: "https://facebook.com/mwalimuwangu",  Icon: Facebook  },
-  // { label: "Instagram", href: "https://instagram.com/mwalimuwangu", Icon: Instagram },
-  // { label: "YouTube",   href: "https://youtube.com/@mwalimuwangu",  Icon: Youtube   },
 ];
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-slate-900 text-slate-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Main footer content */}
+    <footer className="bg-[#e8e0d4] relative overflow-hidden">
+      {/* Decorative shapes */}
+      <div aria-hidden="true" className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute -left-16 bottom-0 w-64 h-64 rounded-full bg-violet-300/25" />
+        <div className="absolute right-0 top-0 w-80 h-80 rounded-full bg-amber-300/20 translate-x-1/3 -translate-y-1/3" />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Main content */}
         <div className="py-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-10">
           {/* Brand */}
           <div className="sm:col-span-2">
-            <Link
-              href="/"
-              className="flex items-center gap-2.5 mb-4"
-              aria-label="Mwalimu Wangu — Home"
-            >
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 shadow-sm shadow-indigo-900/40">
-                <span className="text-white font-bold text-sm font-heading italic tracking-tight select-none">
-                  MW
-                </span>
+            <Link href="/" className="flex items-center gap-2.5 mb-5" aria-label="Mwalimu Wangu — Home">
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-violet-700 shadow-sm">
+                <span className="text-white font-bold text-sm font-heading italic tracking-tight select-none">MW</span>
               </span>
-              <span className="font-heading font-bold text-white text-lg tracking-tight">Mwalimu Wangu</span>
+              <span className="font-heading font-bold text-slate-900 text-lg tracking-tight">Mwalimu Wangu</span>
             </Link>
-            <p className="text-sm text-slate-400 leading-relaxed max-w-xs">
-              Your gateway to Swahili fluency. Connect with qualified native
-              Swahili teachers and start your language journey today.
+            <p className="text-sm text-slate-600 leading-relaxed max-w-xs mb-6">
+              Your gateway to Swahili fluency. Connect with qualified native Swahili teachers and start your language journey today.
             </p>
-
-            {/* Social links */}
             {socialLinks.length > 0 && (
-              <div className="flex items-center gap-3 mt-6">
+              <div className="flex items-center gap-3">
                 {socialLinks.map(({ label, href, Icon }) => (
                   <a
                     key={label}
                     href={href}
                     aria-label={label}
-                    className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-800 text-slate-400 hover:text-white hover:bg-indigo-600 transition-colors"
+                    className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"
                   >
                     <Icon className="h-4 w-4" aria-hidden="true" />
                   </a>
@@ -82,14 +73,11 @@ export default function Footer() {
           {/* Link groups */}
           {Object.entries(footerLinks).map(([title, links]) => (
             <div key={title}>
-              <h3 className="text-white font-semibold text-sm mb-4">{title}</h3>
+              <h3 className="text-slate-900 font-bold text-sm mb-4">{title}</h3>
               <ul className="space-y-3" role="list">
                 {links.map((link) => (
                   <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="text-sm text-slate-400 hover:text-white transition-colors"
-                    >
+                    <Link href={link.href} className="text-sm text-slate-600 hover:text-indigo-600 transition-colors">
                       {link.label}
                     </Link>
                   </li>
@@ -100,15 +88,12 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="py-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="py-6 border-t border-black/10 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-sm text-slate-500">
             &copy; {currentYear} Mwalimu Wangu. All rights reserved.
           </p>
           <p className="text-sm text-slate-500 italic">
-            Asante kwa kujiunga nasi —{" "}
-            <span className="not-italic text-slate-600">
-              Thank you for joining us
-            </span>
+            Asante kwa kujiunga nasi — <span className="not-italic text-slate-600">Thank you for joining us</span>
           </p>
         </div>
       </div>
