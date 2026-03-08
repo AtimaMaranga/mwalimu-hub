@@ -4,18 +4,11 @@ import { createClient } from "@/lib/supabase/server";
 import DashboardShell from "@/components/dashboard/DashboardShell";
 import Button from "@/components/ui/Button";
 import {
-  LayoutDashboard, User, MessageCircle, ExternalLink,
+  User, MessageCircle, ExternalLink,
   ArrowRight, Clock, CheckCircle, DollarSign,
-  TrendingUp, Pencil, ChevronRight, Users,
+  TrendingUp, Pencil, ChevronRight,
 } from "lucide-react";
 import { getInitials } from "@/lib/utils";
-
-const NAV_ITEMS = [
-  { label: "Dashboard",   href: "/dashboard/teacher",         icon: LayoutDashboard },
-  { label: "My Profile",  href: "/dashboard/teacher/profile", icon: User },
-  { label: "Inquiries",   href: "/dashboard/teacher",         icon: MessageCircle },
-  { label: "Browse Site", href: "/teachers",                  icon: Users },
-];
 
 const levelColors: Record<string, { bg: string; text: string; dot: string }> = {
   beginner:     { bg: "bg-emerald-500/15", text: "text-emerald-400", dot: "bg-emerald-400" },
@@ -130,7 +123,7 @@ export default async function TeacherDashboardPage() {
 
   return (
     <DashboardShell
-      navItems={NAV_ITEMS}
+      role="teacher"
       userName={name}
       userInitials={initials}
       userRole="Teacher"

@@ -3,17 +3,29 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { Search, Bell, Settings, LogOut, type LucideIcon } from "lucide-react";
+import {
+  Search, Bell, Settings, LogOut,
+  LayoutDashboard, User, MessageCircle, BookOpen, Users,
+} from "lucide-react";
 
-interface NavItem {
-  label: string;
-  href: string;
-  icon: LucideIcon;
-}
+const NAV_ITEMS = {
+  student: [
+    { label: "Dashboard",     href: "/dashboard/student", icon: LayoutDashboard },
+    { label: "Find Teachers", href: "/teachers",           icon: Search },
+    { label: "My Inquiries",  href: "/dashboard/student", icon: MessageCircle },
+    { label: "How It Works",  href: "/how-it-works",       icon: BookOpen },
+  ],
+  teacher: [
+    { label: "Dashboard",   href: "/dashboard/teacher",         icon: LayoutDashboard },
+    { label: "My Profile",  href: "/dashboard/teacher/profile", icon: User },
+    { label: "Inquiries",   href: "/dashboard/teacher",         icon: MessageCircle },
+    { label: "Browse Site", href: "/teachers",                  icon: Users },
+  ],
+};
 
 interface DashboardShellProps {
   children: React.ReactNode;
-  navItems: NavItem[];
+  role: "student" | "teacher";
   userName: string;
   userInitials: string;
   userRole: string;
@@ -21,13 +33,14 @@ interface DashboardShellProps {
 
 export default function DashboardShell({
   children,
-  navItems,
+  role,
   userName,
   userInitials,
   userRole,
 }: DashboardShellProps) {
   const pathname = usePathname();
   const firstName = userName.split(" ")[0];
+  const navItems = NAV_ITEMS[role];
 
   return (
     <div className="flex h-screen bg-[#13141f] overflow-hidden">
