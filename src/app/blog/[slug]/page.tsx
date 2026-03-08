@@ -20,6 +20,9 @@ import {
   getRelatedPosts,
 } from "@/lib/supabase/queries";
 import { formatDate } from "@/lib/utils";
+import JsonLd from "@/components/seo/JsonLd";
+
+const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://mwalimuwangu.com";
 
 export async function generateStaticParams() {
   const posts = await getBlogPostSlugs();
@@ -37,13 +40,21 @@ export async function generateMetadata({
   return {
     title: post.title,
     description: post.excerpt,
+    alternates: { canonical: `${BASE}/blog/${post.slug}` },
     openGraph: {
       title: post.title,
       description: post.excerpt,
-      images: post.featured_image_url ? [post.featured_image_url] : [],
+      images: post.featured_image_url ? [{ url: post.featured_image_url, alt: post.title }] : ["/og-image.png"],
       type: "article",
       publishedTime: post.published_at || undefined,
       authors: [post.author],
+      siteName: "Mwalimu Wangu",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt,
+      images: post.featured_image_url ? [post.featured_image_url] : ["/og-image.png"],
     },
   };
 }
@@ -76,13 +87,51 @@ export default async function BlogPostPage({
     ? formatDate(post.published_at)
     : formatDate(post.created_at);
 
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || "https://mwalimuwangu.com";
-  const shareUrl = encodeURIComponent(`${siteUrl}/blog/${post.slug}`);
+  const shareUrl = encodeURIComponent(`${BASE}/blog/${post.slug}`);
   const shareTitle = encodeURIComponent(post.title);
+
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.excerpt,
+    ...(post.featured_image_url && { image: post.featured_image_url }),
+    author: {
+      "@type": "Person",
+      name: post.author,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Mwalimu Wangu",
+      url: BASE,
+      logo: {
+        "@type": "ImageObject",
+        url: `${BASE}/og-image.png`,
+      },
+    },
+    datePublished: post.published_at || post.created_at,
+    dateModified: post.updated_at || post.published_at || post.created_at,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${BASE}/blog/${post.slug}`,
+    },
+    ...(post.tags && post.tags.length > 0 && { keywords: post.tags.join(", ") }),
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: BASE },
+      { "@type": "ListItem", position: 2, name: "Blog", item: `${BASE}/blog` },
+      { "@type": "ListItem", position: 3, name: post.title, item: `${BASE}/blog/${post.slug}` },
+    ],
+  };
 
   return (
     <PageWrapper>
+      <JsonLd data={articleSchema} />
+      <JsonLd data={breadcrumbSchema} />
       <article className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
         {/* Back */}
         <Link

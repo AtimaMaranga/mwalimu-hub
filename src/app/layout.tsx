@@ -18,50 +18,58 @@ const plusJakarta = Plus_Jakarta_Sans({
   weight: ["300", "400", "500", "600", "700", "800"],
 });
 
+const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://mwalimuwangu.com";
+
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || "https://mwalimuwangu.com"
-  ),
+  metadataBase: new URL(BASE),
   title: {
-    default: "Mwalimu Wangu — Your Gateway to Swahili Fluency",
+    default: "Learn Swahili Online with Native Teachers | Mwalimu Wangu",
     template: "%s | Mwalimu Wangu",
   },
   description:
-    "Connect with qualified native Swahili teachers for personalised online lessons. Learn Swahili authentically — for travel, business, or culture.",
+    "Connect with verified native Swahili teachers for personalised 1-on-1 online lessons. Learn Swahili for travel, business, family or culture — from $15/hour. Start today.",
   keywords: [
-    "learn Swahili",
+    "learn Swahili online",
     "Swahili tutor",
     "Swahili lessons online",
     "native Swahili teacher",
-    "Swahili course",
-    "mwalimu",
+    "online Swahili classes",
+    "Swahili teacher",
+    "Kiswahili lessons",
+    "learn Kiswahili",
+    "Swahili for beginners",
+    "Swahili private tutor",
     "East Africa language",
+    "mwalimu",
   ],
   authors: [{ name: "Mwalimu Wangu" }],
   creator: "Mwalimu Wangu",
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: process.env.NEXT_PUBLIC_SITE_URL || "https://mwalimuwangu.com",
+    url: BASE,
     siteName: "Mwalimu Wangu",
-    title: "Mwalimu Wangu — Your Gateway to Swahili Fluency",
+    title: "Learn Swahili Online with Native Teachers | Mwalimu Wangu",
     description:
-      "Connect with qualified native Swahili teachers for personalised online lessons.",
+      "Connect with verified native Swahili teachers for personalised 1-on-1 online lessons. Learn Swahili for travel, business, family or culture — from $15/hour.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Mwalimu Wangu — Learn Swahili from Native Speakers",
+        alt: "Mwalimu Wangu — Learn Swahili from Native Speakers Online",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mwalimu Wangu — Your Gateway to Swahili Fluency",
+    title: "Learn Swahili Online with Native Teachers | Mwalimu Wangu",
     description:
-      "Connect with qualified native Swahili teachers for personalised online lessons.",
+      "Connect with verified native Swahili teachers for personalised 1-on-1 online lessons — from $15/hour.",
     images: ["/og-image.png"],
+  },
+  alternates: {
+    canonical: BASE,
   },
   robots: {
     index: true,

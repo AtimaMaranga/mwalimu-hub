@@ -12,10 +12,13 @@ import {
 import PageWrapper from "@/components/layout/PageWrapper";
 import Button from "@/components/ui/Button";
 
+const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://mwalimuwangu.com";
+
 export const metadata: Metadata = {
-  title: "How It Works",
+  title: "How to Learn Swahili Online | How Mwalimu Wangu Works",
   description:
-    "Learn how to find a Swahili teacher and start learning on Mwalimu Wangu in just a few simple steps.",
+    "Discover how easy it is to find a native Swahili teacher and start learning online. Browse profiles, contact your teacher, and begin your first Swahili lesson in minutes.",
+  alternates: { canonical: `${BASE}/how-it-works` },
 };
 
 const studentSteps = [

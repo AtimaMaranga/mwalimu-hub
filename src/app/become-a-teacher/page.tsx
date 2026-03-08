@@ -10,10 +10,13 @@ import {
   Users,
 } from "lucide-react";
 
+const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://mwalimuwangu.com";
+
 export const metadata: Metadata = {
-  title: "Become a Swahili Teacher",
+  title: "Teach Swahili Online | Become a Swahili Tutor on Mwalimu Wangu",
   description:
-    "Share your Swahili knowledge with learners worldwide. Apply to become a teacher on Mwalimu Wangu and build your teaching career.",
+    "Turn your Swahili expertise into a rewarding online teaching career. Apply to become a verified Swahili tutor on Mwalimu Wangu and reach motivated students worldwide.",
+  alternates: { canonical: `${BASE}/become-a-teacher` },
 };
 
 const benefits = [

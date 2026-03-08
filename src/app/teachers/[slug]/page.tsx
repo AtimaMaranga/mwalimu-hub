@@ -17,8 +17,11 @@ import Button from "@/components/ui/Button";
 import Badge from "@/components/ui/Badge";
 import StarRating from "@/components/ui/StarRating";
 import TeacherContactModal from "./TeacherContactModal";
+import JsonLd from "@/components/seo/JsonLd";
 import { getTeacherBySlug, getTeacherSlugs } from "@/lib/supabase/queries";
 import { formatCurrency, getInitials } from "@/lib/utils";
+
+const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://mwalimuwangu.com";
 
 export async function generateStaticParams() {
   const teachers = await getTeacherSlugs();
@@ -33,11 +36,20 @@ export async function generateMetadata({
   const { slug } = await params;
   const teacher = await getTeacherBySlug(slug);
   if (!teacher) return { title: "Teacher Not Found" };
+  const nativeLabel = teacher.is_native_speaker ? "Native Swahili Speaker & " : "";
+  const desc =
+    teacher.tagline ||
+    `Learn Swahili with ${teacher.name}, a ${teacher.is_native_speaker ? "native Swahili speaker" : "qualified Swahili teacher"} with ${teacher.experience_years ?? "extensive"} years of experience. Book 1-on-1 online lessons today.`;
   return {
-    title: `${teacher.name} — Swahili Teacher`,
-    description:
-      teacher.tagline ||
-      `Learn Swahili with ${teacher.name}, a ${teacher.is_native_speaker ? "native" : "qualified"} Swahili teacher with ${teacher.experience_years} years of experience.`,
+    title: `${teacher.name} — ${nativeLabel}Swahili Teacher Online`,
+    description: desc,
+    alternates: { canonical: `${BASE}/teachers/${teacher.slug}` },
+    openGraph: {
+      title: `${teacher.name} — ${nativeLabel}Swahili Teacher`,
+      description: desc,
+      images: teacher.profile_image_url ? [{ url: teacher.profile_image_url, alt: teacher.name }] : ["/og-image.png"],
+      type: "profile",
+    },
   };
 }
 
@@ -52,8 +64,40 @@ export default async function TeacherProfilePage({
 
   const languages = teacher.languages_spoken || [];
 
+  const teacherSchema = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: teacher.name,
+    jobTitle: "Swahili Teacher",
+    description:
+      teacher.tagline ||
+      `${teacher.is_native_speaker ? "Native Swahili speaker" : "Qualified Swahili teacher"} offering 1-on-1 online lessons.`,
+    url: `${BASE}/teachers/${teacher.slug}`,
+    ...(teacher.profile_image_url && { image: teacher.profile_image_url }),
+    knowsAbout: ["Swahili", "Kiswahili", "East African culture", ...(teacher.specializations ?? [])],
+    ...(teacher.rating && teacher.total_students && {
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: teacher.rating.toFixed(1),
+        reviewCount: teacher.total_students,
+        bestRating: "5",
+        worstRating: "1",
+      },
+    }),
+    ...(teacher.hourly_rate && {
+      offers: {
+        "@type": "Offer",
+        price: teacher.hourly_rate.toString(),
+        priceCurrency: "USD",
+        availability: "https://schema.org/InStock",
+        description: "1-on-1 online Swahili lesson (per hour)",
+      },
+    }),
+  };
+
   return (
     <PageWrapper>
+      <JsonLd data={teacherSchema} />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back */}
         <Link

@@ -8,11 +8,16 @@ import AnimatedStat from "@/components/ui/AnimatedStat";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import TeacherCard from "@/components/sections/TeacherCard";
 import BlogCard from "@/components/sections/BlogCard";
+import JsonLd from "@/components/seo/JsonLd";
 import { getFeaturedTeachers, getBlogPosts } from "@/lib/supabase/queries";
 
+const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://mwalimuwangu.com";
+
 export const metadata: Metadata = {
-  title: "Mwalimu Wangu — Your Gateway to Swahili Fluency",
-  description: "Connect with qualified native Swahili teachers for personalised online lessons. Learn Swahili for travel, business, culture, or family. Start your journey today.",
+  title: "Learn Swahili Online with Native Teachers | Mwalimu Wangu",
+  description:
+    "Connect with verified native Swahili teachers for personalised 1-on-1 online lessons. Learn Swahili for travel, business, family or culture — from $15/hour. Start today.",
+  alternates: { canonical: BASE },
 };
 
 const stats = [
@@ -48,8 +53,59 @@ export default async function HomePage() {
     getBlogPosts(3),
   ]);
 
+  const orgSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Mwalimu Wangu",
+    url: BASE,
+    logo: `${BASE}/og-image.png`,
+    description:
+      "Online marketplace connecting Swahili language learners with verified native Swahili teachers for personalised 1-on-1 online lessons.",
+    contactPoint: {
+      "@type": "ContactPoint",
+      email: "hello@mwalimuwangu.com",
+      contactType: "customer service",
+    },
+  };
+
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Mwalimu Wangu",
+    url: BASE,
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: `${BASE}/teachers?q={search_term_string}`,
+      },
+      "query-input": "required name=search_term_string",
+    },
+  };
+
+  const serviceSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Online Swahili Lessons",
+    description:
+      "Personalised 1-on-1 Swahili lessons with verified native Swahili teachers via video call — for beginners, travellers, business professionals, and diaspora learners.",
+    provider: { "@type": "Organization", name: "Mwalimu Wangu", url: BASE },
+    serviceType: "Language Tutoring",
+    areaServed: "Worldwide",
+    offers: {
+      "@type": "AggregateOffer",
+      priceCurrency: "USD",
+      lowPrice: "15",
+      highPrice: "50",
+      offerCount: "5",
+    },
+  };
+
   return (
     <PageWrapper>
+      <JsonLd data={orgSchema} />
+      <JsonLd data={websiteSchema} />
+      <JsonLd data={serviceSchema} />
 
       {/* ── HERO ── */}
       <section className="relative bg-[#f0ebe3] overflow-hidden" aria-label="Hero">

@@ -4,10 +4,13 @@ import { Target, Heart, Globe, Users } from "lucide-react";
 import PageWrapper from "@/components/layout/PageWrapper";
 import Button from "@/components/ui/Button";
 
+const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://mwalimuwangu.com";
+
 export const metadata: Metadata = {
-  title: "About Us",
+  title: "About Mwalimu Wangu — Our Mission to Grow Swahili Learning Worldwide",
   description:
-    "Learn about Mwalimu Wangu — our mission to connect Swahili learners with native teachers and make language learning accessible worldwide.",
+    "Mwalimu Wangu connects Swahili learners with verified native teachers for authentic 1-on-1 online lessons. Learn about our story, mission, and why Swahili matters.",
+  alternates: { canonical: `${BASE}/about` },
 };
 
 const values = [

@@ -4,10 +4,13 @@ import BlogCard from "@/components/sections/BlogCard";
 import { getBlogPosts } from "@/lib/supabase/queries";
 import { BookOpen } from "lucide-react";
 
+const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://mwalimuwangu.com";
+
 export const metadata: Metadata = {
-  title: "Blog — Swahili Learning Tips & Guides",
+  title: "Swahili Learning Blog — Tips, Guides & Stories",
   description:
-    "Discover tips, guides, and stories to help you learn Swahili faster. Written by native speakers and language experts.",
+    "Explore Swahili language learning tips, beginner guides, cultural insights, and advice from native teachers on the Mwalimu Wangu blog.",
+  alternates: { canonical: `${BASE}/blog` },
 };
 
 export default async function BlogPage() {
