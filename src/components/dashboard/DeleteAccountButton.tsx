@@ -15,16 +15,18 @@ export default function DeleteAccountButton() {
     setError(null);
     try {
       const res = await fetch("/api/auth/delete-account", { method: "DELETE" });
+      let body: { error?: string; success?: boolean } = {};
+      try { body = await res.json(); } catch { /* non-JSON response */ }
+
       if (!res.ok) {
-        const body = await res.json();
-        setError(body.error || "Something went wrong. Please try again.");
+        setError(body.error || `Server error (${res.status}). Please try again.`);
         setLoading(false);
         return;
       }
       // Account deleted — redirect to homepage
       router.push("/");
-    } catch {
-      setError("Something went wrong. Please try again.");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Network error. Please try again.");
       setLoading(false);
     }
   };
