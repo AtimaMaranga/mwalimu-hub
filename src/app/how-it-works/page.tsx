@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import JsonLd from "@/components/seo/JsonLd";
 import {
   Search,
   MessageCircle,
@@ -91,8 +92,45 @@ const faqs = [
 ];
 
 export default function HowItWorksPage() {
+  const howToSchema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: "How to Book a Swahili Lesson on Mwalimu Wangu",
+    description:
+      "Find and book a native Swahili teacher for personalised 1-on-1 online lessons in just a few simple steps.",
+    totalTime: "PT5M",
+    step: [
+      {
+        "@type": "HowToStep",
+        position: 1,
+        name: "Browse Teacher Profiles",
+        text: "Explore our directory of verified native Swahili teachers. Use filters to narrow down by specialisation, price range, and availability.",
+        url: `${BASE}/teachers`,
+      },
+      {
+        "@type": "HowToStep",
+        position: 2,
+        name: "Contact Your Teacher",
+        text: "Send your preferred teacher a message directly from their profile. Tell them about your goals, current level, and preferred schedule.",
+      },
+      {
+        "@type": "HowToStep",
+        position: 3,
+        name: "Agree on a Plan",
+        text: "Discuss your learning goals, lesson frequency, and payment directly with your teacher. No platform fee — a direct conversation between you.",
+      },
+      {
+        "@type": "HowToStep",
+        position: 4,
+        name: "Start Learning Swahili",
+        text: "Begin your Swahili lessons via video call (Zoom, Google Meet, or the teacher's preferred platform). Learn at your own pace and track your progress.",
+      },
+    ],
+  };
+
   return (
     <PageWrapper>
+      <JsonLd data={howToSchema} />
       {/* Header */}
       <div className="bg-gradient-to-br from-indigo-900 to-violet-900 text-white py-20">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
