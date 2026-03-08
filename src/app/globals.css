@@ -26,10 +26,10 @@
   --color-accent-900: #4c1d95;
 
   /* Fonts */
-  /* DM Sans — body, UI elements, nav, buttons */
-  --font-sans: var(--font-dm-sans);
-  /* Playfair Display — page titles (h1/h2), editorial display text */
-  --font-heading: var(--font-playfair), Georgia, serif;
+  /* Plus Jakarta Sans — body, UI elements, nav, buttons */
+  --font-sans: var(--font-jakarta);
+  /* Outfit — geometric bold headings */
+  --font-heading: var(--font-outfit), system-ui, sans-serif;
 }
 
 :root {
@@ -48,27 +48,27 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  /* DM Sans as the default UI font */
-  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  font-family: var(--font-jakarta), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 /* Typography */
 
-/* Titles → Playfair Display (editorial serif) */
+/* Titles → Outfit (geometric, futuristic) */
 h1, h2 {
-  font-family: var(--font-playfair), Georgia, serif;
+  font-family: var(--font-outfit), system-ui, sans-serif;
   font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: -0.015em;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 
-/* Subheadings → DM Sans (clean, modern) */
+/* Subheadings → Outfit medium */
 h3, h4, h5, h6 {
-  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  font-family: var(--font-outfit), system-ui, sans-serif;
   font-weight: 600;
-  line-height: 1.35;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
 }
 
 /* Custom scrollbar */
@@ -97,14 +97,12 @@ h3, h4, h5, h6 {
 .prose-custom {
   color: #334155;
   line-height: 1.85;
-  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  font-family: var(--font-jakarta), system-ui, sans-serif;
   font-size: 1.0625rem;
 }
-/* h1/h2 in prose → Playfair Display titles */
-.prose-custom h1 { font-family: var(--font-playfair), Georgia, serif; font-size: 2rem; margin: 1.5rem 0 1rem; color: #0f172a; letter-spacing: -0.02em; }
-.prose-custom h2 { font-family: var(--font-playfair), Georgia, serif; font-size: 1.5rem; margin: 1.5rem 0 0.75rem; color: #0f172a; letter-spacing: -0.015em; }
-/* h3+ in prose → DM Sans subheadings */
-.prose-custom h3 { font-family: var(--font-dm-sans), system-ui, sans-serif; font-size: 1.25rem; margin: 1.25rem 0 0.5rem; color: #0f172a; }
+.prose-custom h1 { font-family: var(--font-outfit), system-ui, sans-serif; font-size: 2rem; margin: 1.5rem 0 1rem; color: #0f172a; letter-spacing: -0.02em; }
+.prose-custom h2 { font-family: var(--font-outfit), system-ui, sans-serif; font-size: 1.5rem; margin: 1.5rem 0 0.75rem; color: #0f172a; letter-spacing: -0.02em; }
+.prose-custom h3 { font-family: var(--font-outfit), system-ui, sans-serif; font-size: 1.25rem; margin: 1.25rem 0 0.5rem; color: #0f172a; }
 .prose-custom p { margin-bottom: 1rem; }
 .prose-custom ul, .prose-custom ol { margin: 0.75rem 0 1rem 1.5rem; }
 .prose-custom li { margin-bottom: 0.25rem; }
