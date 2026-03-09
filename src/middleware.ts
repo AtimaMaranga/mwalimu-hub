@@ -40,6 +40,13 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // Protect /admin/* — redirect to admin login if not authenticated
+  if (!user && pathname.startsWith("/admin") && pathname !== "/admin/login") {
+    const url = request.nextUrl.clone();
+    url.pathname = "/admin/login";
+    return NextResponse.redirect(url);
+  }
+
   // Redirect /auth pages to dashboard if already logged in
   if (
     user &&
@@ -55,5 +62,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/auth/login", "/auth/signup"],
+  matcher: ["/dashboard/:path*", "/admin/:path*", "/auth/login", "/auth/signup"],
 };

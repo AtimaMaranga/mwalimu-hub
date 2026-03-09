@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import {
@@ -33,8 +32,9 @@ export default async function AdminLayout({
     data: { user },
   } = await supabase.auth.getUser();
 
+  // Login page — render without sidebar shell
   if (!user) {
-    redirect("/admin/login");
+    return <>{children}</>;
   }
 
   return (
