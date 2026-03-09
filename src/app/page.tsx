@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Fragment } from "react";
-import { Search, MessageCircle, Video, Globe, TrendingUp, Heart, Briefcase, GraduationCap, Users, Star, ArrowRight, CheckCircle } from "lucide-react";
+import { Search, MessageCircle, Video, Globe, TrendingUp, Heart, Briefcase, GraduationCap, Users, Star, ArrowRight, CheckCircle } from "@/components/ui/icons";
 import PageWrapper from "@/components/layout/PageWrapper";
 import Button from "@/components/ui/Button";
 import AnimatedStat from "@/components/ui/AnimatedStat";
@@ -11,10 +11,10 @@ import BlogCard from "@/components/sections/BlogCard";
 import JsonLd from "@/components/seo/JsonLd";
 import { getFeaturedTeachers, getBlogPosts } from "@/lib/supabase/queries";
 
-const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://mwalimuwangu.com";
+const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://swahili-tutors.com";
 
 export const metadata: Metadata = {
-  title: "Learn Swahili Online with Native Teachers | Mwalimu Wangu",
+  title: "Learn Swahili Online with Native Teachers | Swahili Tutors",
   description:
     "Connect with verified native Swahili teachers for personalised 1-on-1 online lessons. Learn Swahili for travel, business, family or culture — from $15/hour. Start today.",
   alternates: { canonical: BASE },
@@ -56,14 +56,14 @@ export default async function HomePage() {
   const orgSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Mwalimu Wangu",
+    name: "Swahili Tutors",
     url: BASE,
     logo: `${BASE}/og-image.png`,
     description:
       "Online marketplace connecting Swahili language learners with verified native Swahili teachers for personalised 1-on-1 online lessons.",
     contactPoint: {
       "@type": "ContactPoint",
-      email: "hello@mwalimuwangu.com",
+      email: "hello@swahili-tutors.com",
       contactType: "customer service",
     },
   };
@@ -71,7 +71,7 @@ export default async function HomePage() {
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "Mwalimu Wangu",
+    name: "Swahili Tutors",
     url: BASE,
     potentialAction: {
       "@type": "SearchAction",
@@ -89,7 +89,7 @@ export default async function HomePage() {
     name: "Online Swahili Lessons",
     description:
       "Personalised 1-on-1 Swahili lessons with verified native Swahili teachers via video call — for beginners, travellers, business professionals, and diaspora learners.",
-    provider: { "@type": "Organization", name: "Mwalimu Wangu", url: BASE },
+    provider: { "@type": "Organization", name: "Swahili Tutors", url: BASE },
     serviceType: "Language Tutoring",
     areaServed: "Worldwide",
     offers: {
@@ -441,7 +441,7 @@ export default async function HomePage() {
               Find your teacher and start today
             </h2>
             <p className="text-slate-600 text-lg mb-10 leading-relaxed max-w-xl mx-auto">
-              Join thousands of learners worldwide discovering the beauty of Swahili with expert native teachers on Mwalimu Wangu.
+              Join thousands of learners worldwide discovering the beauty of Swahili with expert native teachers on Swahili Tutors.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
               <Link href="/teachers">

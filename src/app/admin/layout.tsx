@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Admin Dashboard | Mwalimu Wangu",
+  title: "Admin Dashboard | Swahili Tutors",
   robots: { index: false, follow: false },
 };
 
@@ -43,7 +43,7 @@ export default async function AdminLayout({
       <aside className="w-64 bg-slate-900 text-white flex flex-col shrink-0">
         <div className="p-6 border-b border-slate-800">
           <p className="text-xs text-slate-400 mb-1">Admin Panel</p>
-          <p className="font-bold text-white">Mwalimu Wangu</p>
+          <p className="font-bold text-white">Swahili Tutors</p>
           <p className="text-xs text-slate-400 mt-1 truncate">{user.email}</p>
         </div>
 

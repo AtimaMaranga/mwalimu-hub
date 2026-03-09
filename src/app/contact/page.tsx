@@ -6,7 +6,7 @@ import { Mail, Clock, MessageSquare } from "lucide-react";
 export const metadata: Metadata = {
   title: "Contact Us",
   description:
-    "Get in touch with Mwalimu Wangu — whether you want to learn Swahili, become a teacher, or have a general question.",
+    "Get in touch with Swahili Tutors — whether you want to learn Swahili, become a teacher, or have a general question.",
 };
 
 export default function ContactPage() {
@@ -37,7 +37,7 @@ export default function ContactPage() {
               {
                 icon: Mail,
                 title: "Email",
-                value: "hello@mwalimuwangu.com",
+                value: "hello@swahili-tutors.com",
                 sub: "We read every message",
               },
               {

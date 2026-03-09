@@ -79,7 +79,7 @@ export default async function AdminDashboard() {
         Dashboard
       </h1>
       <p className="text-slate-500 text-sm mb-8">
-        Welcome back. Here&apos;s an overview of Mwalimu Wangu.
+        Welcome back. Here&apos;s an overview of Swahili Tutors.
       </p>
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">

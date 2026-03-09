@@ -4,7 +4,7 @@ import PageWrapper from "@/components/layout/PageWrapper";
 export const metadata: Metadata = {
   title: "Terms of Service",
   description:
-    "Mwalimu Wangu Terms of Service — please read before using our platform.",
+    "Swahili Tutors Terms of Service — please read before using our platform.",
 };
 
 export default function TermsPage() {
@@ -19,21 +19,21 @@ export default function TermsPage() {
 
       <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12 prose-custom">
         <p>
-          Welcome to Mwalimu Wangu. By accessing or using our website and
+          Welcome to Swahili Tutors. By accessing or using our website and
           services, you agree to be bound by these Terms of Service. Please
           read them carefully.
         </p>
 
         <h2>1. Acceptance of Terms</h2>
         <p>
-          By accessing mwalimuwangu.com, you confirm that you are at least 18
+          By accessing swahili-tutors.com, you confirm that you are at least 18
           years of age (or have parental consent) and that you agree to comply
           with these terms. If you do not agree, please do not use the platform.
         </p>
 
         <h2>2. Services Provided</h2>
         <p>
-          Mwalimu Wangu is a marketplace that connects Swahili language learners
+          Swahili Tutors is a marketplace that connects Swahili language learners
           with Swahili teachers. We do not directly provide tutoring services.
           All teaching arrangements are made between the student and teacher
           independently.
@@ -56,7 +56,7 @@ export default function TermsPage() {
 
         <h2>5. Payment and Transactions</h2>
         <p>
-          At this time, Mwalimu Wangu does not process payments. All financial
+          At this time, Swahili Tutors does not process payments. All financial
           arrangements are made directly between students and teachers. Mwalimu
           Wangu accepts no liability for payment disputes between students and
           teachers.
@@ -75,13 +75,13 @@ export default function TermsPage() {
         <h2>7. Intellectual Property</h2>
         <p>
           All content on this website — including text, images, logos, and
-          design — is the property of Mwalimu Wangu or its licensors. You may
+          design — is the property of Swahili Tutors or its licensors. You may
           not reproduce or redistribute our content without written permission.
         </p>
 
         <h2>8. Limitation of Liability</h2>
         <p>
-          Mwalimu Wangu is provided on an &ldquo;as is&rdquo; basis. We make no
+          Swahili Tutors is provided on an &ldquo;as is&rdquo; basis. We make no
           warranties about the availability, accuracy, or reliability of our
           services. To the maximum extent permitted by law, we are not liable
           for any direct or indirect damages arising from your use of the
@@ -98,7 +98,7 @@ export default function TermsPage() {
         <h2>10. Contact</h2>
         <p>
           For questions about these terms, please contact us at{" "}
-          <a href="mailto:legal@mwalimuwangu.com">legal@mwalimuwangu.com</a>.
+          <a href="mailto:legal@swahili-tutors.com">legal@swahili-tutors.com</a>.
         </p>
       </div>
     </PageWrapper>

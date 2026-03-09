@@ -4,12 +4,12 @@ import { Target, Heart, Globe, Users } from "lucide-react";
 import PageWrapper from "@/components/layout/PageWrapper";
 import Button from "@/components/ui/Button";
 
-const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://mwalimuwangu.com";
+const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://swahili-tutors.com";
 
 export const metadata: Metadata = {
-  title: "About Mwalimu Wangu — Our Mission to Grow Swahili Learning Worldwide",
+  title: "About Swahili Tutors — Our Mission to Grow Swahili Learning Worldwide",
   description:
-    "Mwalimu Wangu connects Swahili learners with verified native teachers for authentic 1-on-1 online lessons. Learn about our story, mission, and why Swahili matters.",
+    "Swahili Tutors connects Swahili learners with verified native teachers for authentic 1-on-1 online lessons. Learn about our story, mission, and why Swahili matters.",
   alternates: { canonical: `${BASE}/about` },
 };
 
@@ -43,7 +43,7 @@ export default function AboutPage() {
       <div className="bg-gradient-to-br from-indigo-900 to-violet-900 text-white py-20">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
           <h1 className="text-3xl sm:text-5xl font-bold font-heading mb-4">
-            About Mwalimu Wangu
+            About Swahili Tutors
           </h1>
           <p className="text-indigo-100 text-lg">
             We are on a mission to connect every Swahili learner with the right teacher.
@@ -64,9 +64,9 @@ export default function AboutPage() {
               </h2>
               <div className="space-y-4 text-slate-600 leading-relaxed">
                 <p>
-                  Mwalimu Wangu — Swahili for &ldquo;My Teacher&rdquo; — was
-                  founded with a simple belief: the best way to learn a language
-                  is from someone who lives and breathes it.
+                  Swahili Tutors was founded with a simple belief: the best
+                  way to learn a language is from someone who lives and breathes
+                  it.
                 </p>
                 <p>
                   We connect motivated learners worldwide with qualified, vetted
@@ -127,7 +127,7 @@ export default function AboutPage() {
               market.
             </p>
             <p>
-              We founded Mwalimu Wangu to change that. As East Africa becomes
+              We founded Swahili Tutors to change that. As East Africa becomes
               one of the world&apos;s most dynamic regions — economically,
               culturally, and politically — Swahili fluency is becoming an
               increasingly valuable skill. We want to be the platform that
@@ -136,7 +136,7 @@ export default function AboutPage() {
             <p>
               At the same time, Swahili teachers across the region possess
               extraordinary knowledge and skill, but lack access to a global
-              audience. Mwalimu Wangu gives them that access — so they can
+              audience. Swahili Tutors gives them that access — so they can
               share their expertise and build sustainable teaching careers.
             </p>
           </div>
@@ -174,7 +174,7 @@ export default function AboutPage() {
           </h2>
           <p className="text-indigo-100 mb-8">
             Whether you want to learn Swahili or share your expertise,
-            there&apos;s a place for you on Mwalimu Wangu.
+            there&apos;s a place for you on Swahili Tutors.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/teachers">

@@ -4,7 +4,7 @@ import TeachersClient from "./TeachersClient";
 import JsonLd from "@/components/seo/JsonLd";
 import { getTeachers } from "@/lib/supabase/queries";
 
-const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://mwalimuwangu.com";
+const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://swahili-tutors.com";
 
 export const metadata: Metadata = {
   title: "Find a Swahili Tutor Online | Browse Native Swahili Teachers",

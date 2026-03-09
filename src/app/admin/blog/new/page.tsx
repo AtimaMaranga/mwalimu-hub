@@ -44,7 +44,7 @@ export default function NewBlogPostPage() {
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      author: "Mwalimu Wangu Team",
+      author: "Swahili Tutors Team",
       is_published: false,
     },
   });

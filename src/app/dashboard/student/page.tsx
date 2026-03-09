@@ -5,7 +5,7 @@ import DashboardShell from "@/components/dashboard/DashboardShell";
 import Button from "@/components/ui/Button";
 import {
   ArrowRight, Clock, ChevronRight, Users, TrendingUp, MessageCircle, Search,
-} from "lucide-react";
+} from "@/components/ui/icons";
 import { getInitials } from "@/lib/utils";
 
 const levelColors: Record<string, { bg: string; text: string; dot: string }> = {

@@ -18,13 +18,13 @@ const plusJakarta = Plus_Jakarta_Sans({
   weight: ["300", "400", "500", "600", "700", "800"],
 });
 
-const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://mwalimuwangu.com";
+const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://swahili-tutors.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE),
   title: {
-    default: "Learn Swahili Online with Native Teachers | Mwalimu Wangu",
-    template: "%s | Mwalimu Wangu",
+    default: "Learn Swahili Online with Native Teachers | Swahili Tutors",
+    template: "%s | Swahili Tutors",
   },
   description:
     "Connect with verified native Swahili teachers for personalised 1-on-1 online lessons. Learn Swahili for travel, business, family or culture — from $15/hour. Start today.",
@@ -42,14 +42,14 @@ export const metadata: Metadata = {
     "East Africa language",
     "mwalimu",
   ],
-  authors: [{ name: "Mwalimu Wangu" }],
-  creator: "Mwalimu Wangu",
+  authors: [{ name: "Swahili Tutors" }],
+  creator: "Swahili Tutors",
   openGraph: {
     type: "website",
     locale: "en_US",
     url: BASE,
-    siteName: "Mwalimu Wangu",
-    title: "Learn Swahili Online with Native Teachers | Mwalimu Wangu",
+    siteName: "Swahili Tutors",
+    title: "Learn Swahili Online with Native Teachers | Swahili Tutors",
     description:
       "Connect with verified native Swahili teachers for personalised 1-on-1 online lessons. Learn Swahili for travel, business, family or culture — from $15/hour.",
     images: [
@@ -57,13 +57,13 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Mwalimu Wangu — Learn Swahili from Native Speakers Online",
+        alt: "Swahili Tutors — Learn Swahili from Native Speakers Online",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Learn Swahili Online with Native Teachers | Mwalimu Wangu",
+    title: "Learn Swahili Online with Native Teachers | Swahili Tutors",
     description:
       "Connect with verified native Swahili teachers for personalised 1-on-1 online lessons — from $15/hour.",
     images: ["/og-image.png"],

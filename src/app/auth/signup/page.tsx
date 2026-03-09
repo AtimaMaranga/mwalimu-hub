@@ -104,9 +104,9 @@ export default function SignupPage() {
           <div className="text-center mb-8">
             <Link href="/" className="inline-flex items-center gap-2.5 justify-center mb-7 group">
               <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-violet-700 shadow-md shadow-indigo-200 group-hover:shadow-indigo-300 transition-shadow">
-                <span className="text-white font-bold text-sm font-heading italic">MW</span>
+                <span className="text-white font-bold text-sm font-heading italic">ST</span>
               </span>
-              <span className="font-heading font-bold text-slate-900 text-lg tracking-tight">Mwalimu Wangu</span>
+              <span className="font-heading font-bold text-slate-900 text-lg tracking-tight">Swahili Tutors</span>
             </Link>
             <h1 className="text-3xl font-bold font-heading text-slate-900 mb-2">Create your account</h1>
             <p className="text-slate-500 text-sm">Start your Swahili journey today — it&apos;s free</p>

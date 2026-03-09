@@ -43,7 +43,7 @@ export default function AdminLoginPage() {
           <h1 className="text-2xl font-bold text-white font-heading">
             Admin Login
           </h1>
-          <p className="text-slate-400 text-sm mt-1">Mwalimu Wangu Dashboard</p>
+          <p className="text-slate-400 text-sm mt-1">Swahili Tutors Dashboard</p>
         </div>
 
         <form
@@ -65,7 +65,7 @@ export default function AdminLoginPage() {
               onChange={(e) => setEmail(e.target.value)}
               required
               className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-300 text-sm"
-              placeholder="admin@mwalimuwangu.com"
+              placeholder="admin@swahili-tutors.com"
             />
           </div>
 

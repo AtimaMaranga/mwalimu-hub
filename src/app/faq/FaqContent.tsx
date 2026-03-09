@@ -48,7 +48,7 @@ export default function FaqContent() {
           </h1>
           <p className="text-indigo-100 text-lg">
             Everything you need to know about learning and teaching Swahili on
-            Mwalimu Wangu.
+            Swahili Tutors.
           </p>
         </div>
       </div>

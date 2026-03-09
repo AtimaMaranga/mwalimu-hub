@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getTeacherSlugs, getBlogPostSlugs } from "@/lib/supabase/queries";
 
-const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://mwalimuwangu.com";
+const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://swahili-tutors.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [teachers, posts] = await Promise.all([getTeacherSlugs(), getBlogPostSlugs()]);

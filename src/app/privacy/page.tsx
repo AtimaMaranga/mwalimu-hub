@@ -4,7 +4,7 @@ import PageWrapper from "@/components/layout/PageWrapper";
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
-    "Mwalimu Wangu Privacy Policy — how we collect, use, and protect your personal information.",
+    "Swahili Tutors Privacy Policy — how we collect, use, and protect your personal information.",
 };
 
 export default function PrivacyPage() {
@@ -19,7 +19,7 @@ export default function PrivacyPage() {
 
       <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12 prose-custom">
         <p>
-          At Mwalimu Wangu, we take your privacy seriously. This policy explains
+          At Swahili Tutors, we take your privacy seriously. This policy explains
           what personal data we collect, why we collect it, and how we use and
           protect it.
         </p>
@@ -119,8 +119,8 @@ export default function PrivacyPage() {
         </ul>
         <p>
           To exercise any of these rights, email us at{" "}
-          <a href="mailto:privacy@mwalimuwangu.com">
-            privacy@mwalimuwangu.com
+          <a href="mailto:privacy@swahili-tutors.com">
+            privacy@swahili-tutors.com
           </a>
           .
         </p>
@@ -144,8 +144,8 @@ export default function PrivacyPage() {
         <p>
           For privacy-related questions or to exercise your rights, contact us
           at{" "}
-          <a href="mailto:privacy@mwalimuwangu.com">
-            privacy@mwalimuwangu.com
+          <a href="mailto:privacy@swahili-tutors.com">
+            privacy@swahili-tutors.com
           </a>
           .
         </p>

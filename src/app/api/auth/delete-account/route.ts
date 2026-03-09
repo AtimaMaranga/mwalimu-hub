@@ -19,6 +19,7 @@ export async function DELETE() {
   }
 
   const userId = user.id;
+  const userEmail = user.email;
 
   // Admin client — bypasses RLS
   const admin = createSupabaseClient(
@@ -26,15 +27,15 @@ export async function DELETE() {
     process.env.SUPABASE_SERVICE_ROLE_KEY
   );
 
-  // 2. Look up the user's profile to get their teacher_id (if they're a teacher)
-  //    teachers table has no user_id — it links through profiles.teacher_id
+  // 2. Look up the user's profile to get their teacher_id (if they're a teacher).
+  //    maybeSingle() returns null cleanly when no profile row exists (no error thrown).
   const { data: profile } = await admin
     .from("profiles")
     .select("teacher_id")
     .eq("id", userId)
-    .single();
+    .maybeSingle();
 
-  // 3. If they're a teacher, delete the teacher record
+  // 3. If they're a teacher, delete the teacher record first.
   if (profile?.teacher_id) {
     const { error: teacherErr } = await admin
       .from("teachers")
@@ -45,15 +46,28 @@ export async function DELETE() {
     }
   }
 
-  // 4. Delete the auth user.
+  // 4. For students: delete any inquiries linked to their email.
+  //    This clears any FK or orphaned records before the auth user is removed.
+  if (userEmail && !profile?.teacher_id) {
+    await admin
+      .from("student_inquiries")
+      .delete()
+      .eq("student_email", userEmail);
+  }
+
+  // 5. Delete the auth user.
   //    The profiles table has ON DELETE CASCADE → profile is deleted automatically.
   const { error: deleteError } = await admin.auth.admin.deleteUser(userId);
   if (deleteError) {
     return NextResponse.json({ error: `Failed to delete account: ${deleteError.message}` }, { status: 500 });
   }
 
-  // 5. Clear the session cookie
-  await supabase.auth.signOut();
+  // 6. Clear the session cookie (best-effort — user is already deleted).
+  try {
+    await supabase.auth.signOut();
+  } catch {
+    // Session clearance may fail after user deletion; safe to ignore.
+  }
 
   return NextResponse.json({ success: true });
 }

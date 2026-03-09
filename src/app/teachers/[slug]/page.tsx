@@ -21,7 +21,7 @@ import JsonLd from "@/components/seo/JsonLd";
 import { getTeacherBySlug, getTeacherSlugs } from "@/lib/supabase/queries";
 import { formatCurrency, getInitials } from "@/lib/utils";
 
-const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://mwalimuwangu.com";
+const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://swahili-tutors.com";
 
 export async function generateStaticParams() {
   const teachers = await getTeacherSlugs();

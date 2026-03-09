@@ -24,7 +24,7 @@ export const faqs = [
       },
       {
         q: "How do I pay for Swahili lessons?",
-        a: "Payment is arranged directly between you and your teacher. Common methods include PayPal, bank transfer, M-Pesa, and Wise. Mwalimu Wangu does not handle payments directly at this stage.",
+        a: "Payment is arranged directly between you and your teacher. Common methods include PayPal, bank transfer, M-Pesa, and Wise. Swahili Tutors does not handle payments directly at this stage.",
       },
     ],
   },
@@ -32,7 +32,7 @@ export const faqs = [
     category: "For Teachers",
     items: [
       {
-        q: "How do I become a Swahili teacher on Mwalimu Wangu?",
+        q: "How do I become a Swahili teacher on Swahili Tutors?",
         a: "Fill in the application form on our Become a Teacher page. We review all applications within 48 hours and will contact you by email with next steps.",
       },
       {
@@ -45,7 +45,7 @@ export const faqs = [
       },
       {
         q: "Is there a commission or platform fee?",
-        a: "Currently, Mwalimu Wangu charges no commission. We may introduce a platform fee in future phases, and teachers will be informed well in advance of any changes.",
+        a: "Currently, Swahili Tutors charges no commission. We may introduce a platform fee in future phases, and teachers will be informed well in advance of any changes.",
       },
     ],
   },
@@ -53,16 +53,16 @@ export const faqs = [
     category: "General",
     items: [
       {
-        q: "What languages are taught on Mwalimu Wangu?",
+        q: "What languages are taught on Swahili Tutors?",
         a: "Our platform focuses exclusively on Swahili (Kiswahili). This allows us to maintain deep expertise and quality in one language rather than spreading thin across many.",
       },
       {
-        q: "Is Mwalimu Wangu available worldwide?",
+        q: "Is Swahili Tutors available worldwide?",
         a: "Yes — both students and teachers from anywhere in the world are welcome. Lessons take place online via video call, so geography is no barrier.",
       },
       {
-        q: "How do I contact Mwalimu Wangu?",
-        a: "Use our Contact page or email us at hello@mwalimuwangu.com. We aim to respond within 24 hours on weekdays.",
+        q: "How do I contact Swahili Tutors?",
+        a: "Use our Contact page or email us at hello@swahili-tutors.com. We aim to respond within 24 hours on weekdays.",
       },
     ],
   },
@@ -75,7 +75,7 @@ export const faqs = [
       },
       {
         q: "I'm having trouble with the website. What should I do?",
-        a: "Please contact us at hello@mwalimuwangu.com or use the Contact page. Describe the issue and include your browser and device type if possible.",
+        a: "Please contact us at hello@swahili-tutors.com or use the Contact page. Describe the issue and include your browser and device type if possible.",
       },
     ],
   },

@@ -22,7 +22,7 @@ import {
 import { formatDate } from "@/lib/utils";
 import JsonLd from "@/components/seo/JsonLd";
 
-const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://mwalimuwangu.com";
+const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://swahili-tutors.com";
 
 export async function generateStaticParams() {
   const posts = await getBlogPostSlugs();
@@ -48,7 +48,7 @@ export async function generateMetadata({
       type: "article",
       publishedTime: post.published_at || undefined,
       authors: [post.author],
-      siteName: "Mwalimu Wangu",
+      siteName: "Swahili Tutors",
     },
     twitter: {
       card: "summary_large_image",
@@ -102,7 +102,7 @@ export default async function BlogPostPage({
     },
     publisher: {
       "@type": "Organization",
-      name: "Mwalimu Wangu",
+      name: "Swahili Tutors",
       url: BASE,
       logo: {
         "@type": "ImageObject",
@@ -253,7 +253,7 @@ export default async function BlogPostPage({
             <div>
               <p className="font-semibold text-slate-900">{post.author}</p>
               <p className="text-xs text-slate-500">
-                Mwalimu Wangu Contributor
+                Swahili Tutors Contributor
               </p>
             </div>
           </div>

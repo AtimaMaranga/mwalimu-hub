@@ -59,6 +59,6 @@ export function getInitials(name: string): string {
 
 /** Build absolute URL */
 export function absoluteUrl(path: string): string {
-  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://mwalimuwangu.com";
+  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://swahili-tutors.com";
   return `${base}${path}`;
 }

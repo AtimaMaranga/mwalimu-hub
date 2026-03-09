@@ -77,15 +77,15 @@ export default function Navbar() {
             <Link
               href="/"
               className="flex items-center gap-2.5 group"
-              aria-label="Mwalimu Wangu — Home"
+              aria-label="Swahili Tutors — Home"
             >
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-violet-700 shadow-sm">
                 <span className="text-white font-bold text-sm font-heading italic tracking-tight select-none">
-                  MW
+                  ST
                 </span>
               </span>
               <span className="font-heading font-bold text-slate-900 text-lg tracking-tight">
-                Mwalimu Wangu
+                Swahili Tutors
               </span>
             </Link>
 

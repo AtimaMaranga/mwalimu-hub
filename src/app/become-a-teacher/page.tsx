@@ -10,12 +10,12 @@ import {
   Users,
 } from "lucide-react";
 
-const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://mwalimuwangu.com";
+const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://swahili-tutors.com";
 
 export const metadata: Metadata = {
-  title: "Teach Swahili Online | Become a Swahili Tutor on Mwalimu Wangu",
+  title: "Teach Swahili Online | Become a Swahili Tutor on Swahili Tutors",
   description:
-    "Turn your Swahili expertise into a rewarding online teaching career. Apply to become a verified Swahili tutor on Mwalimu Wangu and reach motivated students worldwide.",
+    "Turn your Swahili expertise into a rewarding online teaching career. Apply to become a verified Swahili tutor on Swahili Tutors and reach motivated students worldwide.",
   alternates: { canonical: `${BASE}/become-a-teacher` },
 };
 
@@ -85,7 +85,7 @@ export default function BecomeTeacherPage() {
               id="benefits-heading"
               className="text-3xl font-bold font-heading text-slate-900 mb-4"
             >
-              Why Teach with Mwalimu Wangu?
+              Why Teach with Swahili Tutors?
             </h2>
             <p className="text-slate-500 max-w-2xl mx-auto">
               We make it easy to share your Swahili expertise and build a

@@ -1,7 +1,7 @@
 import { Resend } from "resend";
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "hello@mwalimuwangu.com";
-const FROM = "Mwalimu Wangu <noreply@mwalimuwangu.com>";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "hello@swahili-tutors.com";
+const FROM = "Swahili Tutors <noreply@swahili-tutors.com>";
 
 function getResend() {
   if (!process.env.RESEND_API_KEY) {
@@ -43,12 +43,12 @@ export async function sendContactConfirmation(data: {
   return getResend().emails.send({
     from: FROM,
     to: data.email,
-    subject: "We received your message — Mwalimu Wangu",
+    subject: "We received your message — Swahili Tutors",
     html: `
       <h2>Habari ${data.name}!</h2>
-      <p>Thank you for reaching out to Mwalimu Wangu. We've received your message and will get back to you within 24 hours.</p>
+      <p>Thank you for reaching out to Swahili Tutors. We've received your message and will get back to you within 24 hours.</p>
       <p>In the meantime, feel free to browse our <a href="${process.env.NEXT_PUBLIC_SITE_URL}/teachers">teacher directory</a>.</p>
-      <p>Asante sana,<br/>The Mwalimu Wangu Team</p>
+      <p>Asante sana,<br/>The Swahili Tutors Team</p>
     `,
   });
 }
@@ -83,12 +83,12 @@ export async function sendApplicationConfirmation(data: {
   return getResend().emails.send({
     from: FROM,
     to: data.email,
-    subject: "Application received — Mwalimu Wangu",
+    subject: "Application received — Swahili Tutors",
     html: `
       <h2>Habari ${data.name}!</h2>
-      <p>Thank you for applying to teach on Mwalimu Wangu. We've received your application and will review it within 48 hours.</p>
+      <p>Thank you for applying to teach on Swahili Tutors. We've received your application and will review it within 48 hours.</p>
       <p>We'll contact you at this email address with the outcome. If you have any questions in the meantime, feel free to reply to this email.</p>
-      <p>Asante sana,<br/>The Mwalimu Wangu Team</p>
+      <p>Asante sana,<br/>The Swahili Tutors Team</p>
     `,
   });
 }
@@ -123,12 +123,12 @@ export async function sendInquiryNotification(data: {
     getResend().emails.send({
       from: FROM,
       to: data.student_email,
-      subject: `Your inquiry to ${data.teacher_name} — Mwalimu Wangu`,
+      subject: `Your inquiry to ${data.teacher_name} — Swahili Tutors`,
       html: `
         <h2>Habari ${data.student_name}!</h2>
         <p>Your inquiry has been sent to <strong>${data.teacher_name}</strong>. They will contact you directly at this email address within 24–48 hours.</p>
         <p>While you wait, feel free to <a href="${process.env.NEXT_PUBLIC_SITE_URL}/teachers">browse other teachers</a> too.</p>
-        <p>Asante,<br/>The Mwalimu Wangu Team</p>
+        <p>Asante,<br/>The Swahili Tutors Team</p>
       `,
     }),
   ];

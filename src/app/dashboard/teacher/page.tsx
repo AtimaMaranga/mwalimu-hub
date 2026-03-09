@@ -7,7 +7,7 @@ import {
   User, MessageCircle, ExternalLink,
   ArrowRight, Clock, CheckCircle, DollarSign,
   TrendingUp, Pencil, ChevronRight,
-} from "lucide-react";
+} from "@/components/ui/icons";
 import { getInitials } from "@/lib/utils";
 
 const levelColors: Record<string, { bg: string; text: string; dot: string }> = {

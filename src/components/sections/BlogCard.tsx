@@ -20,10 +20,10 @@ function ImagePlaceholder() {
           style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
           aria-hidden="true"
         >
-          MW
+          ST
         </p>
         <p className="text-white/25 text-xs font-medium uppercase tracking-[0.2em] mt-3">
-          Mwalimu Wangu
+          Swahili Tutors
         </p>
       </div>
     </div>

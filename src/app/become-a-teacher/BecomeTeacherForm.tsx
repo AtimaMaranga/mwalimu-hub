@@ -81,7 +81,7 @@ export default function BecomeTeacherForm() {
           Application Received!
         </h2>
         <p className="text-slate-500 max-w-sm mx-auto">
-          Thank you for applying to teach on Mwalimu Wangu. We&apos;ll review
+          Thank you for applying to teach on Swahili Tutors. We&apos;ll review
           your application and contact you within 48 hours.
         </p>
       </div>
@@ -286,7 +286,7 @@ export default function BecomeTeacherForm() {
             className="h-4 w-4 rounded text-indigo-600 focus:ring-indigo-500 mt-0.5"
           />
           <label htmlFor="agree_terms" className="text-sm text-slate-600">
-            I agree to Mwalimu Wangu&apos;s{" "}
+            I agree to Swahili Tutors&apos;s{" "}
             <a
               href="/terms"
               className="text-indigo-600 underline"

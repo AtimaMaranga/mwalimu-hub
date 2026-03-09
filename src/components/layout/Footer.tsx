@@ -26,7 +26,7 @@ const footerLinks = {
 };
 
 const socialLinks = [
-  { label: "Email", href: "mailto:hello@mwalimuwangu.com", Icon: Mail },
+  { label: "Email", href: "mailto:hello@swahili-tutors.com", Icon: Mail },
 ];
 
 export default function Footer() {
@@ -45,11 +45,11 @@ export default function Footer() {
         <div className="py-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-10">
           {/* Brand */}
           <div className="sm:col-span-2">
-            <Link href="/" className="flex items-center gap-2.5 mb-5" aria-label="Mwalimu Wangu — Home">
+            <Link href="/" className="flex items-center gap-2.5 mb-5" aria-label="Swahili Tutors — Home">
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-violet-700 shadow-sm">
-                <span className="text-white font-bold text-sm font-heading italic tracking-tight select-none">MW</span>
+                <span className="text-white font-bold text-sm font-heading italic tracking-tight select-none">ST</span>
               </span>
-              <span className="font-heading font-bold text-slate-900 text-lg tracking-tight">Mwalimu Wangu</span>
+              <span className="font-heading font-bold text-slate-900 text-lg tracking-tight">Swahili Tutors</span>
             </Link>
             <p className="text-sm text-slate-600 leading-relaxed max-w-xs mb-6">
               Your gateway to Swahili fluency. Connect with qualified native Swahili teachers and start your language journey today.
@@ -90,7 +90,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="py-6 border-t border-black/10 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-sm text-slate-500">
-            &copy; {currentYear} Mwalimu Wangu. All rights reserved.
+            &copy; {currentYear} Swahili Tutors. All rights reserved.
           </p>
           <p className="text-sm text-slate-500 italic">
             Asante kwa kujiunga nasi — <span className="not-italic text-slate-600">Thank you for joining us</span>

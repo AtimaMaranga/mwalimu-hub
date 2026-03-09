@@ -4,12 +4,12 @@ import BlogCard from "@/components/sections/BlogCard";
 import { getBlogPosts } from "@/lib/supabase/queries";
 import { BookOpen } from "lucide-react";
 
-const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://mwalimuwangu.com";
+const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://swahili-tutors.com";
 
 export const metadata: Metadata = {
   title: "Swahili Learning Blog — Tips, Guides & Stories",
   description:
-    "Explore Swahili language learning tips, beginner guides, cultural insights, and advice from native teachers on the Mwalimu Wangu blog.",
+    "Explore Swahili language learning tips, beginner guides, cultural insights, and advice from native teachers on the Swahili Tutors blog.",
   alternates: { canonical: `${BASE}/blog` },
 };
 

@@ -13,10 +13,10 @@ import {
 import PageWrapper from "@/components/layout/PageWrapper";
 import Button from "@/components/ui/Button";
 
-const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://mwalimuwangu.com";
+const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://swahili-tutors.com";
 
 export const metadata: Metadata = {
-  title: "How to Learn Swahili Online | How Mwalimu Wangu Works",
+  title: "How to Learn Swahili Online | How Swahili Tutors Works",
   description:
     "Discover how easy it is to find a native Swahili teacher and start learning online. Browse profiles, contact your teacher, and begin your first Swahili lesson in minutes.",
   alternates: { canonical: `${BASE}/how-it-works` },
@@ -78,7 +78,7 @@ const teacherSteps = [
 
 const faqs = [
   {
-    q: "Is there a fee to use Mwalimu Wangu?",
+    q: "Is there a fee to use Swahili Tutors?",
     a: "Using the platform to find and contact teachers is completely free for students. Teachers pay no commission during our current phase. This may change in future as we grow.",
   },
   {
@@ -95,7 +95,7 @@ export default function HowItWorksPage() {
   const howToSchema = {
     "@context": "https://schema.org",
     "@type": "HowTo",
-    name: "How to Book a Swahili Lesson on Mwalimu Wangu",
+    name: "How to Book a Swahili Lesson on Swahili Tutors",
     description:
       "Find and book a native Swahili teacher for personalised 1-on-1 online lessons in just a few simple steps.",
     totalTime: "PT5M",
@@ -138,7 +138,7 @@ export default function HowItWorksPage() {
             How It Works
           </h1>
           <p className="text-indigo-100 text-lg">
-            Getting started on Mwalimu Wangu is simple. Here is everything you
+            Getting started on Swahili Tutors is simple. Here is everything you
             need to know.
           </p>
         </div>

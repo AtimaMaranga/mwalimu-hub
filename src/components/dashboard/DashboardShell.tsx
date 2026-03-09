@@ -51,9 +51,9 @@ export default function DashboardShell({
       <div className="px-5 py-5 border-b border-white/5">
         <Link href="/" className="flex items-center gap-2.5 group" onClick={() => setSidebarOpen(false)}>
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 shadow-lg shadow-cyan-900/40 text-white font-bold text-xs italic shrink-0">
-            MW
+            ST
           </span>
-          <span className="text-white font-bold text-sm tracking-tight">Mwalimu Wangu</span>
+          <span className="text-white font-bold text-sm tracking-tight">Swahili Tutors</span>
         </Link>
       </div>
 
