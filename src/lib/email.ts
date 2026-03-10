@@ -93,6 +93,47 @@ export async function sendApplicationConfirmation(data: {
   });
 }
 
+// ─── Teacher Approval ─────────────────────────────────────────────────────
+
+export async function sendTeacherApprovedEmail(data: {
+  name: string;
+  email: string;
+  slug: string;
+}) {
+  return getResend().emails.send({
+    from: FROM,
+    to: data.email,
+    subject: "You're approved — welcome to Swahili Tutors!",
+    html: `
+      <h2>Habari ${data.name}!</h2>
+      <p>Great news — your teacher profile has been reviewed and <strong>approved</strong>. You are now live on Swahili Tutors!</p>
+      <p><a href="${process.env.NEXT_PUBLIC_SITE_URL}/teachers/${data.slug}">View your public profile</a></p>
+      <p>Students can now find you and send you inquiries. You'll receive an email each time a student reaches out.</p>
+      <p>If you'd like to update your profile details, log in to your dashboard at <a href="${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/teacher/profile">${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/teacher/profile</a>.</p>
+      <p>Asante sana,<br/>The Swahili Tutors Team</p>
+    `,
+  });
+}
+
+export async function sendTeacherRejectedEmail(data: {
+  name: string;
+  email: string;
+}) {
+  return getResend().emails.send({
+    from: FROM,
+    to: data.email,
+    subject: "Update on your Swahili Tutors application",
+    html: `
+      <h2>Habari ${data.name},</h2>
+      <p>Thank you for your interest in teaching on Swahili Tutors.</p>
+      <p>After reviewing your application, we're unable to approve your profile at this time. This may be due to incomplete information or our current capacity.</p>
+      <p>You're welcome to reapply at any time with updated information at <a href="${process.env.NEXT_PUBLIC_SITE_URL}/become-a-teacher">${process.env.NEXT_PUBLIC_SITE_URL}/become-a-teacher</a>.</p>
+      <p>If you have any questions, feel free to reply to this email.</p>
+      <p>Asante,<br/>The Swahili Tutors Team</p>
+    `,
+  });
+}
+
 // ─── Student Inquiry ──────────────────────────────────────────────────────
 
 export async function sendInquiryNotification(data: {
