@@ -1,3 +1,4 @@
+import { unstable_noStore as noStore } from "next/cache";
 import { createClient, createStaticClient } from "./server";
 import type { Teacher, BlogPost, Review } from "@/types";
 
@@ -17,6 +18,7 @@ function isSupabaseConfigured(): boolean {
 
 /** Fetch all published teachers */
 export async function getTeachers(): Promise<Teacher[]> {
+  noStore();
   if (!isSupabaseConfigured()) return [];
   try {
     const supabase = await createClient();
@@ -39,6 +41,7 @@ export async function getTeachers(): Promise<Teacher[]> {
 
 /** Fetch a single teacher by slug */
 export async function getTeacherBySlug(slug: string): Promise<Teacher | null> {
+  noStore();
   if (!isSupabaseConfigured()) return null;
   try {
     const supabase = await createClient();
@@ -62,6 +65,7 @@ export async function getTeacherBySlug(slug: string): Promise<Teacher | null> {
 
 /** Fetch featured teachers (first 4 published) */
 export async function getFeaturedTeachers(): Promise<Teacher[]> {
+  noStore();
   if (!isSupabaseConfigured()) return [];
   try {
     const supabase = await createClient();
@@ -170,6 +174,7 @@ export async function getRelatedPosts(
 
 /** Fetch approved reviews for a teacher */
 export async function getTeacherReviews(teacherId: string): Promise<Review[]> {
+  noStore();
   if (!isSupabaseConfigured()) return [];
   try {
     const supabase = await createClient();
