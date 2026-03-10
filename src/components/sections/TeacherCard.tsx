@@ -88,9 +88,26 @@ export default function TeacherCard({ teacher }: TeacherCardProps) {
 
       {/* Body */}
       <div className="px-5 pt-2 flex-1">
-        <h3 className="font-bold text-slate-900 text-base leading-tight">
-          {teacher.name}
-        </h3>
+        <div className="flex items-center gap-2">
+          <h3 className="font-bold text-slate-900 text-base leading-tight">
+            {teacher.name}
+          </h3>
+          <span
+            className={`inline-flex items-center gap-1 text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${
+              teacher.is_online
+                ? "bg-emerald-50 text-emerald-600"
+                : "bg-slate-100 text-slate-400"
+            }`}
+            title={teacher.is_online ? "Online now" : "Offline"}
+          >
+            <span
+              className={`h-1.5 w-1.5 rounded-full ${
+                teacher.is_online ? "bg-emerald-500" : "bg-slate-400"
+              }`}
+            />
+            {teacher.is_online ? "Online" : "Offline"}
+          </span>
+        </div>
         {teacher.tagline && (
           <p className="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">
             {teacher.tagline}

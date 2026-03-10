@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import DashboardShell from "@/components/dashboard/DashboardShell";
+import OnlineToggle from "@/components/dashboard/OnlineToggle";
 import Button from "@/components/ui/Button";
 import {
   User, MessageCircle, ExternalLink,
@@ -254,6 +255,9 @@ export default async function TeacherDashboardPage() {
                     : <><Clock className="h-3.5 w-3.5" /> Under review — published within 24–48 hrs</>
                   }
                 </div>
+
+                {/* Online toggle */}
+                <OnlineToggle initialValue={teacher.is_online ?? false} />
 
                 {/* Action buttons */}
                 <div className="flex gap-2">

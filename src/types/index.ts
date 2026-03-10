@@ -20,10 +20,23 @@ export interface Teacher {
   video_intro_url?: string;
   is_native_speaker: boolean;
   is_published: boolean;
+  is_online: boolean;
   rating: number;
   total_students: number;
   created_at: string;
   updated_at: string;
+}
+
+/** Student review for a teacher */
+export interface Review {
+  id: string;
+  teacher_id: string;
+  student_name: string;
+  student_email: string;
+  rating: number;
+  comment?: string;
+  is_approved: boolean;
+  created_at: string;
 }
 
 export interface LanguageEntry {

@@ -1,5 +1,5 @@
 import { createClient, createStaticClient } from "./server";
-import type { Teacher, BlogPost } from "@/types";
+import type { Teacher, BlogPost, Review } from "@/types";
 
 /** Returns true only when real Supabase credentials are present */
 function isSupabaseConfigured(): boolean {
@@ -162,6 +162,31 @@ export async function getRelatedPosts(
     return data as BlogPost[];
   } catch (err) {
     console.error("getRelatedPosts error:", err instanceof Error ? err.message : err);
+    return [];
+  }
+}
+
+// ─── Reviews ───────────────────────────────────────────────────────────────
+
+/** Fetch approved reviews for a teacher */
+export async function getTeacherReviews(teacherId: string): Promise<Review[]> {
+  if (!isSupabaseConfigured()) return [];
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("reviews")
+      .select("*")
+      .eq("teacher_id", teacherId)
+      .eq("is_approved", true)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("getTeacherReviews error:", error.message);
+      return [];
+    }
+    return data as Review[];
+  } catch (err) {
+    console.error("getTeacherReviews error:", err instanceof Error ? err.message : err);
     return [];
   }
 }

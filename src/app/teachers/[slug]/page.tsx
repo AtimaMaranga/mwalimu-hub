@@ -17,8 +17,10 @@ import Button from "@/components/ui/Button";
 import Badge from "@/components/ui/Badge";
 import StarRating from "@/components/ui/StarRating";
 import TeacherContactModal from "./TeacherContactModal";
+import ReviewForm from "./ReviewForm";
+import ReviewList from "./ReviewList";
 import JsonLd from "@/components/seo/JsonLd";
-import { getTeacherBySlug, getTeacherSlugs } from "@/lib/supabase/queries";
+import { getTeacherBySlug, getTeacherSlugs, getTeacherReviews } from "@/lib/supabase/queries";
 import { formatCurrency, getInitials } from "@/lib/utils";
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://swahili-tutors.com";
@@ -61,6 +63,12 @@ export default async function TeacherProfilePage({
   const { slug } = await params;
   const teacher = await getTeacherBySlug(slug);
   if (!teacher) notFound();
+
+  const [reviews] = await Promise.all([getTeacherReviews(teacher.id)]);
+  const avgRating =
+    reviews.length > 0
+      ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+      : teacher.rating;
 
   const languages = teacher.languages_spoken || [];
 
@@ -138,9 +146,27 @@ export default async function TeacherProfilePage({
 
                 {/* Info */}
                 <div className="flex-1">
-                  <h1 className="text-2xl sm:text-3xl font-bold font-heading text-slate-900 mb-1">
-                    {teacher.name}
-                  </h1>
+                  <div className="flex items-center gap-3 flex-wrap mb-1">
+                    <h1 className="text-2xl sm:text-3xl font-bold font-heading text-slate-900">
+                      {teacher.name}
+                    </h1>
+                    <span
+                      className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full ${
+                        teacher.is_online
+                          ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                          : "bg-slate-100 text-slate-500 border border-slate-200"
+                      }`}
+                    >
+                      <span
+                        className={`h-2 w-2 rounded-full ${
+                          teacher.is_online
+                            ? "bg-emerald-500 shadow-[0_0_6px_#34d399] animate-pulse"
+                            : "bg-slate-400"
+                        }`}
+                      />
+                      {teacher.is_online ? "Online now" : "Offline"}
+                    </span>
+                  </div>
                   {teacher.tagline && (
                     <p className="text-slate-500 mb-3">{teacher.tagline}</p>
                   )}
@@ -273,18 +299,20 @@ export default async function TeacherProfilePage({
               </section>
             )}
 
-            {/* Reviews placeholder */}
+            {/* Reviews */}
             <section aria-labelledby="reviews-heading" className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 sm:p-8">
-              <h2 id="reviews-heading" className="text-xl font-bold font-heading text-slate-900 mb-4">
+              <h2 id="reviews-heading" className="text-xl font-bold font-heading text-slate-900 mb-6">
                 Student Reviews
               </h2>
-              <div className="text-center py-8 text-slate-400">
-                <StarRating rating={teacher.rating} size="lg" showValue className="justify-center mb-2" />
-                <p className="text-sm">Reviews feature coming soon.</p>
-                <p className="text-xs mt-1 text-slate-300">
-                  Based on {teacher.total_students} students taught.
-                </p>
-              </div>
+              <ReviewList reviews={reviews} averageRating={avgRating} />
+            </section>
+
+            {/* Leave a review */}
+            <section aria-labelledby="review-form-heading" className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 sm:p-8">
+              <h2 id="review-form-heading" className="text-xl font-bold font-heading text-slate-900 mb-1">
+                Leave a Review
+              </h2>
+              <ReviewForm teacherId={teacher.id} teacherName={teacher.name} />
             </section>
           </div>
 
