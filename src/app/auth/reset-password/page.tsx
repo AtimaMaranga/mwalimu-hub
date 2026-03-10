@@ -32,7 +32,9 @@ export default function ResetPasswordPage() {
       setError(error.message);
       setLoading(false);
     } else {
-      router.push("/dashboard");
+      const { data: { user } } = await supabase.auth.getUser();
+      const role = user?.user_metadata?.role;
+      router.push(role === "teacher" ? "/dashboard/teacher" : role === "student" ? "/dashboard/student" : "/");
       router.refresh();
     }
   };

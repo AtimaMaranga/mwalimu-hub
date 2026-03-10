@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { BookOpen } from "lucide-react";
 import Button from "@/components/ui/Button";
@@ -95,6 +96,15 @@ export default function AdminLoginPage() {
               <p className="text-sm text-red-700">{error}</p>
             </div>
           )}
+
+          <div className="flex justify-end -mt-2">
+            <Link
+              href="/auth/forgot-password"
+              className="text-xs text-indigo-600 hover:text-indigo-700 font-medium"
+            >
+              Forgot password?
+            </Link>
+          </div>
 
           <Button
             type="submit"
