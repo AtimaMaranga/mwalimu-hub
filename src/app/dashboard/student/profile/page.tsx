@@ -2,34 +2,33 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import DashboardShell from "@/components/dashboard/DashboardShell";
 import { getInitials } from "@/lib/utils";
-import TeacherProfileForm from "./TeacherProfileForm";
+import StudentProfileForm from "./StudentProfileForm";
 
-export default async function TeacherProfilePage() {
+export default async function StudentProfilePage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth/login");
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("*, teachers(*)")
+    .select("*")
     .eq("id", user.id)
     .single();
 
-  const teacher = (profile as any)?.teachers ?? null;
-  const name = profile?.full_name || user.email?.split("@")[0] || "Teacher";
+  const name = profile?.full_name || user.email?.split("@")[0] || "Student";
 
   return (
     <DashboardShell
-      role="teacher"
+      role="student"
       userName={name}
       userInitials={getInitials(name)}
-      userRole="Teacher"
+      userRole="Student"
     >
-      <TeacherProfileForm
+      <StudentProfileForm
         userId={user.id}
         userEmail={user.email!}
+        fullName={profile?.full_name ?? ""}
         avatarUrl={profile?.avatar_url ?? ""}
-        teacher={teacher}
       />
     </DashboardShell>
   );

@@ -12,10 +12,11 @@ import DeleteAccountButton from "./DeleteAccountButton";
 
 const NAV_ITEMS = {
   student: [
-    { label: "Dashboard",     href: "/dashboard/student", icon: LayoutDashboard },
-    { label: "Find Teachers", href: "/teachers",           icon: Search },
-    { label: "My Inquiries",  href: "/dashboard/student", icon: MessageCircle },
-    { label: "How It Works",  href: "/how-it-works",       icon: BookOpen },
+    { label: "Dashboard",     href: "/dashboard/student",         icon: LayoutDashboard },
+    { label: "My Profile",    href: "/dashboard/student/profile", icon: User },
+    { label: "Find Teachers", href: "/teachers",                  icon: Search },
+    { label: "My Inquiries",  href: "/dashboard/student",         icon: MessageCircle },
+    { label: "How It Works",  href: "/how-it-works",              icon: BookOpen },
   ],
   teacher: [
     { label: "Dashboard",   href: "/dashboard/teacher",         icon: LayoutDashboard },
