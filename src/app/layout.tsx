@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
+import AuthHashHandler from "@/components/auth/AuthHashHandler";
 
 // Outfit — geometric, modern headings
 const outfit = Outfit({
@@ -91,7 +92,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${outfit.variable} ${plusJakarta.variable}`}>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <AuthHashHandler />
+        {children}
+      </body>
     </html>
   );
 }
