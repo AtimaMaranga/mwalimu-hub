@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createPureAdminClient } from "@/lib/supabase/server";
 import { sendTeacherApprovedEmail, sendTeacherRejectedEmail } from "@/lib/email";
 import { slugify } from "@/lib/utils";
 
@@ -20,7 +20,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 
-  const { data: application, error: fetchError } = await supabase
+  // Use admin client to bypass RLS for reading applications
+  const adminClient = createPureAdminClient();
+
+  const { data: application, error: fetchError } = await adminClient
     .from("teacher_applications")
     .select("*")
     .eq("id", applicationId)
@@ -31,22 +34,26 @@ export async function POST(request: NextRequest) {
   }
 
   if (action === "approve") {
-    // Generate a unique slug from the applicant's name
     const slug = `${slugify(application.name)}-${Date.now().toString(36)}`;
 
-    const { error: insertError } = await supabase.from("teachers").insert({
-      name: application.name,
-      email: application.email,
-      phone: application.phone || null,
-      slug,
-      bio: application.teaching_philosophy || null,
-      qualifications: application.qualifications || null,
-      hourly_rate: application.rate_expectation || null,
-      availability_description: application.available_hours
-        ? `Available ${application.available_hours} hours per week`
-        : null,
-      is_published: true,
-    });
+    // 1. Create the teacher record
+    const { data: teacher, error: insertError } = await adminClient
+      .from("teachers")
+      .insert({
+        name: application.name,
+        email: application.email,
+        phone: application.phone || null,
+        slug,
+        bio: application.teaching_philosophy || null,
+        qualifications: application.qualifications || null,
+        hourly_rate: application.rate_expectation || null,
+        availability_description: application.available_hours
+          ? `Available ${application.available_hours} hours per week`
+          : null,
+        is_published: true,
+      })
+      .select("id")
+      .single();
 
     if (insertError) {
       if (insertError.code === "23505") {
@@ -58,7 +65,50 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: insertError.message }, { status: 500 });
     }
 
-    await supabase
+    // 2. Check if the teacher already has an auth account
+    const { data: existingUsers } = await adminClient.auth.admin.listUsers();
+    const existingUser = existingUsers?.users?.find(
+      (u) => u.email?.toLowerCase() === application.email.toLowerCase()
+    );
+
+    if (existingUser) {
+      // Teacher already has an account — update their profile to teacher role and link
+      await adminClient
+        .from("profiles")
+        .upsert({
+          id: existingUser.id,
+          role: "teacher",
+          full_name: application.name,
+          teacher_id: teacher!.id,
+        });
+    } else {
+      // 3. Invite the teacher — creates auth user + triggers handle_new_user()
+      const { data: inviteData, error: inviteError } = await adminClient.auth.admin.inviteUserByEmail(
+        application.email,
+        {
+          data: { role: "teacher", full_name: application.name },
+          redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback?next=/dashboard/teacher&welcome=1`,
+        }
+      );
+
+      if (inviteError) {
+        console.error("Invite error:", inviteError);
+        // Don't fail the whole approval if invite fails — teacher record is created
+      } else if (inviteData?.user) {
+        // 4. Link the profile to the teacher record
+        await adminClient
+          .from("profiles")
+          .upsert({
+            id: inviteData.user.id,
+            role: "teacher",
+            full_name: application.name,
+            teacher_id: teacher!.id,
+          });
+      }
+    }
+
+    // 5. Mark application as approved
+    await adminClient
       .from("teacher_applications")
       .update({ status: "approved" })
       .eq("id", applicationId);
@@ -69,7 +119,7 @@ export async function POST(request: NextRequest) {
       console.error("Approval email failed:", e);
     }
   } else {
-    await supabase
+    await adminClient
       .from("teacher_applications")
       .update({ status: "rejected" })
       .eq("id", applicationId);

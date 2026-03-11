@@ -39,6 +39,17 @@ export function createStaticClient() {
   );
 }
 
+/**
+ * Pure service-role client (no cookies) — use this for auth.admin.* operations
+ * like inviteUserByEmail, deleteUser, etc.
+ */
+export function createPureAdminClient() {
+  return createSupabaseClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+}
+
 /** Admin client using service role key — bypasses RLS */
 export async function createAdminClient() {
   const cookieStore = await cookies();
