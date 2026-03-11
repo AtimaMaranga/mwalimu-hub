@@ -144,24 +144,51 @@ export async function sendInquiryNotification(data: {
   message?: string;
   experience_level?: string;
 }) {
+  const resend = getResend();
+  const messageHtml = (data.message || "No message").replace(/\n/g, "<br/>");
+
   const promises = [
-    // Admin notification
-    getResend().emails.send({
+    // Direct notification to the teacher
+    ...(data.teacher_email ? [
+      resend.emails.send({
+        from: FROM,
+        to: data.teacher_email,
+        subject: `New student inquiry from ${data.student_name} — Swahili Tutors`,
+        html: `
+          <h2>Habari ${data.teacher_name}!</h2>
+          <p>A student has sent you an inquiry on Swahili Tutors.</p>
+          <table style="border-collapse:collapse;width:100%;margin:16px 0">
+            <tr><td style="padding:8px;font-weight:bold;width:140px">Student name</td><td style="padding:8px">${data.student_name}</td></tr>
+            <tr style="background:#f8f8f8"><td style="padding:8px;font-weight:bold">Student email</td><td style="padding:8px"><a href="mailto:${data.student_email}">${data.student_email}</a></td></tr>
+            <tr><td style="padding:8px;font-weight:bold">Level</td><td style="padding:8px">${data.experience_level || "Not specified"}</td></tr>
+          </table>
+          <p><strong>Message:</strong></p>
+          <blockquote style="border-left:3px solid #6366f1;padding-left:12px;color:#444">${messageHtml}</blockquote>
+          <p>Reply directly to <a href="mailto:${data.student_email}">${data.student_email}</a> to get in touch with this student.</p>
+          <p>You can also <a href="${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/teacher">view your dashboard</a> to manage messages.</p>
+          <p>Asante,<br/>The Swahili Tutors Team</p>
+        `,
+      })
+    ] : []),
+
+    // Admin CC
+    resend.emails.send({
       from: FROM,
       to: ADMIN_EMAIL,
       subject: `[Inquiry] ${data.student_name} → ${data.teacher_name}`,
       html: `
         <h2>New Student Inquiry</h2>
-        <p><strong>Teacher:</strong> ${data.teacher_name}</p>
+        <p><strong>Teacher:</strong> ${data.teacher_name} (${data.teacher_email || "no email"})</p>
         <p><strong>Student:</strong> ${data.student_name} (${data.student_email})</p>
         <p><strong>Level:</strong> ${data.experience_level || "Not specified"}</p>
         <hr/>
         <p><strong>Message:</strong></p>
-        <p>${(data.message || "No message").replace(/\n/g, "<br/>")}</p>
+        <p>${messageHtml}</p>
       `,
     }),
+
     // Student confirmation
-    getResend().emails.send({
+    resend.emails.send({
       from: FROM,
       to: data.student_email,
       subject: `Your inquiry to ${data.teacher_name} — Swahili Tutors`,

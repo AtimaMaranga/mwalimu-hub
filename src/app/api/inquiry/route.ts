@@ -28,6 +28,13 @@ export async function POST(req: NextRequest) {
     const data = parsed.data;
     const supabase = await createAdminClient();
 
+    // Fetch teacher's email so we can notify them directly
+    const { data: teacher } = await supabase
+      .from("teachers")
+      .select("email")
+      .eq("id", data.teacher_id)
+      .single();
+
     const { error: dbError } = await supabase.from("student_inquiries").insert({
       teacher_id: data.teacher_id,
       student_name: data.student_name,
@@ -44,6 +51,7 @@ export async function POST(req: NextRequest) {
 
     await sendInquiryNotification({
       teacher_name: data.teacher_name,
+      teacher_email: teacher?.email,
       student_name: data.student_name,
       student_email: data.student_email,
       message: data.message,
