@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { createClient, createAdminClient, createPureAdminClient } from "@/lib/supabase/server";
 
 async function isParticipant(
   adminClient: Awaited<ReturnType<typeof createAdminClient>>,
@@ -24,11 +24,34 @@ async function isParticipant(
     .eq("id", userId)
     .single();
 
-  if (
-    profile?.role === "teacher" &&
-    profile?.teacher_id === conversation.teacher_id
-  ) {
-    return { allowed: true, role: "teacher" };
+  if (profile?.role === "teacher") {
+    // Direct match
+    if (profile.teacher_id === conversation.teacher_id) {
+      return { allowed: true, role: "teacher" };
+    }
+
+    // Auto-heal: profile.teacher_id not set — match by auth email
+    if (!profile.teacher_id) {
+      const pureAdmin = createPureAdminClient();
+      const { data: authData } = await pureAdmin.auth.admin.getUserById(userId);
+      const email = authData?.user?.email?.toLowerCase();
+
+      const { data: teacher } = await adminClient
+        .from("teachers")
+        .select("id")
+        .eq("id", conversation.teacher_id)
+        .ilike("email", email ?? "")
+        .single();
+
+      if (teacher) {
+        // Link and allow
+        await adminClient
+          .from("profiles")
+          .update({ teacher_id: teacher.id })
+          .eq("id", userId);
+        return { allowed: true, role: "teacher" };
+      }
+    }
   }
 
   return { allowed: false, role: null };

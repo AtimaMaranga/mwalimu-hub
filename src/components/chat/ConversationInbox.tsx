@@ -13,12 +13,10 @@ interface ConversationInboxProps {
 
 function formatTimeAgo(isoString: string): string {
   const date = new Date(isoString);
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
+  const diffMs = Date.now() - date.getTime();
   const diffMins = Math.floor(diffMs / 60000);
   const diffHours = Math.floor(diffMins / 60);
   const diffDays = Math.floor(diffHours / 24);
-
   if (diffMins < 1) return "just now";
   if (diffMins < 60) return `${diffMins}m ago`;
   if (diffHours < 24) return `${diffHours}h ago`;
@@ -30,12 +28,23 @@ function getInitials(name: string): string {
   return name.split(" ").map((n) => n[0]).slice(0, 2).join("").toUpperCase();
 }
 
+/** Is the person considered online? Teachers use is_online; students use last_seen within 5 min */
+function resolveOnline(conv: Conversation, role: "student" | "teacher"): boolean {
+  if (role === "student") {
+    // Student is viewing a teacher → show teacher's is_online
+    return conv.teacher_is_online ?? false;
+  } else {
+    // Teacher is viewing a student → online if last_seen within 5 min
+    if (!conv.student_last_seen_at) return false;
+    return Date.now() - new Date(conv.student_last_seen_at).getTime() < 5 * 60 * 1000;
+  }
+}
+
 function playInboxSound() {
   try {
     const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
     if (!AudioCtx) return;
     const ctx = new AudioCtx();
-    // Two-tone chime
     [440, 660].forEach((freq, i) => {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
@@ -49,9 +58,7 @@ function playInboxSound() {
       osc.start(start);
       osc.stop(start + 0.3);
     });
-  } catch {
-    // silently ignore
-  }
+  } catch { /* ignore */ }
 }
 
 export default function ConversationInbox({ currentUserId, userRole }: ConversationInboxProps) {
@@ -64,50 +71,40 @@ export default function ConversationInbox({ currentUserId, userRole }: Conversat
   const fetchConversations = useCallback(async (silent = false) => {
     try {
       const res = await fetch("/api/conversations");
-      if (res.ok) {
-        const data = await res.json();
-        const incoming: Conversation[] = data.conversations ?? [];
+      if (!res.ok) return;
+      const data = await res.json();
+      const incoming: Conversation[] = data.conversations ?? [];
 
-        // Sound on new unread messages (not on first load)
-        if (!isFirstLoad.current) {
-          const newTotal = incoming.reduce((sum, c) => {
-            return sum + (userRole === "student" ? c.student_unread : c.teacher_unread);
-          }, 0);
-          if (newTotal > prevUnreadTotal.current) playInboxSound();
-          prevUnreadTotal.current = newTotal;
-        } else {
-          prevUnreadTotal.current = incoming.reduce((sum, c) => {
-            return sum + (userRole === "student" ? c.student_unread : c.teacher_unread);
-          }, 0);
-          isFirstLoad.current = false;
-        }
-
-        setConversations(incoming);
+      if (!isFirstLoad.current) {
+        const newTotal = incoming.reduce(
+          (sum, c) => sum + (userRole === "student" ? c.student_unread : c.teacher_unread), 0
+        );
+        if (newTotal > prevUnreadTotal.current) playInboxSound();
+        prevUnreadTotal.current = newTotal;
+      } else {
+        prevUnreadTotal.current = incoming.reduce(
+          (sum, c) => sum + (userRole === "student" ? c.student_unread : c.teacher_unread), 0
+        );
+        isFirstLoad.current = false;
       }
+
+      setConversations(incoming);
     } finally {
       if (!silent) setLoading(false);
     }
   }, [userRole]);
 
-  useEffect(() => {
-    fetchConversations(false);
-  }, [fetchConversations]);
+  useEffect(() => { fetchConversations(false); }, [fetchConversations]);
 
-  // Realtime subscription on conversations
+  // Realtime — refetch on any conversation change
   useEffect(() => {
     const supabase = createClient();
     const channel = supabase
       .channel("inbox:conversations")
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "conversations" },
-        () => {
-          // Re-fetch on any conversation change so we have full data
-          fetchConversations(true);
-        }
-      )
+      .on("postgres_changes", { event: "*", schema: "public", table: "conversations" }, () => {
+        fetchConversations(true);
+      })
       .subscribe();
-
     return () => { supabase.removeChannel(channel); };
   }, [fetchConversations]);
 
@@ -117,19 +114,19 @@ export default function ConversationInbox({ currentUserId, userRole }: Conversat
     return () => clearInterval(interval);
   }, [fetchConversations]);
 
-  const getUnreadCount = (conv: Conversation) =>
-    userRole === "student" ? conv.student_unread : conv.teacher_unread;
+  const getUnreadCount = (c: Conversation) =>
+    userRole === "student" ? c.student_unread : c.teacher_unread;
 
-  const getRecipientName = (conv: Conversation) =>
-    userRole === "student" ? conv.teacher_name : conv.student_name;
+  const getRecipientName = (c: Conversation) =>
+    userRole === "student" ? c.teacher_name : c.student_name;
 
-  const handleOpenConversation = useCallback((conv: Conversation) => {
+  const handleOpen = useCallback((conv: Conversation) => {
     setActiveConversation(conv);
     setConversations((prev) =>
-      prev.map((c) => {
-        if (c.id !== conv.id) return c;
-        return userRole === "student" ? { ...c, student_unread: 0 } : { ...c, teacher_unread: 0 };
-      })
+      prev.map((c) => c.id !== conv.id ? c : userRole === "student"
+        ? { ...c, student_unread: 0 }
+        : { ...c, teacher_unread: 0 }
+      )
     );
     fetch(`/api/conversations/${conv.id}/read`, { method: "PATCH" }).catch(() => {});
   }, [userRole]);
@@ -147,7 +144,9 @@ export default function ConversationInbox({ currentUserId, userRole }: Conversat
             </div>
             <div>
               <p className="text-sm font-bold text-slate-900">Messages</p>
-              <p className="text-xs text-slate-400">{conversations.length} conversation{conversations.length !== 1 ? "s" : ""}</p>
+              <p className="text-xs text-slate-400">
+                {conversations.length} conversation{conversations.length !== 1 ? "s" : ""}
+              </p>
             </div>
           </div>
           {totalUnread > 0 && (
@@ -157,11 +156,13 @@ export default function ConversationInbox({ currentUserId, userRole }: Conversat
           )}
         </div>
 
+        {/* Body */}
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <div className="flex gap-1.5">
               {[0, 1, 2].map((i) => (
-                <div key={i} className="h-2 w-2 rounded-full bg-slate-200 animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />
+                <div key={i} className="h-2 w-2 rounded-full bg-slate-200 animate-bounce"
+                  style={{ animationDelay: `${i * 0.15}s` }} />
               ))}
             </div>
           </div>
@@ -183,27 +184,33 @@ export default function ConversationInbox({ currentUserId, userRole }: Conversat
               const recipientName = getRecipientName(conv);
               const unread = getUnreadCount(conv);
               const isActive = activeConversation?.id === conv.id;
+              const isOnline = resolveOnline(conv, userRole);
 
               return (
                 <button
                   key={conv.id}
-                  onClick={() => handleOpenConversation(conv)}
+                  onClick={() => handleOpen(conv)}
                   className={`w-full flex items-center gap-3 px-6 py-4 hover:bg-slate-50 transition-colors text-left ${isActive ? "bg-indigo-50/50" : ""}`}
                 >
+                  {/* Avatar with online dot */}
                   <div className="relative shrink-0">
                     <div className="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xs font-bold">
                       {getInitials(recipientName)}
                     </div>
-                    {unread > 0 && (
-                      <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 border-2 border-white" />
-                    )}
+                    <span className={`absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-white ${isOnline ? "bg-emerald-500" : "bg-slate-300"}`} />
                   </div>
 
+                  {/* Content */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2 mb-0.5">
-                      <p className={`text-sm truncate ${unread > 0 ? "font-bold text-slate-900" : "font-medium text-slate-700"}`}>
-                        {recipientName}
-                      </p>
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        <p className={`text-sm truncate ${unread > 0 ? "font-bold text-slate-900" : "font-medium text-slate-700"}`}>
+                          {recipientName}
+                        </p>
+                        <span className={`text-[10px] font-medium shrink-0 ${isOnline ? "text-emerald-600" : "text-slate-400"}`}>
+                          {isOnline ? "Online" : "Offline"}
+                        </span>
+                      </div>
                       <span className="text-[11px] text-slate-400 shrink-0">
                         {formatTimeAgo(conv.last_message_at)}
                       </span>
@@ -226,12 +233,14 @@ export default function ConversationInbox({ currentUserId, userRole }: Conversat
         )}
       </div>
 
+      {/* Chat window */}
       {activeConversation && (
         <ChatWindow
           conversationId={activeConversation.id}
           currentUserId={currentUserId}
           currentUserRole={userRole}
           recipientName={getRecipientName(activeConversation)}
+          recipientIsOnline={resolveOnline(activeConversation, userRole)}
           onClose={() => setActiveConversation(null)}
         />
       )}

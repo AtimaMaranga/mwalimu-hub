@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -45,6 +45,14 @@ export default function DashboardShell({
   const firstName = userName.split(" ")[0];
   const navItems = NAV_ITEMS[role];
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Presence heartbeat — keep last_seen_at fresh while dashboard is open
+  useEffect(() => {
+    const ping = () => fetch("/api/user/presence", { method: "PATCH" }).catch(() => {});
+    ping();
+    const interval = setInterval(ping, 30_000);
+    return () => clearInterval(interval);
+  }, []);
 
   const SidebarContent = () => (
     <>

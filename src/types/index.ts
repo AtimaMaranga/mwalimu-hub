@@ -51,6 +51,9 @@ export interface Conversation {
   student_unread: number;
   teacher_unread: number;
   created_at: string;
+  // Enriched fields
+  teacher_is_online?: boolean;
+  student_last_seen_at?: string | null;
 }
 
 export interface Message {
