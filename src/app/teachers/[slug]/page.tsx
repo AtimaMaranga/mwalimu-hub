@@ -20,8 +20,10 @@ import TeacherContactModal from "./TeacherContactModal";
 import ReviewForm from "./ReviewForm";
 import ReviewList from "./ReviewList";
 import JsonLd from "@/components/seo/JsonLd";
+import ChatWidget from "@/components/chat/ChatWidget";
 import { getTeacherBySlug, getTeacherSlugs, getTeacherReviews } from "@/lib/supabase/queries";
 import { formatCurrency, getInitials } from "@/lib/utils";
+import { createClient } from "@/lib/supabase/server";
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://swahili-tutors.com";
 
@@ -63,6 +65,15 @@ export default async function TeacherProfilePage({
   const { slug } = await params;
   const teacher = await getTeacherBySlug(slug);
   if (!teacher) notFound();
+
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  const { data: profile } = user
+    ? await supabase.from("profiles").select("full_name, teacher_id").eq("id", user.id).single()
+    : { data: null };
+
+  const isOwnProfile = profile?.teacher_id === teacher.id;
 
   const [reviews] = await Promise.all([getTeacherReviews(teacher.id)]);
   const avgRating =
@@ -328,6 +339,15 @@ export default async function TeacherProfilePage({
                 </div>
 
                 <TeacherContactModal teacher={teacher} />
+
+                {!isOwnProfile && (
+                  <ChatWidget
+                    teacher={{ id: teacher.id, name: teacher.name, slug: teacher.slug, is_online: teacher.is_online }}
+                    currentUserId={user?.id ?? null}
+                    currentUserName={profile?.full_name ?? user?.email?.split("@")[0] ?? null}
+                    currentUserEmail={user?.email ?? null}
+                  />
+                )}
 
                 <p className="text-xs text-slate-400 text-center mt-3">
                   No payment required now. Discuss directly with your teacher.

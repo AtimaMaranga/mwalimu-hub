@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import DashboardShell from "@/components/dashboard/DashboardShell";
 import Button from "@/components/ui/Button";
+import ConversationInbox from "@/components/chat/ConversationInbox";
 import {
   ArrowRight, Clock, ChevronRight, Users, TrendingUp, MessageCircle, Search, GraduationCap,
 } from "@/components/ui/icons";
@@ -314,6 +315,10 @@ export default async function StudentDashboardPage({
             </>
           )}
         </div>
+
+        {/* ── Conversation Inbox ── */}
+        <ConversationInbox currentUserId={user.id} userRole="student" />
+
       </div>
     </DashboardShell>
   );

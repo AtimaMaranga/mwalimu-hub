@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import DashboardShell from "@/components/dashboard/DashboardShell";
+import ConversationInbox from "@/components/chat/ConversationInbox";
 import OnlineToggle from "@/components/dashboard/OnlineToggle";
 import Button from "@/components/ui/Button";
 import {
@@ -430,6 +431,9 @@ export default async function TeacherDashboardPage({
             </>
           )}
         </div>
+
+        {/* ── Conversation Inbox ── */}
+        <ConversationInbox currentUserId={user.id} userRole="teacher" />
 
       </div>
     </DashboardShell>

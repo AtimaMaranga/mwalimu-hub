@@ -39,6 +39,30 @@ export interface Review {
   created_at: string;
 }
 
+export interface Conversation {
+  id: string;
+  student_id: string;
+  teacher_id: string;
+  student_name: string;
+  student_email: string;
+  teacher_name: string;
+  last_message?: string;
+  last_message_at: string;
+  student_unread: number;
+  teacher_unread: number;
+  created_at: string;
+}
+
+export interface Message {
+  id: string;
+  conversation_id: string;
+  sender_id: string;
+  sender_role: 'student' | 'teacher';
+  sender_name: string;
+  content: string;
+  created_at: string;
+}
+
 export interface LanguageEntry {
   language: string;
   level: string;
