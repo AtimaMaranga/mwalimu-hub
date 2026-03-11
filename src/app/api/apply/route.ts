@@ -58,10 +58,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Database error" }, { status: 500 });
     }
 
-    await Promise.allSettled([
+    const [notifyResult, confirmResult] = await Promise.allSettled([
       sendApplicationNotification(data),
       sendApplicationConfirmation({ name: data.name, email: data.email }),
     ]);
+
+    if (notifyResult.status === "rejected") {
+      console.error("Admin notification email failed:", notifyResult.reason);
+    }
+    if (confirmResult.status === "rejected") {
+      console.error("Applicant confirmation email failed:", confirmResult.reason);
+    }
 
     return NextResponse.json({ success: true });
   } catch (err) {
