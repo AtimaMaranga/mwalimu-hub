@@ -1,9 +1,11 @@
+import { unstable_noStore as noStore } from "next/cache";
 import { createAdminClient } from "@/lib/supabase/server";
 import { MessageSquare, FileText } from "lucide-react";
 import ApplicationsClient from "./ApplicationsClient";
 import ContactsClient from "./ContactsClient";
 
 export default async function SubmissionsPage() {
+  noStore();
   const supabase = await createAdminClient();
 
   const [{ data: contacts }, { data: applications }] = await Promise.all([

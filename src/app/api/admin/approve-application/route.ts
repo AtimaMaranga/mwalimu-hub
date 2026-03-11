@@ -108,10 +108,15 @@ export async function POST(request: NextRequest) {
     }
 
     // 5. Mark application as approved
-    await adminClient
+    const { error: approveError } = await adminClient
       .from("teacher_applications")
       .update({ status: "approved" })
       .eq("id", applicationId);
+
+    if (approveError) {
+      console.error("Failed to update application status to approved:", approveError.message);
+      return NextResponse.json({ error: "Failed to update application status" }, { status: 500 });
+    }
 
     try {
       await sendTeacherApprovedEmail({ name: application.name, email: application.email, slug });
@@ -119,10 +124,15 @@ export async function POST(request: NextRequest) {
       console.error("Approval email failed:", e);
     }
   } else {
-    await adminClient
+    const { error: rejectError } = await adminClient
       .from("teacher_applications")
       .update({ status: "rejected" })
       .eq("id", applicationId);
+
+    if (rejectError) {
+      console.error("Failed to update application status to rejected:", rejectError.message);
+      return NextResponse.json({ error: "Failed to update application status" }, { status: 500 });
+    }
 
     try {
       await sendTeacherRejectedEmail({ name: application.name, email: application.email });
