@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import DashboardShell from "@/components/dashboard/DashboardShell";
 import Button from "@/components/ui/Button";
 import {
-  ArrowRight, Clock, ChevronRight, Users, TrendingUp, MessageCircle, Search,
+  ArrowRight, Clock, ChevronRight, Users, TrendingUp, MessageCircle, Search, GraduationCap,
 } from "@/components/ui/icons";
 import { getInitials } from "@/lib/utils";
 
@@ -73,10 +73,17 @@ function BarChart({ data }: { data: number[] }) {
   );
 }
 
-export default async function StudentDashboardPage() {
+export default async function StudentDashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ welcome?: string }>;
+}) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth/login");
+
+  const { welcome } = await searchParams;
+  const isNewUser = welcome === "1";
 
   const { data: profile } = await supabase
     .from("profiles")
@@ -115,6 +122,27 @@ export default async function StudentDashboardPage() {
       userRole="Student"
     >
       <div className="space-y-6">
+
+        {/* ── Welcome banner (shown once after email confirmation) ── */}
+        {isNewUser && (
+          <div className="relative bg-gradient-to-r from-indigo-600/20 to-violet-600/10 border border-indigo-500/20 rounded-2xl p-6 overflow-hidden">
+            <div className="absolute right-6 top-0 bottom-0 flex items-center opacity-10">
+              <GraduationCap className="h-32 w-32 text-indigo-400" />
+            </div>
+            <div className="relative">
+              <p className="text-indigo-400 text-xs font-semibold uppercase tracking-widest mb-1">Account confirmed</p>
+              <h2 className="text-white text-lg font-bold mb-1">Welcome to Swahili Tutors, {name.split(" ")[0]}!</h2>
+              <p className="text-slate-400 text-sm max-w-md mb-4">
+                Your account is active. Browse our native Swahili teachers and send your first free inquiry to get started.
+              </p>
+              <Link href="/teachers">
+                <Button variant="primary" size="sm">
+                  Browse Teachers <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        )}
 
         {/* ── Stat cards ── */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">

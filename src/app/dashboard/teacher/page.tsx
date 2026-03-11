@@ -7,7 +7,7 @@ import Button from "@/components/ui/Button";
 import {
   User, MessageCircle, ExternalLink,
   ArrowRight, Clock, CheckCircle, DollarSign,
-  TrendingUp, Pencil, ChevronRight,
+  TrendingUp, Pencil, ChevronRight, GraduationCap,
 } from "@/components/ui/icons";
 import { getInitials } from "@/lib/utils";
 
@@ -81,10 +81,17 @@ function CircleProgress({ pct, label, sub, color }: {
   );
 }
 
-export default async function TeacherDashboardPage() {
+export default async function TeacherDashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ welcome?: string }>;
+}) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth/login");
+
+  const { welcome } = await searchParams;
+  const isNewUser = welcome === "1";
 
   const { data: profile } = await supabase
     .from("profiles")
@@ -130,6 +137,27 @@ export default async function TeacherDashboardPage() {
       userRole="Teacher"
     >
       <div className="space-y-6">
+
+        {/* ── Welcome banner (shown once after email confirmation) ── */}
+        {isNewUser && (
+          <div className="relative bg-gradient-to-r from-violet-600/20 to-indigo-600/10 border border-violet-500/20 rounded-2xl p-6 overflow-hidden">
+            <div className="absolute right-6 top-0 bottom-0 flex items-center opacity-10">
+              <GraduationCap className="h-32 w-32 text-violet-400" />
+            </div>
+            <div className="relative">
+              <p className="text-violet-400 text-xs font-semibold uppercase tracking-widest mb-1">Account confirmed</p>
+              <h2 className="text-white text-lg font-bold mb-1">Welcome to Swahili Tutors, {name.split(" ")[0]}!</h2>
+              <p className="text-slate-400 text-sm max-w-md mb-4">
+                Your teacher account is active. Set up your profile so students can discover and contact you.
+              </p>
+              <Link href="/dashboard/teacher/profile">
+                <Button variant="primary" size="sm">
+                  Set up your profile <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        )}
 
         {/* ── Profile setup banner (no profile yet) ── */}
         {!teacher && (
