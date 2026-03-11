@@ -49,90 +49,112 @@ export default function DashboardShell({
   const SidebarContent = () => (
     <>
       {/* Logo */}
-      <div className="px-5 py-5 border-b border-white/5">
+      <div className="px-5 py-5 border-b border-slate-100">
         <Link href="/" className="flex items-center gap-2.5 group" onClick={() => setSidebarOpen(false)}>
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 shadow-lg shadow-cyan-900/40 text-white font-bold text-xs italic shrink-0">
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-violet-700 shadow-md shadow-indigo-200 text-white font-bold text-sm italic shrink-0">
             ST
           </span>
-          <span className="text-white font-bold text-sm tracking-tight">Swahili Tutors</span>
+          <div>
+            <span className="text-slate-900 font-bold text-sm tracking-tight block leading-none">Swahili Tutors</span>
+            <span className="text-slate-400 text-[10px] font-medium capitalize">{role} portal</span>
+          </div>
         </Link>
       </div>
 
-      {/* Nav items */}
-      <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
-        {navItems.map(({ label, href, icon: Icon }) => {
-          const isActive = pathname === href || (href !== "/dashboard" && pathname.startsWith(href));
-          return (
-            <Link
-              key={`${href}-${label}`}
-              href={href}
-              onClick={() => setSidebarOpen(false)}
-              className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all",
-                isActive
-                  ? "bg-cyan-500/15 text-cyan-400 shadow-sm"
-                  : "text-slate-400 hover:text-white hover:bg-white/5"
-              )}
+      {/* Nav */}
+      <nav className="flex-1 px-3 py-5 overflow-y-auto">
+        <p className="px-3 mb-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Menu</p>
+        <div className="space-y-0.5">
+          {navItems.map(({ label, href, icon: Icon }) => {
+            const isActive = pathname === href || (href !== "/dashboard" && pathname.startsWith(href));
+            return (
+              <Link
+                key={`${href}-${label}`}
+                href={href}
+                onClick={() => setSidebarOpen(false)}
+                className={cn(
+                  "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all",
+                  isActive
+                    ? "bg-indigo-50 text-indigo-700"
+                    : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
+                )}
+              >
+                <Icon className={cn("h-4 w-4 shrink-0", isActive ? "text-indigo-600" : "text-slate-400")} />
+                {label}
+                {isActive && (
+                  <span className="ml-auto h-5 w-5 rounded-full bg-indigo-100 flex items-center justify-center">
+                    <span className="h-1.5 w-1.5 rounded-full bg-indigo-600" />
+                  </span>
+                )}
+              </Link>
+            );
+          })}
+        </div>
+
+        <p className="px-3 mt-6 mb-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Account</p>
+        <div className="space-y-0.5">
+          <Link
+            href="/settings"
+            onClick={() => setSidebarOpen(false)}
+            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-all"
+          >
+            <Settings className="h-4 w-4 shrink-0 text-slate-400" />
+            Settings
+          </Link>
+          <form action="/api/auth/logout" method="POST">
+            <button
+              type="submit"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-slate-500 hover:text-red-600 hover:bg-red-50 transition-all w-full"
             >
-              <Icon className={cn("h-4 w-4 shrink-0", isActive ? "text-cyan-400" : "text-slate-500")} />
-              {label}
-              {isActive && <span className="ml-auto h-1.5 w-1.5 rounded-full bg-cyan-400" />}
-            </Link>
-          );
-        })}
+              <LogOut className="h-4 w-4 shrink-0" />
+              Log Out
+            </button>
+          </form>
+          <DeleteAccountButton />
+        </div>
       </nav>
 
-      {/* Bottom links */}
-      <div className="px-3 pb-4 pt-2 border-t border-white/5 space-y-0.5">
-        <Link
-          href="/settings"
-          onClick={() => setSidebarOpen(false)}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-all"
-        >
-          <Settings className="h-4 w-4 shrink-0 text-slate-500" />
-          Settings
-        </Link>
-        <form action="/api/auth/logout" method="POST">
-          <button
-            type="submit"
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-slate-400 hover:text-red-400 hover:bg-red-500/5 transition-all w-full"
-          >
-            <LogOut className="h-4 w-4 shrink-0" />
-            Log Out
-          </button>
-        </form>
-        <DeleteAccountButton />
+      {/* User card at bottom */}
+      <div className="px-4 pb-5 pt-3 border-t border-slate-100">
+        <div className="flex items-center gap-3 px-3 py-3 rounded-xl bg-slate-50">
+          <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xs font-bold shrink-0">
+            {userInitials}
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-slate-900 text-xs font-semibold truncate">{firstName}</p>
+            <p className="text-slate-400 text-[10px] capitalize">{userRole}</p>
+          </div>
+        </div>
       </div>
     </>
   );
 
   return (
-    <div className="flex h-screen bg-[#13141f] overflow-hidden">
+    <div className="flex h-screen bg-slate-50 overflow-hidden">
 
       {/* ── Desktop sidebar ── */}
-      <aside className="hidden md:flex w-56 bg-[#0c0d16] flex-col border-r border-white/5 shrink-0">
+      <aside className="hidden md:flex w-60 bg-white flex-col border-r border-slate-100 shadow-sm shrink-0">
         <SidebarContent />
       </aside>
 
-      {/* ── Mobile sidebar overlay ── */}
+      {/* ── Mobile overlay ── */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
+          className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm md:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
-      {/* ── Mobile sidebar drawer ── */}
+      {/* ── Mobile drawer ── */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-50 w-64 bg-[#0c0d16] flex flex-col border-r border-white/5 transform transition-transform duration-300 ease-in-out md:hidden",
+          "fixed inset-y-0 left-0 z-50 w-64 bg-white flex flex-col border-r border-slate-100 shadow-xl transform transition-transform duration-300 ease-in-out md:hidden",
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
-        {/* Close button */}
         <button
           onClick={() => setSidebarOpen(false)}
-          className="absolute top-4 right-4 h-8 w-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+          className="absolute top-4 right-4 h-8 w-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
         >
           <X className="h-4 w-4" />
         </button>
@@ -142,53 +164,60 @@ export default function DashboardShell({
       {/* ── Main area ── */}
       <div className="flex-1 flex flex-col overflow-hidden min-w-0">
 
-        {/* Top header */}
-        <header className="h-16 bg-[#0c0d16] border-b border-white/5 flex items-center justify-between px-4 sm:px-6 shrink-0">
+        {/* Header */}
+        <header className="h-16 bg-white border-b border-slate-100 shadow-sm flex items-center justify-between px-4 sm:px-6 shrink-0">
           <div className="flex items-center gap-3">
-            {/* Hamburger — mobile only */}
             <button
               onClick={() => setSidebarOpen(true)}
-              className="md:hidden h-9 w-9 flex items-center justify-center rounded-xl bg-white/5 border border-white/8 text-slate-400 hover:text-white transition-colors"
+              className="md:hidden h-9 w-9 flex items-center justify-center rounded-xl bg-slate-100 text-slate-500 hover:text-slate-900 transition-colors"
               aria-label="Open menu"
             >
               <Menu className="h-4 w-4" />
             </button>
-            <h1 className="text-base sm:text-xl font-bold text-white tracking-tight">
-              Welcome, {firstName}
-            </h1>
+            <div>
+              <h1 className="text-base font-bold text-slate-900 leading-none">
+                Good day, {firstName}
+              </h1>
+              <p className="text-xs text-slate-400 mt-0.5 hidden sm:block">
+                Welcome back to your {role} dashboard
+              </p>
+            </div>
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
-            {/* Search — hidden on small mobile */}
+            {/* Search */}
             <div className="relative hidden lg:block">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
               <input
                 type="text"
                 placeholder="Search..."
-                className="bg-white/5 border border-white/8 rounded-xl pl-9 pr-4 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-500/50 transition-all w-44"
+                className="bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-4 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all w-44"
               />
             </div>
 
-            {/* Notification bell */}
-            <button className="relative h-9 w-9 flex items-center justify-center rounded-xl bg-white/5 border border-white/8 text-slate-400 hover:text-white hover:border-white/20 transition-all shrink-0">
+            {/* Bell */}
+            <button className="relative h-9 w-9 flex items-center justify-center rounded-xl bg-slate-50 border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-300 transition-all shrink-0">
               <Bell className="h-4 w-4" />
-              <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-cyan-400 ring-2 ring-[#0c0d16]" />
+              <span className="absolute top-2 right-2 h-1.5 w-1.5 rounded-full bg-indigo-500" />
             </button>
 
+            {/* Divider */}
+            <div className="h-8 w-px bg-slate-100" />
+
             {/* User chip */}
-            <div className="flex items-center gap-2 pl-2 border-l border-white/10">
-              <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white text-xs font-bold shadow-lg shadow-cyan-900/30 shrink-0">
+            <div className="flex items-center gap-2.5">
+              <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xs font-bold shadow-sm shrink-0">
                 {userInitials}
               </div>
-              <div className="hidden sm:block text-right leading-none">
-                <p className="text-white text-xs font-semibold">{firstName}</p>
-                <p className="text-slate-500 text-xs mt-0.5 capitalize">{userRole}</p>
+              <div className="hidden sm:block leading-none">
+                <p className="text-slate-900 text-xs font-semibold">{firstName}</p>
+                <p className="text-slate-400 text-xs mt-0.5 capitalize">{userRole}</p>
               </div>
             </div>
           </div>
         </header>
 
-        {/* Scrollable content */}
+        {/* Content */}
         <main className="flex-1 overflow-y-auto p-4 sm:p-6">
           {children}
         </main>
