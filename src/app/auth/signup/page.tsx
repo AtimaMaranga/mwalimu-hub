@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   Eye, EyeOff, Mail, Check, ArrowRight, ArrowLeft,
@@ -92,30 +91,76 @@ function PasswordInput({
   );
 }
 
+// ─── Password rules ──────────────────────────────────────────────────────────
+
+const PASSWORD_RULES = [
+  { id: "length",    label: "At least 8 characters",          test: (p: string) => p.length >= 8 },
+  { id: "upper",     label: "One uppercase letter (A–Z)",      test: (p: string) => /[A-Z]/.test(p) },
+  { id: "lower",     label: "One lowercase letter (a–z)",      test: (p: string) => /[a-z]/.test(p) },
+  { id: "number",    label: "One number (0–9)",                test: (p: string) => /[0-9]/.test(p) },
+  { id: "special",   label: "One special character (!@#$…)",   test: (p: string) => /[^A-Za-z0-9]/.test(p) },
+];
+
+export function isPasswordStrong(password: string): boolean {
+  return PASSWORD_RULES.every((r) => r.test(password));
+}
+
 function PasswordStrengthBar({ password }: { password: string }) {
-  const strength = (() => {
-    if (!password) return null;
-    if (password.length < 6) return "weak";
-    if (password.length < 8) return "fair";
-    if (/[A-Z]/.test(password) && /[0-9]/.test(password)) return "strong";
-    return "good";
-  })();
-  if (!strength) return null;
-  const cfg = {
-    weak:   { label: "Too short",  color: "bg-red-400",     w: "w-1/4" },
-    fair:   { label: "Fair",       color: "bg-amber-400",   w: "w-2/4" },
-    good:   { label: "Good",       color: "bg-indigo-400",  w: "w-3/4" },
-    strong: { label: "Strong",     color: "bg-emerald-500", w: "w-full" },
-  }[strength];
+  if (!password) return null;
+
+  const passed = PASSWORD_RULES.filter((r) => r.test(password)).length;
+  const pct = passed / PASSWORD_RULES.length;
+
+  const barColor =
+    pct <= 0.2 ? "bg-red-400" :
+    pct <= 0.4 ? "bg-orange-400" :
+    pct <= 0.6 ? "bg-amber-400" :
+    pct <= 0.8 ? "bg-indigo-400" :
+    "bg-emerald-500";
+
+  const strengthLabel =
+    pct <= 0.2 ? "Very weak" :
+    pct <= 0.4 ? "Weak" :
+    pct <= 0.6 ? "Fair" :
+    pct <= 0.8 ? "Good" :
+    "Strong";
+
+  const labelColor =
+    pct <= 0.4 ? "text-red-500" :
+    pct <= 0.6 ? "text-amber-500" :
+    pct <= 0.8 ? "text-indigo-500" :
+    "text-emerald-600";
+
   return (
-    <div className="mt-2">
-      <div className="h-1 w-full bg-slate-100 rounded-full overflow-hidden">
-        <div className={`h-full rounded-full transition-all duration-300 ${cfg.color} ${cfg.w}`} />
+    <div className="mt-3 space-y-2">
+      {/* Bar */}
+      <div className="flex items-center gap-2">
+        <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+          <div
+            className={`h-full rounded-full transition-all duration-300 ${barColor}`}
+            style={{ width: `${pct * 100}%` }}
+          />
+        </div>
+        <span className={`text-xs font-semibold shrink-0 ${labelColor}`}>{strengthLabel}</span>
       </div>
-      <p className={`text-xs mt-1 font-medium ${
-        strength === "weak" ? "text-red-500" : strength === "fair" ? "text-amber-500" :
-        strength === "good" ? "text-indigo-500" : "text-emerald-600"
-      }`}>{cfg.label}</p>
+      {/* Requirements checklist */}
+      <div className="grid grid-cols-1 gap-1">
+        {PASSWORD_RULES.map((rule) => {
+          const ok = rule.test(password);
+          return (
+            <div key={rule.id} className="flex items-center gap-2">
+              <div className={`h-3.5 w-3.5 rounded-full flex items-center justify-center shrink-0 transition-colors ${
+                ok ? "bg-emerald-500" : "bg-slate-200"
+              }`}>
+                {ok && <Check className="h-2 w-2 text-white" />}
+              </div>
+              <span className={`text-xs transition-colors ${ok ? "text-emerald-700" : "text-slate-400"}`}>
+                {rule.label}
+              </span>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
@@ -252,7 +297,7 @@ function StudentSignupForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    if (password.length < 8) { setError("Password must be at least 8 characters."); return; }
+    if (!isPasswordStrong(password)) { setError("Please meet all password requirements before continuing."); return; }
     if (password !== confirmPassword) { setError("Passwords do not match."); return; }
     setLoading(true);
     const supabase = createClient();
@@ -437,7 +482,7 @@ function TeacherSignupForm({ onSuccess }: { onSuccess: (email: string) => void }
     e.preventDefault();
     setError("");
     if (step === 1) {
-      if (password.length < 8) { setError("Password must be at least 8 characters."); return; }
+      if (!isPasswordStrong(password)) { setError("Please meet all password requirements before continuing."); return; }
       if (password !== confirmPassword) { setError("Passwords do not match."); return; }
     }
     if (step === 2) {
