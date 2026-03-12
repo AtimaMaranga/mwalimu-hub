@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Outfit, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import AuthHashHandler from "@/components/auth/AuthHashHandler";
+import { Analytics } from "@vercel/analytics/next";
 
 // Outfit — geometric, modern headings
 const outfit = Outfit({
@@ -95,6 +96,7 @@ export default function RootLayout({
       <body className="antialiased">
         <AuthHashHandler />
         {children}
+        <Analytics />
       </body>
     </html>
   );
