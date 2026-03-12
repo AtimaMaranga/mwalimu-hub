@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient, createPureAdminClient } from "@/lib/supabase/server";
+import { createClient, createAdminClient, createPureAdminClient } from "@/lib/supabase/server";
 import { sendTeacherApprovedEmail, sendTeacherRejectedEmail } from "@/lib/email";
 import { slugify } from "@/lib/utils";
 
@@ -20,8 +20,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 
-  // Use admin client to bypass RLS for reading applications
-  const adminClient = createPureAdminClient();
+  // Use SSR admin client (service role) to bypass RLS for all DB operations
+  const adminClient = await createAdminClient();
 
   const { data: application, error: fetchError } = await adminClient
     .from("teacher_applications")

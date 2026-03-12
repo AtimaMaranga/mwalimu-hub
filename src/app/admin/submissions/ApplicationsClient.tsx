@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { CheckCircle, XCircle, ChevronDown, ChevronUp, Mail, Phone, Clock, DollarSign } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 
@@ -129,7 +128,6 @@ function ApplicationCard({
 }
 
 export default function ApplicationsClient({ applications: initial }: { applications: Application[] }) {
-  const router = useRouter();
   const [applications, setApplications] = useState(initial);
   const [processing, setProcessing] = useState<string | null>(null);
   const [toast, setToast] = useState<{ msg: string; ok: boolean } | null>(null);
@@ -150,6 +148,9 @@ export default function ApplicationsClient({ applications: initial }: { applicat
     const body = await res.json();
 
     if (res.ok) {
+      // Update local state immediately — do NOT call router.refresh() here
+      // because it re-renders the server component and resets useState back
+      // to whatever is in the DB at that instant, undoing the local update.
       setApplications((prev) =>
         prev.map((a) =>
           a.id === applicationId
@@ -160,10 +161,9 @@ export default function ApplicationsClient({ applications: initial }: { applicat
       showToast(
         action === "approve"
           ? "Approved — teacher profile created and published."
-          : "Application rejected.",
-        action === "approve"
+          : "Application rejected successfully.",
+        true  // always green for success
       );
-      router.refresh();
     } else {
       showToast(body.error || "Something went wrong. Try again.", false);
     }
