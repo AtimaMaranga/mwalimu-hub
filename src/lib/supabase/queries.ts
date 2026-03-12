@@ -93,7 +93,7 @@ export async function getFeaturedTeachers(): Promise<Teacher[]> {
 export async function getBlogPosts(limit?: number): Promise<BlogPost[]> {
   if (!isSupabaseConfigured()) return [];
   try {
-    const supabase = await createClient();
+    const supabase = createStaticClient();
     let query = supabase
       .from("blog_posts")
       .select("*")
@@ -118,7 +118,7 @@ export async function getBlogPosts(limit?: number): Promise<BlogPost[]> {
 export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
   if (!isSupabaseConfigured()) return null;
   try {
-    const supabase = await createClient();
+    const supabase = createStaticClient();
     const { data, error } = await supabase
       .from("blog_posts")
       .select("*")
@@ -145,7 +145,7 @@ export async function getRelatedPosts(
 ): Promise<BlogPost[]> {
   if (!isSupabaseConfigured()) return [];
   try {
-    const supabase = await createClient();
+    const supabase = createStaticClient();
     let query = supabase
       .from("blog_posts")
       .select("*")
