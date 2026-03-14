@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect, useRef } from "react";
-import { Search, SlidersHorizontal, X, Users } from "lucide-react";
+import { Search, ChevronDown, X, Users } from "lucide-react";
 import type { Teacher } from "@/types";
 import { SPECIALIZATIONS, DIALECTS } from "@/types";
 import TeacherCard from "@/components/sections/TeacherCard";
@@ -11,7 +11,51 @@ interface TeachersClientProps {
   initialTeachers: Teacher[];
 }
 
-const TEACHERS_PER_PAGE = 12;
+const TEACHERS_PER_PAGE = 10;
+
+/* ─── Dropdown filter button ─── */
+function FilterDropdown({
+  label,
+  value,
+  children,
+}: {
+  label: string;
+  value?: string;
+  children: React.ReactNode;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const handleClick = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [open]);
+
+  return (
+    <div className="relative" ref={ref}>
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className={`flex items-center gap-2 px-4 py-2.5 rounded-lg border text-sm font-medium transition-colors ${
+          value
+            ? "border-indigo-300 bg-indigo-50 text-indigo-700"
+            : "border-slate-200 text-slate-700 hover:bg-slate-50"
+        }`}
+      >
+        {value || label}
+        <ChevronDown className={`h-3.5 w-3.5 transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
+      {open && (
+        <div className="absolute top-full left-0 mt-2 w-64 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-4 max-h-72 overflow-y-auto">
+          {children}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function TeachersClient({ initialTeachers }: TeachersClientProps) {
   const [search, setSearch] = useState("");
@@ -21,7 +65,6 @@ export default function TeachersClient({ initialTeachers }: TeachersClientProps)
   const [selectedDialects, setSelectedDialects] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<"rating" | "price_asc" | "price_desc" | "newest">("rating");
   const [page, setPage] = useState(1);
-  const [filtersOpen, setFiltersOpen] = useState(false);
 
   const filtered = useMemo(() => {
     let result = [...initialTeachers];
@@ -64,13 +107,12 @@ export default function TeachersClient({ initialTeachers }: TeachersClientProps)
 
   const totalPages = Math.ceil(filtered.length / TEACHERS_PER_PAGE);
   const paginated = filtered.slice((page - 1) * TEACHERS_PER_PAGE, page * TEACHERS_PER_PAGE);
-  const gridRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
 
-  // Scroll to top of grid when page changes (not on initial render)
   const isFirstRender = useRef(true);
   useEffect(() => {
     if (isFirstRender.current) { isFirstRender.current = false; return; }
-    gridRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    listRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, [page]);
 
   const toggleSpec = (spec: string) => {
@@ -100,97 +142,74 @@ export default function TeachersClient({ initialTeachers }: TeachersClientProps)
   const hasActiveFilters =
     search || selectedSpecs.length > 0 || selectedDialects.length > 0 || nativeOnly || maxPrice < 50 || sortBy !== "rating";
 
+  const priceLabel = maxPrice < 50 ? `Up to $${maxPrice}/hr` : undefined;
+  const specLabel = selectedSpecs.length > 0
+    ? selectedSpecs.length === 1 ? selectedSpecs[0] : `${selectedSpecs.length} selected`
+    : undefined;
+  const dialectLabel = selectedDialects.length > 0
+    ? selectedDialects.length === 1 ? selectedDialects[0] : `${selectedDialects.length} selected`
+    : undefined;
+
   return (
     <>
-      {/* Header */}
-      <div className="bg-gradient-to-br from-indigo-900 to-violet-900 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-3xl sm:text-5xl font-bold font-heading mb-4">
-            Find Your Swahili Teacher
-          </h1>
-          <p className="text-indigo-100 text-lg max-w-2xl mx-auto mb-8">
-            Browse our community of verified native Swahili teachers and find the
-            perfect match for your learning goals.
-          </p>
-          {/* Search bar */}
-          <div className="relative max-w-xl mx-auto">
-            <Search
-              className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400"
-              aria-hidden="true"
-            />
-            <input
-              type="search"
-              placeholder="Search by name, specialisation, or keywords..."
-              value={search}
-              onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-              className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-white text-slate-900 placeholder-slate-400 shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-300"
-              aria-label="Search teachers"
-            />
-            {search && (
-              <button
-                onClick={() => { setSearch(""); setPage(1); }}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                aria-label="Clear search"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            )}
-          </div>
-        </div>
+      {/* Page heading */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">
+          {filtered.length} Swahili tutor{filtered.length !== 1 ? "s" : ""} to help you reach fluency
+        </h1>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Toolbar */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setFiltersOpen((v) => !v)}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-200 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors"
-            >
-              <SlidersHorizontal className="h-4 w-4" aria-hidden="true" />
-              Filters
-              {hasActiveFilters && (
-                <span className="ml-1 h-5 w-5 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center">
-                  {selectedSpecs.length + selectedDialects.length + (nativeOnly ? 1 : 0) + (maxPrice < 50 ? 1 : 0)}
-                </span>
-              )}
-            </button>
-            {hasActiveFilters && (
-              <button
-                onClick={clearFilters}
-                className="text-sm text-indigo-600 hover:text-indigo-800 font-medium"
-              >
-                Clear all
-              </button>
-            )}
-            <p className="text-sm text-slate-500">
-              {filtered.length} teacher{filtered.length !== 1 ? "s" : ""} found
-            </p>
-          </div>
+      {/* ── Filter bar ── */}
+      <div className="sticky top-16 z-40 bg-white border-b border-slate-200">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          {/* Row 1: Primary filters */}
+          <div className="flex flex-wrap items-center gap-2 mb-2">
+            <FilterDropdown label="Specialties" value={specLabel}>
+              <div className="space-y-1.5">
+                {SPECIALIZATIONS.map((spec) => (
+                  <label key={spec} className="flex items-center gap-2.5 cursor-pointer py-1 hover:bg-slate-50 px-1 rounded">
+                    <input
+                      type="checkbox"
+                      checked={selectedSpecs.includes(spec)}
+                      onChange={() => toggleSpec(spec)}
+                      className="h-4 w-4 rounded text-indigo-600 focus:ring-indigo-500"
+                    />
+                    <span className="text-sm text-slate-700">{spec}</span>
+                  </label>
+                ))}
+              </div>
+            </FilterDropdown>
 
-          <select
-            value={sortBy}
-            onChange={(e) => { setSortBy(e.target.value as typeof sortBy); setPage(1); }}
-            className="px-3 py-2 rounded-xl border border-slate-200 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-300"
-            aria-label="Sort teachers"
-          >
-            <option value="rating">Highest Rated</option>
-            <option value="price_asc">Price: Low to High</option>
-            <option value="price_desc">Price: High to Low</option>
-            <option value="newest">Newest First</option>
-          </select>
-        </div>
+            <FilterDropdown label="Dialect" value={dialectLabel}>
+              <div className="space-y-1.5">
+                {DIALECTS.map((dialect) => (
+                  <label key={dialect} className="flex items-center gap-2.5 cursor-pointer py-1 hover:bg-slate-50 px-1 rounded">
+                    <input
+                      type="checkbox"
+                      checked={selectedDialects.includes(dialect)}
+                      onChange={() => toggleDialect(dialect)}
+                      className="h-4 w-4 rounded text-indigo-600 focus:ring-indigo-500"
+                    />
+                    <span className="text-sm text-slate-700">{dialect}</span>
+                  </label>
+                ))}
+              </div>
+            </FilterDropdown>
 
-        <div className="flex gap-8">
-          {/* Sidebar Filters */}
-          <aside
-            className={`${filtersOpen ? "block" : "hidden"} lg:block w-full lg:w-64 shrink-0`}
-            aria-label="Filter options"
-          >
-            <div className="bg-white rounded-2xl border border-slate-100 p-5 sticky top-24 space-y-6">
-              {/* Price */}
+            <FilterDropdown label="Native speaker" value={nativeOnly ? "Native only" : undefined}>
+              <label className="flex items-center gap-2.5 cursor-pointer py-1">
+                <input
+                  type="checkbox"
+                  checked={nativeOnly}
+                  onChange={(e) => { setNativeOnly(e.target.checked); setPage(1); }}
+                  className="h-4 w-4 rounded text-indigo-600 focus:ring-indigo-500"
+                />
+                <span className="text-sm text-slate-700">Native speakers only</span>
+              </label>
+            </FilterDropdown>
+
+            <FilterDropdown label="Price per lesson" value={priceLabel}>
               <div>
-                <h3 className="font-semibold text-slate-900 mb-3 text-sm">Max Price (USD/hour)</h3>
                 <input
                   type="range"
                   min={5}
@@ -199,144 +218,179 @@ export default function TeachersClient({ initialTeachers }: TeachersClientProps)
                   value={maxPrice}
                   onChange={(e) => { setMaxPrice(Number(e.target.value)); setPage(1); }}
                   className="w-full accent-indigo-600"
-                  aria-label={`Maximum price: $${maxPrice} per hour`}
                 />
-                <div className="flex justify-between text-xs text-slate-400 mt-1">
+                <div className="flex justify-between text-xs text-slate-500 mt-1">
                   <span>$5</span>
                   <span className="font-semibold text-indigo-700">${maxPrice}/hr</span>
                   <span>$50+</span>
                 </div>
               </div>
+            </FilterDropdown>
 
-              {/* Specialisations */}
-              <div>
-                <h3 className="font-semibold text-slate-900 mb-3 text-sm">Specialisation</h3>
-                <div className="space-y-2">
-                  {SPECIALIZATIONS.map((spec) => (
-                    <label key={spec} className="flex items-center gap-2 cursor-pointer group">
-                      <input
-                        type="checkbox"
-                        checked={selectedSpecs.includes(spec)}
-                        onChange={() => toggleSpec(spec)}
-                        className="h-4 w-4 rounded text-indigo-600 focus:ring-indigo-500"
-                      />
-                      <span className="text-sm text-slate-600 group-hover:text-slate-900 transition-colors">
-                        {spec}
-                      </span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Dialect */}
-              <div>
-                <h3 className="font-semibold text-slate-900 mb-3 text-sm">Dialect</h3>
-                <div className="space-y-2">
-                  {DIALECTS.map((dialect) => (
-                    <label key={dialect} className="flex items-center gap-2 cursor-pointer group">
-                      <input
-                        type="checkbox"
-                        checked={selectedDialects.includes(dialect)}
-                        onChange={() => toggleDialect(dialect)}
-                        className="h-4 w-4 rounded text-indigo-600 focus:ring-indigo-500"
-                      />
-                      <span className="text-sm text-slate-600 group-hover:text-slate-900 transition-colors">
-                        {dialect}
-                      </span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Native Speaker */}
-              <div>
-                <h3 className="font-semibold text-slate-900 mb-3 text-sm">Teacher Type</h3>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={nativeOnly}
-                    onChange={(e) => { setNativeOnly(e.target.checked); setPage(1); }}
-                    className="h-4 w-4 rounded text-indigo-600 focus:ring-indigo-500"
-                  />
-                  <span className="text-sm text-slate-600">Native speakers only</span>
-                </label>
-              </div>
-
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={clearFilters}
-                fullWidth
-                className="text-slate-500 hover:text-slate-700"
+            {/* Sort + Search — right side */}
+            <div className="flex items-center gap-2 ml-auto">
+              <select
+                value={sortBy}
+                onChange={(e) => { setSortBy(e.target.value as typeof sortBy); setPage(1); }}
+                className="px-3 py-2.5 rounded-lg border border-slate-200 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-300 bg-white"
+                aria-label="Sort teachers"
               >
-                Reset filters
-              </Button>
-            </div>
-          </aside>
+                <option value="rating">Sort by: Top rated</option>
+                <option value="price_asc">Sort by: Price low → high</option>
+                <option value="price_desc">Sort by: Price high → low</option>
+                <option value="newest">Sort by: Newest</option>
+              </select>
 
-          {/* Grid */}
-          <div className="flex-1 min-w-0" ref={gridRef}>
-            {paginated.length > 0 ? (
-              <>
-                <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-5">
-                  {paginated.map((teacher) => (
-                    <TeacherCard key={teacher.id} teacher={teacher} />
+              <div className="relative hidden sm:block">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                <input
+                  type="search"
+                  placeholder="Search by name or keyword"
+                  value={search}
+                  onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+                  className="pl-9 pr-8 py-2.5 w-56 rounded-lg border border-slate-200 text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+                  aria-label="Search teachers"
+                />
+                {search && (
+                  <button
+                    onClick={() => { setSearch(""); setPage(1); }}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Active filter chips */}
+          {hasActiveFilters && (
+            <div className="flex flex-wrap items-center gap-2">
+              {selectedSpecs.map((spec) => (
+                <button
+                  key={spec}
+                  onClick={() => toggleSpec(spec)}
+                  className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-medium hover:bg-indigo-100 transition-colors"
+                >
+                  {spec}
+                  <X className="h-3 w-3" />
+                </button>
+              ))}
+              {selectedDialects.map((d) => (
+                <button
+                  key={d}
+                  onClick={() => toggleDialect(d)}
+                  className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-medium hover:bg-indigo-100 transition-colors"
+                >
+                  {d}
+                  <X className="h-3 w-3" />
+                </button>
+              ))}
+              {nativeOnly && (
+                <button
+                  onClick={() => { setNativeOnly(false); setPage(1); }}
+                  className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-medium hover:bg-indigo-100 transition-colors"
+                >
+                  Native only
+                  <X className="h-3 w-3" />
+                </button>
+              )}
+              {maxPrice < 50 && (
+                <button
+                  onClick={() => { setMaxPrice(50); setPage(1); }}
+                  className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-medium hover:bg-indigo-100 transition-colors"
+                >
+                  ≤ ${maxPrice}/hr
+                  <X className="h-3 w-3" />
+                </button>
+              )}
+              <button
+                onClick={clearFilters}
+                className="text-xs text-indigo-600 hover:text-indigo-800 font-semibold ml-1"
+              >
+                Clear all
+              </button>
+            </div>
+          )}
+
+          {/* Mobile search (visible on small screens only) */}
+          <div className="sm:hidden mt-2">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+              <input
+                type="search"
+                placeholder="Search by name or keyword"
+                value={search}
+                onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+                className="pl-9 pr-4 py-2.5 w-full rounded-lg border border-slate-200 text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+                aria-label="Search teachers"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Teacher list ── */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6" ref={listRef}>
+        {paginated.length > 0 ? (
+          <>
+            <div className="space-y-4">
+              {paginated.map((teacher) => (
+                <TeacherCard key={teacher.id} teacher={teacher} variant="list" />
+              ))}
+            </div>
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-center gap-2 mt-10">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={page === 1}
+                  onClick={() => setPage((p) => p - 1)}
+                >
+                  ← Previous
+                </Button>
+                <div className="flex gap-1">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                    <button
+                      key={p}
+                      onClick={() => setPage(p)}
+                      className={`h-9 w-9 rounded-lg text-sm font-medium transition-colors ${
+                        p === page
+                          ? "bg-indigo-600 text-white"
+                          : "text-slate-600 hover:bg-slate-100"
+                      }`}
+                      aria-label={`Page ${p}`}
+                      aria-current={p === page ? "page" : undefined}
+                    >
+                      {p}
+                    </button>
                   ))}
                 </div>
-
-                {/* Pagination */}
-                {totalPages > 1 && (
-                  <div className="flex items-center justify-center gap-2 mt-10">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      disabled={page === 1}
-                      onClick={() => setPage((p) => p - 1)}
-                    >
-                      ← Previous
-                    </Button>
-                    <div className="flex gap-1">
-                      {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-                        <button
-                          key={p}
-                          onClick={() => setPage(p)}
-                          className={`h-9 w-9 rounded-lg text-sm font-medium transition-colors ${
-                            p === page
-                              ? "bg-indigo-600 text-white"
-                              : "text-slate-600 hover:bg-slate-100"
-                          }`}
-                          aria-label={`Go to page ${p}`}
-                          aria-current={p === page ? "page" : undefined}
-                        >
-                          {p}
-                        </button>
-                      ))}
-                    </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      disabled={page === totalPages}
-                      onClick={() => setPage((p) => p + 1)}
-                    >
-                      Next →
-                    </Button>
-                  </div>
-                )}
-              </>
-            ) : (
-              <div className="text-center py-20">
-                <Users className="h-16 w-16 mx-auto mb-4 text-slate-200" aria-hidden="true" />
-                <h3 className="text-lg font-semibold text-slate-700 mb-2">No teachers found</h3>
-                <p className="text-slate-400 mb-6">
-                  Try adjusting your filters or search terms.
-                </p>
-                <Button variant="outline" onClick={clearFilters}>
-                  Clear all filters
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={page === totalPages}
+                  onClick={() => setPage((p) => p + 1)}
+                >
+                  Next →
                 </Button>
               </div>
             )}
+          </>
+        ) : (
+          <div className="text-center py-20">
+            <Users className="h-16 w-16 mx-auto mb-4 text-slate-200" />
+            <h3 className="text-lg font-semibold text-slate-700 mb-2">No teachers found</h3>
+            <p className="text-slate-400 mb-6">
+              Try adjusting your filters or search terms.
+            </p>
+            <Button variant="outline" onClick={clearFilters}>
+              Clear all filters
+            </Button>
           </div>
-        </div>
+        )}
       </div>
     </>
   );
