@@ -58,7 +58,7 @@ export default function ImageUpload({ currentUrl, userId, onUpload, initials = "
       <button
         type="button"
         onClick={() => ref.current?.click()}
-        className="relative h-24 w-24 rounded-2xl bg-gradient-to-br from-cyan-600 to-blue-700 flex items-center justify-center cursor-pointer group overflow-hidden shrink-0"
+        className="relative h-24 w-24 rounded-2xl bg-gradient-to-br from-teal-600 to-blue-700 flex items-center justify-center cursor-pointer group overflow-hidden shrink-0"
       >
         {preview ? (
           <img src={preview} alt="Profile" className="h-full w-full object-cover" />

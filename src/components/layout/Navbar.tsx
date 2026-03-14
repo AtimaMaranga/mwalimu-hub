@@ -10,9 +10,9 @@ import { createClient } from "@/lib/supabase/client";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 
 const NAV_LINKS_BASE = [
-  { label: "Blog", href: "/blog" },
   { label: "How It Works", href: "/how-it-works" },
-  { label: "About", href: "/about" },
+  { label: "Blog", href: "/blog" },
+  { label: "Become a Tutor", href: "/become-a-teacher" },
 ];
 
 export default function Navbar() {
@@ -24,7 +24,6 @@ export default function Navbar() {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
 
-  // Close user menu on click outside
   useEffect(() => {
     if (!userMenuOpen) return;
     const handleClick = (e: MouseEvent) => {
@@ -71,12 +70,11 @@ export default function Navbar() {
 
   return (
     <div className="sticky top-0 z-50">
-      {/* ── Main nav ── */}
       <header
         className={cn(
-          "bg-[#f0ebe3] transition-all duration-200",
+          "bg-white transition-all duration-200",
           scrolled
-            ? "shadow-sm border-b border-[#d8cfc4]"
+            ? "shadow-sm border-b border-slate-200"
             : "border-b border-transparent"
         )}
       >
@@ -91,7 +89,7 @@ export default function Navbar() {
               className="flex items-center gap-2.5 group"
               aria-label="Swahili Tutors — Home"
             >
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-violet-700 shadow-sm">
+              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-teal-600 shadow-sm">
                 <span className="text-white font-bold text-sm font-heading italic tracking-tight select-none">
                   ST
                 </span>
@@ -102,9 +100,9 @@ export default function Navbar() {
             </Link>
 
             {/* Desktop Nav */}
-            <ul className="hidden md:flex items-center gap-0.5" role="list">
+            <ul className="hidden md:flex items-center gap-1" role="list">
               {[
-                { label: "Find a Teacher", href: user ? "/teachers" : "/get-started" },
+                { label: "Find Tutors", href: user ? "/teachers" : "/get-started" },
                 ...NAV_LINKS_BASE,
               ].map((link) => {
                 const isActive =
@@ -116,8 +114,8 @@ export default function Navbar() {
                       className={cn(
                         "px-4 py-2 text-sm rounded-lg transition-all duration-150",
                         isActive
-                          ? "font-semibold text-indigo-600"
-                          : "text-slate-700 hover:text-indigo-600 font-medium"
+                          ? "font-semibold text-teal-700"
+                          : "text-slate-600 hover:text-teal-700 font-medium"
                       )}
                     >
                       {link.label}
@@ -128,15 +126,14 @@ export default function Navbar() {
             </ul>
 
             {/* Desktop CTAs */}
-            <div className="hidden md:flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-3">
               {user ? (
-                /* Logged-in user menu */
                 <div className="relative" ref={userMenuRef}>
                   <button
                     onClick={() => setUserMenuOpen((v) => !v)}
-                    className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-xl hover:bg-black/5 transition-colors"
+                    className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-lg hover:bg-slate-50 transition-colors"
                   >
-                    <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xs font-bold">
+                    <div className="h-8 w-8 rounded-lg bg-teal-600 flex items-center justify-center text-white text-xs font-bold">
                       {userInitials}
                     </div>
                     <span className="text-sm font-medium text-slate-700">
@@ -146,7 +143,7 @@ export default function Navbar() {
                   </button>
 
                   {userMenuOpen && (
-                    <div className="absolute right-0 top-full mt-2 w-52 bg-white border border-slate-200 rounded-2xl shadow-lg py-2 z-50">
+                    <div className="absolute right-0 top-full mt-2 w-52 bg-white border border-slate-200 rounded-xl shadow-lg py-2 z-50">
                       <div className="px-4 py-2 border-b border-slate-100 mb-1">
                         <p className="text-xs font-medium text-slate-500 truncate">{user.email}</p>
                       </div>
@@ -179,15 +176,14 @@ export default function Navbar() {
                   )}
                 </div>
               ) : (
-                /* Guest CTAs */
                 <>
                   <Link href="/auth/login">
-                    <button className="px-5 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:bg-black/5 transition-all">
+                    <button className="px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all">
                       Log in
                     </button>
                   </Link>
                   <Link href="/auth/signup">
-                    <button className="px-5 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition-all">
+                    <button className="px-5 py-2.5 rounded-lg bg-teal-600 text-white text-sm font-semibold hover:bg-teal-700 transition-all shadow-sm">
                       Sign up
                     </button>
                   </Link>
@@ -199,7 +195,7 @@ export default function Navbar() {
             <button
               type="button"
               onClick={() => setMobileOpen((v) => !v)}
-              className="md:hidden p-2 rounded-lg text-slate-600 hover:text-indigo-700 hover:bg-black/5 transition-colors"
+              className="md:hidden p-2 rounded-lg text-slate-600 hover:text-teal-700 hover:bg-slate-50 transition-colors"
               aria-expanded={mobileOpen}
               aria-controls="mobile-menu"
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
@@ -222,7 +218,7 @@ export default function Navbar() {
           >
             <ul className="flex flex-col gap-1 pt-2" role="list">
               {[
-                { label: "Find a Teacher", href: user ? "/teachers" : "/get-started" },
+                { label: "Find Tutors", href: user ? "/teachers" : "/get-started" },
                 ...NAV_LINKS_BASE,
               ].map((link) => (
                 <li key={link.href}>
@@ -230,10 +226,10 @@ export default function Navbar() {
                     href={link.href}
                     onClick={() => setMobileOpen(false)}
                     className={cn(
-                      "block px-4 py-3 rounded-xl text-sm font-medium transition-colors",
+                      "block px-4 py-3 rounded-lg text-sm font-medium transition-colors",
                       pathname === link.href || pathname.startsWith(link.href + "/")
-                        ? "text-indigo-700 bg-indigo-50 font-semibold"
-                        : "text-slate-600 hover:text-indigo-700 hover:bg-black/5"
+                        ? "text-teal-700 bg-teal-50 font-semibold"
+                        : "text-slate-600 hover:text-teal-700 hover:bg-slate-50"
                     )}
                   >
                     {link.label}

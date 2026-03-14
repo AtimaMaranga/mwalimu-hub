@@ -54,7 +54,7 @@ export default function DashboardShell({
       {/* Logo */}
       <div className="px-5 py-5 border-b border-slate-100">
         <Link href="/" className="flex items-center gap-2.5 group" onClick={() => setSidebarOpen(false)}>
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-violet-700 shadow-md shadow-indigo-200 text-white font-bold text-sm italic shrink-0">
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-teal-600 to-teal-700 shadow-md shadow-teal-200 text-white font-bold text-sm italic shrink-0">
             ST
           </span>
           <div>
@@ -78,15 +78,15 @@ export default function DashboardShell({
                 className={cn(
                   "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all",
                   isActive
-                    ? "bg-indigo-50 text-indigo-700"
+                    ? "bg-teal-50 text-teal-700"
                     : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
                 )}
               >
-                <Icon className={cn("h-4 w-4 shrink-0", isActive ? "text-indigo-600" : "text-slate-400")} />
+                <Icon className={cn("h-4 w-4 shrink-0", isActive ? "text-teal-600" : "text-slate-400")} />
                 {label}
                 {isActive && (
-                  <span className="ml-auto h-5 w-5 rounded-full bg-indigo-100 flex items-center justify-center">
-                    <span className="h-1.5 w-1.5 rounded-full bg-indigo-600" />
+                  <span className="ml-auto h-5 w-5 rounded-full bg-teal-100 flex items-center justify-center">
+                    <span className="h-1.5 w-1.5 rounded-full bg-teal-600" />
                   </span>
                 )}
               </Link>
@@ -120,7 +120,7 @@ export default function DashboardShell({
       {/* User card at bottom */}
       <div className="px-4 pb-5 pt-3 border-t border-slate-100">
         <div className="flex items-center gap-3 px-3 py-3 rounded-xl bg-slate-50">
-          <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xs font-bold shrink-0">
+          <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center text-white text-xs font-bold shrink-0">
             {userInitials}
           </div>
           <div className="flex-1 min-w-0">
@@ -191,7 +191,7 @@ export default function DashboardShell({
             {/* Bell */}
             <button className="relative h-9 w-9 flex items-center justify-center rounded-xl bg-slate-50 border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-300 transition-all shrink-0">
               <Bell className="h-4 w-4" />
-              <span className="absolute top-2 right-2 h-1.5 w-1.5 rounded-full bg-indigo-500" />
+              <span className="absolute top-2 right-2 h-1.5 w-1.5 rounded-full bg-teal-500" />
             </button>
 
             {/* Divider */}
@@ -199,7 +199,7 @@ export default function DashboardShell({
 
             {/* User chip */}
             <div className="flex items-center gap-2.5">
-              <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xs font-bold shadow-sm shrink-0">
+              <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center text-white text-xs font-bold shadow-sm shrink-0">
                 {userInitials}
               </div>
               <div className="hidden sm:block leading-none">

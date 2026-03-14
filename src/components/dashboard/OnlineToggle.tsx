@@ -41,7 +41,7 @@ export default function OnlineToggle({ initialValue }: OnlineToggleProps) {
       <button
         onClick={toggle}
         disabled={isPending}
-        className={`relative inline-flex h-5 w-10 items-center rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
+        className={`relative inline-flex h-5 w-10 items-center rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 ${
           isOnline ? "bg-emerald-500" : "bg-slate-200"
         } ${isPending ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
         role="switch"

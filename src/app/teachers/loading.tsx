@@ -2,7 +2,7 @@ export default function TeachersLoading() {
   return (
     <>
       {/* Header skeleton */}
-      <div className="bg-gradient-to-br from-indigo-900 to-violet-900 text-white py-16">
+      <div className="bg-gradient-to-br from-teal-800 to-teal-950 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="h-10 w-80 bg-white/10 rounded-xl mx-auto mb-4 animate-pulse" />
           <div className="h-5 w-96 bg-white/10 rounded-lg mx-auto mb-8 animate-pulse" />
@@ -29,7 +29,7 @@ export default function TeachersLoading() {
                   <div className="h-6 w-20 bg-slate-50 rounded-full animate-pulse" />
                   <div className="h-6 w-16 bg-slate-50 rounded-full animate-pulse" />
                 </div>
-                <div className="h-10 w-full bg-indigo-50 rounded-xl animate-pulse mt-4" />
+                <div className="h-10 w-full bg-teal-50 rounded-xl animate-pulse mt-4" />
               </div>
             </div>
           ))}

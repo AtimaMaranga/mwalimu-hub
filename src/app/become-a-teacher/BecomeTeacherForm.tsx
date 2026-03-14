@@ -107,7 +107,7 @@ export default function BecomeTeacherForm() {
               <input
                 id="name"
                 {...register("name")}
-                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-300 text-sm"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-300 text-sm"
                 placeholder="Amina Odhiambo"
               />
               {errors.name && (
@@ -127,7 +127,7 @@ export default function BecomeTeacherForm() {
                 id="email"
                 type="email"
                 {...register("email")}
-                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-300 text-sm"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-300 text-sm"
                 placeholder="you@example.com"
               />
               {errors.email && (
@@ -147,7 +147,7 @@ export default function BecomeTeacherForm() {
                 id="phone"
                 type="tel"
                 {...register("phone")}
-                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-300 text-sm"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-300 text-sm"
                 placeholder="+254 712 345 678"
               />
             </div>
@@ -171,7 +171,7 @@ export default function BecomeTeacherForm() {
                 id="experience"
                 {...register("experience")}
                 rows={4}
-                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-300 text-sm resize-none"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-300 text-sm resize-none"
                 placeholder="Describe your teaching experience — how long you've been teaching, where, what types of students, and any relevant contexts..."
               />
               {errors.experience && (
@@ -192,7 +192,7 @@ export default function BecomeTeacherForm() {
                 id="qualifications"
                 {...register("qualifications")}
                 rows={3}
-                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-300 text-sm resize-none"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-300 text-sm resize-none"
                 placeholder="List your relevant degrees, teaching qualifications, language certifications, etc."
               />
               {errors.qualifications && (
@@ -216,7 +216,7 @@ export default function BecomeTeacherForm() {
                   min={1}
                   max={60}
                   {...register("available_hours", { valueAsNumber: true })}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-300 text-sm"
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-300 text-sm"
                   placeholder="10"
                 />
                 {errors.available_hours && (
@@ -239,7 +239,7 @@ export default function BecomeTeacherForm() {
                   min={5}
                   max={200}
                   {...register("rate_expectation", { valueAsNumber: true })}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-300 text-sm"
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-300 text-sm"
                   placeholder="25"
                 />
                 {errors.rate_expectation && (
@@ -264,7 +264,7 @@ export default function BecomeTeacherForm() {
                 id="teaching_philosophy"
                 {...register("teaching_philosophy")}
                 rows={6}
-                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-300 text-sm resize-none"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-300 text-sm resize-none"
                 placeholder="Describe your approach to teaching Swahili. What makes your lessons unique? How do you adapt to different learning styles? What results do you help students achieve?"
                 maxLength={1000}
               />
@@ -283,13 +283,13 @@ export default function BecomeTeacherForm() {
             id="agree_terms"
             type="checkbox"
             {...register("agree_terms")}
-            className="h-4 w-4 rounded text-indigo-600 focus:ring-indigo-500 mt-0.5"
+            className="h-4 w-4 rounded text-teal-600 focus:ring-teal-500 mt-0.5"
           />
           <label htmlFor="agree_terms" className="text-sm text-slate-600">
             I agree to Swahili Tutors&apos;s{" "}
             <a
               href="/terms"
-              className="text-indigo-600 underline"
+              className="text-teal-600 underline"
               target="_blank"
               rel="noreferrer"
             >
@@ -298,7 +298,7 @@ export default function BecomeTeacherForm() {
             and{" "}
             <a
               href="/privacy"
-              className="text-indigo-600 underline"
+              className="text-teal-600 underline"
               target="_blank"
               rel="noreferrer"
             >

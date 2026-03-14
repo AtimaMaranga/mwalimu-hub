@@ -16,13 +16,13 @@ interface ToastProps {
 const icons: Record<ToastType, React.ReactNode> = {
   success: <CheckCircle className="h-5 w-5 text-emerald-500" />,
   error:   <XCircle className="h-5 w-5 text-red-500" />,
-  info:    <AlertCircle className="h-5 w-5 text-indigo-500" />,
+  info:    <AlertCircle className="h-5 w-5 text-teal-500" />,
 };
 
 const styles: Record<ToastType, string> = {
   success: "bg-emerald-50 border-emerald-200",
   error:   "bg-red-50 border-red-200",
-  info:    "bg-indigo-50 border-indigo-200",
+  info:    "bg-teal-50 border-teal-200",
 };
 
 export default function Toast({ message, type = "info", duration = 4000, onClose }: ToastProps) {

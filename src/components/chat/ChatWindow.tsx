@@ -237,7 +237,7 @@ export default function ChatWindow({
 
           {/* Header */}
           <div className="flex items-center gap-3 px-4 py-3 border-b border-slate-100 bg-white shrink-0">
-            <div className="h-9 w-9 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xs font-bold shrink-0">
+            <div className="h-9 w-9 rounded-full bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center text-white text-xs font-bold shrink-0">
               {getInitials(recipientName)}
             </div>
             <div className="flex-1 min-w-0">
@@ -268,8 +268,8 @@ export default function ChatWindow({
               </div>
             ) : messages.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full gap-3 text-center px-6">
-                <div className="h-12 w-12 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center">
-                  <Send className="h-5 w-5 text-indigo-400" />
+                <div className="h-12 w-12 rounded-2xl bg-teal-50 border border-teal-100 flex items-center justify-center">
+                  <Send className="h-5 w-5 text-teal-400" />
                 </div>
                 <p className="text-slate-700 text-sm font-medium">Start the conversation</p>
                 <p className="text-slate-400 text-xs">Say hello to {recipientName.split(" ")[0]}</p>
@@ -285,7 +285,7 @@ export default function ChatWindow({
                       )}
                       <div className={`max-w-[75%] px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed break-words ${
                         isOwn
-                          ? "bg-indigo-600 text-white rounded-br-sm"
+                          ? "bg-teal-600 text-white rounded-br-sm"
                           : "bg-white text-slate-800 rounded-bl-sm shadow-sm border border-slate-100"
                       }`}>
                         {msg.content}
@@ -332,14 +332,14 @@ export default function ChatWindow({
                 onKeyDown={handleKeyDown}
                 placeholder="Type a message..."
                 rows={1}
-                className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent transition-colors leading-relaxed"
+                className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 resize-none focus:outline-none focus:ring-2 focus:ring-teal-300 focus:border-transparent transition-colors leading-relaxed"
                 style={{ minHeight: "40px", maxHeight: "120px" }}
                 disabled={sending}
               />
               <button
                 onClick={handleSend}
                 disabled={!inputValue.trim() || sending}
-                className="h-10 w-10 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-300 disabled:cursor-not-allowed flex items-center justify-center transition-colors shrink-0"
+                className="h-10 w-10 rounded-xl bg-teal-600 hover:bg-teal-500 disabled:bg-teal-300 disabled:cursor-not-allowed flex items-center justify-center transition-colors shrink-0"
                 aria-label="Send message"
               >
                 {sending

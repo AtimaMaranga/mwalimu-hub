@@ -139,8 +139,8 @@ export default function ConversationInbox({ currentUserId, userRole }: Conversat
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-50">
           <div className="flex items-center gap-3">
-            <div className="h-8 w-8 rounded-lg bg-indigo-50 flex items-center justify-center">
-              <MessageCircle className="h-4 w-4 text-indigo-600" />
+            <div className="h-8 w-8 rounded-lg bg-teal-50 flex items-center justify-center">
+              <MessageCircle className="h-4 w-4 text-teal-600" />
             </div>
             <div>
               <p className="text-sm font-bold text-slate-900">Messages</p>
@@ -168,8 +168,8 @@ export default function ConversationInbox({ currentUserId, userRole }: Conversat
           </div>
         ) : conversations.length === 0 ? (
           <div className="text-center py-16 px-6">
-            <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-50 mb-4">
-              <MessageCircle className="h-6 w-6 text-indigo-400" />
+            <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-teal-50 mb-4">
+              <MessageCircle className="h-6 w-6 text-teal-400" />
             </div>
             <p className="text-slate-900 font-semibold mb-1">No messages yet</p>
             <p className="text-slate-400 text-sm max-w-xs mx-auto">
@@ -190,11 +190,11 @@ export default function ConversationInbox({ currentUserId, userRole }: Conversat
                 <button
                   key={conv.id}
                   onClick={() => handleOpen(conv)}
-                  className={`w-full flex items-center gap-3 px-6 py-4 hover:bg-slate-50 transition-colors text-left ${isActive ? "bg-indigo-50/50" : ""}`}
+                  className={`w-full flex items-center gap-3 px-6 py-4 hover:bg-slate-50 transition-colors text-left ${isActive ? "bg-teal-50/50" : ""}`}
                 >
                   {/* Avatar with online dot */}
                   <div className="relative shrink-0">
-                    <div className="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xs font-bold">
+                    <div className="h-10 w-10 rounded-full bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center text-white text-xs font-bold">
                       {getInitials(recipientName)}
                     </div>
                     <span className={`absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-white ${isOnline ? "bg-emerald-500" : "bg-slate-300"}`} />
@@ -220,7 +220,7 @@ export default function ConversationInbox({ currentUserId, userRole }: Conversat
                         {conv.last_message ?? "No messages yet"}
                       </p>
                       {unread > 0 && (
-                        <span className="h-5 min-w-5 px-1 rounded-full bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center shrink-0">
+                        <span className="h-5 min-w-5 px-1 rounded-full bg-teal-600 text-white text-[10px] font-bold flex items-center justify-center shrink-0">
                           {unread > 99 ? "99+" : unread}
                         </span>
                       )}

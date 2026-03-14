@@ -17,7 +17,7 @@ import { getInitials } from "@/lib/utils";
 const levelColors: Record<string, { bg: string; text: string; dot: string; border: string }> = {
   beginner:     { bg: "bg-emerald-50",  text: "text-emerald-700", dot: "bg-emerald-500", border: "border-emerald-100" },
   intermediate: { bg: "bg-blue-50",     text: "text-blue-700",    dot: "bg-blue-500",    border: "border-blue-100"    },
-  advanced:     { bg: "bg-violet-50",   text: "text-violet-700",  dot: "bg-violet-500",  border: "border-violet-100"  },
+  advanced:     { bg: "bg-teal-50",   text: "text-teal-700",  dot: "bg-teal-500",  border: "border-teal-100"  },
 };
 
 function StatCard({ label, value, sub, icon: Icon, iconBg, iconColor }: {
@@ -42,18 +42,18 @@ function StepProgress({ pct, label, done }: { pct: number; label: string; done: 
   return (
     <div className="flex items-center gap-3 py-3">
       <div className={`h-8 w-8 rounded-full flex items-center justify-center shrink-0 text-xs font-bold ${
-        done ? "bg-indigo-600 text-white" : "bg-slate-100 text-slate-400"
+        done ? "bg-teal-600 text-white" : "bg-slate-100 text-slate-400"
       }`}>
         {done ? "✓" : ""}
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between mb-1">
           <p className={`text-sm font-medium ${done ? "text-slate-900" : "text-slate-500"}`}>{label}</p>
-          <span className={`text-xs font-semibold ${done ? "text-indigo-600" : "text-slate-400"}`}>{pct}%</span>
+          <span className={`text-xs font-semibold ${done ? "text-teal-600" : "text-slate-400"}`}>{pct}%</span>
         </div>
         <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
           <div
-            className="h-full bg-indigo-500 rounded-full transition-all duration-500"
+            className="h-full bg-teal-500 rounded-full transition-all duration-500"
             style={{ width: `${pct}%` }}
           />
         </div>
@@ -70,7 +70,7 @@ function BarChart({ data }: { data: number[] }) {
       {data.map((v, i) => (
         <div key={i} className="flex-1 flex flex-col items-center gap-1.5">
           <div
-            className="w-full rounded-t-lg bg-indigo-500 transition-all"
+            className="w-full rounded-t-lg bg-teal-500 transition-all"
             style={{ height: `${(v / max) * 100}%`, minHeight: 4, opacity: v === 0 ? 0.2 : 1 }}
           />
           <span className="text-slate-400 text-[9px] font-medium">{labels[i]}</span>
@@ -137,18 +137,18 @@ export default async function StudentDashboardPage({
 
         {/* ── Welcome banner ── */}
         {isNewUser && (
-          <div className="relative bg-gradient-to-r from-indigo-600 to-violet-600 rounded-2xl p-6 overflow-hidden shadow-lg shadow-indigo-200">
+          <div className="relative bg-gradient-to-r from-teal-600 to-teal-600 rounded-2xl p-6 overflow-hidden shadow-lg shadow-teal-200">
             <div className="absolute right-0 top-0 bottom-0 flex items-center pr-8 opacity-20">
               <GraduationCap className="h-28 w-28 text-white" />
             </div>
             <div className="relative">
-              <p className="text-indigo-200 text-xs font-semibold uppercase tracking-widest mb-1">Account confirmed</p>
+              <p className="text-teal-200 text-xs font-semibold uppercase tracking-widest mb-1">Account confirmed</p>
               <h2 className="text-white text-xl font-bold mb-1">Welcome, {name.split(" ")[0]}!</h2>
-              <p className="text-indigo-100 text-sm max-w-md mb-4">
+              <p className="text-teal-100 text-sm max-w-md mb-4">
                 Your account is active. Browse native Swahili teachers and send your first free inquiry.
               </p>
               <Link href="/teachers">
-                <button className="inline-flex items-center gap-2 bg-white text-indigo-700 font-semibold text-sm px-4 py-2 rounded-xl hover:bg-indigo-50 transition-colors shadow-sm">
+                <button className="inline-flex items-center gap-2 bg-white text-teal-700 font-semibold text-sm px-4 py-2 rounded-xl hover:bg-teal-50 transition-colors shadow-sm">
                   Browse Teachers <ArrowRight className="h-4 w-4" />
                 </button>
               </Link>
@@ -158,9 +158,9 @@ export default async function StudentDashboardPage({
 
         {/* ── Stats ── */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatCard label="Inquiries Sent"     value={totalInquiries}    sub="Total messages sent"         icon={MessageCircle} iconBg="bg-indigo-50"  iconColor="text-indigo-600" />
-          <StatCard label="Teachers Contacted" value={teachersContacted} sub="Unique teachers"              icon={Users}         iconBg="bg-violet-50"  iconColor="text-violet-600" />
-          <StatCard label="Teachers Available" value={publishedTeachers} sub="Ready to teach"               icon={Search}        iconBg="bg-cyan-50"    iconColor="text-cyan-600" />
+          <StatCard label="Inquiries Sent"     value={totalInquiries}    sub="Total messages sent"         icon={MessageCircle} iconBg="bg-teal-50"  iconColor="text-teal-600" />
+          <StatCard label="Teachers Contacted" value={teachersContacted} sub="Unique teachers"              icon={Users}         iconBg="bg-teal-50"  iconColor="text-teal-600" />
+          <StatCard label="Teachers Available" value={publishedTeachers} sub="Ready to teach"               icon={Search}        iconBg="bg-teal-50"    iconColor="text-teal-600" />
           <StatCard label="Learning Progress"  value="0%"                sub="Lessons completed"           icon={TrendingUp}    iconBg="bg-amber-50"   iconColor="text-amber-600" />
         </div>
 
@@ -176,23 +176,23 @@ export default async function StudentDashboardPage({
         <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
           <div className="flex items-center justify-between px-6 py-4 border-b border-slate-50">
             <div className="flex items-center gap-3">
-              <div className="h-8 w-8 rounded-lg bg-violet-50 flex items-center justify-center">
-                <CalendarDays className="h-4 w-4 text-violet-600" />
+              <div className="h-8 w-8 rounded-lg bg-teal-50 flex items-center justify-center">
+                <CalendarDays className="h-4 w-4 text-teal-600" />
               </div>
               <div>
                 <p className="text-sm font-bold text-slate-900">My Bookings</p>
                 <p className="text-xs text-slate-400">{activeBookings.length} active</p>
               </div>
             </div>
-            <Link href="/teachers" className="text-xs text-indigo-600 hover:text-indigo-700 font-semibold flex items-center gap-1">
+            <Link href="/teachers" className="text-xs text-teal-600 hover:text-teal-700 font-semibold flex items-center gap-1">
               Book a lesson <ArrowRight className="h-3 w-3" />
             </Link>
           </div>
 
           {!bookings || bookings.length === 0 ? (
             <div className="text-center py-12 px-6">
-              <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-50 mb-4">
-                <CalendarDays className="h-6 w-6 text-violet-400" />
+              <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-teal-50 mb-4">
+                <CalendarDays className="h-6 w-6 text-teal-400" />
               </div>
               <p className="text-slate-900 font-semibold mb-1">No bookings yet</p>
               <p className="text-slate-400 text-sm max-w-xs mx-auto mb-4">
@@ -215,7 +215,7 @@ export default async function StudentDashboardPage({
 
                 return (
                   <div key={booking.id} className="px-6 py-4 flex items-center gap-4 hover:bg-slate-50 transition-colors">
-                    <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xs font-bold shrink-0 overflow-hidden">
+                    <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center text-white text-xs font-bold shrink-0 overflow-hidden">
                       {teacher?.profile_image_url
                         ? <img src={teacher.profile_image_url} alt={teacher.name} className="h-full w-full object-cover" />
                         : getInitials(teacher?.name ?? "T")}
@@ -257,7 +257,7 @@ export default async function StudentDashboardPage({
           <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
             <div className="flex items-center justify-between mb-2">
               <p className="text-sm font-bold text-slate-900">Learning Journey</p>
-              <Link href="/teachers" className="text-xs text-indigo-600 hover:text-indigo-700 font-medium">
+              <Link href="/teachers" className="text-xs text-teal-600 hover:text-teal-700 font-medium">
                 Explore →
               </Link>
             </div>
@@ -273,14 +273,14 @@ export default async function StudentDashboardPage({
             <p className="text-sm font-bold text-slate-900 mb-4">Quick Actions</p>
             <div className="space-y-2">
               {[
-                { label: "Browse all teachers",  sub: "Find your perfect match",  href: "/teachers",         iconBg: "bg-indigo-50",  iconColor: "text-indigo-600",  icon: Search },
-                { label: "How lessons work",     sub: "Learn the booking process", href: "/how-it-works",     iconBg: "bg-violet-50",  iconColor: "text-violet-600",  icon: BookOpen },
+                { label: "Browse all teachers",  sub: "Find your perfect match",  href: "/teachers",         iconBg: "bg-teal-50",  iconColor: "text-teal-600",  icon: Search },
+                { label: "How lessons work",     sub: "Learn the booking process", href: "/how-it-works",     iconBg: "bg-teal-50",  iconColor: "text-teal-600",  icon: BookOpen },
                 { label: "Become a teacher",     sub: "Earn teaching Swahili",     href: "/become-a-teacher", iconBg: "bg-amber-50",   iconColor: "text-amber-600",   icon: Star },
               ].map(({ label, sub, href, iconBg, iconColor, icon: Icon }) => (
                 <Link
                   key={href}
                   href={href}
-                  className="flex items-center gap-3 p-3 rounded-xl border border-slate-100 hover:border-indigo-100 hover:bg-indigo-50/30 transition-all group"
+                  className="flex items-center gap-3 p-3 rounded-xl border border-slate-100 hover:border-teal-100 hover:bg-teal-50/30 transition-all group"
                 >
                   <div className={`h-8 w-8 rounded-lg ${iconBg} flex items-center justify-center shrink-0`}>
                     <Icon className={`h-4 w-4 ${iconColor}`} />
@@ -289,7 +289,7 @@ export default async function StudentDashboardPage({
                     <p className="text-slate-800 text-xs font-semibold">{label}</p>
                     <p className="text-slate-400 text-xs truncate">{sub}</p>
                   </div>
-                  <ChevronRight className="h-4 w-4 text-slate-300 group-hover:text-indigo-400 transition-colors shrink-0" />
+                  <ChevronRight className="h-4 w-4 text-slate-300 group-hover:text-teal-400 transition-colors shrink-0" />
                 </Link>
               ))}
             </div>
@@ -300,23 +300,23 @@ export default async function StudentDashboardPage({
         <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
           <div className="flex items-center justify-between px-6 py-4 border-b border-slate-50">
             <div className="flex items-center gap-3">
-              <div className="h-8 w-8 rounded-lg bg-indigo-50 flex items-center justify-center">
-                <MessageCircle className="h-4 w-4 text-indigo-600" />
+              <div className="h-8 w-8 rounded-lg bg-teal-50 flex items-center justify-center">
+                <MessageCircle className="h-4 w-4 text-teal-600" />
               </div>
               <div>
                 <p className="text-sm font-bold text-slate-900">My Inquiries</p>
                 <p className="text-xs text-slate-400">{totalInquiries} total sent</p>
               </div>
             </div>
-            <Link href="/teachers" className="text-xs text-indigo-600 hover:text-indigo-700 font-semibold flex items-center gap-1">
+            <Link href="/teachers" className="text-xs text-teal-600 hover:text-teal-700 font-semibold flex items-center gap-1">
               Find teachers <ArrowRight className="h-3 w-3" />
             </Link>
           </div>
 
           {!inquiries || totalInquiries === 0 ? (
             <div className="text-center py-16 px-6">
-              <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-50 mb-4">
-                <MessageCircle className="h-6 w-6 text-indigo-400" />
+              <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-teal-50 mb-4">
+                <MessageCircle className="h-6 w-6 text-teal-400" />
               </div>
               <p className="text-slate-900 font-semibold mb-1">No inquiries yet</p>
               <p className="text-slate-400 text-sm mb-6 max-w-xs mx-auto">
@@ -350,7 +350,7 @@ export default async function StudentDashboardPage({
                     className={`grid grid-cols-12 gap-4 px-6 py-4 items-center hover:bg-slate-50 transition-colors ${idx !== 0 ? "border-t border-slate-50" : ""}`}
                   >
                     <div className="col-span-3 flex items-center gap-3 min-w-0">
-                      <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xs font-bold shrink-0 overflow-hidden shadow-sm">
+                      <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center text-white text-xs font-bold shrink-0 overflow-hidden shadow-sm">
                         {teacher?.profile_image_url
                           ? <img src={teacher.profile_image_url} alt={teacher.name} className="h-full w-full object-cover" />
                           : teacherInitials}
@@ -358,7 +358,7 @@ export default async function StudentDashboardPage({
                       <div className="min-w-0">
                         <p className="text-slate-900 text-sm font-semibold truncate">{teacher?.name ?? "Teacher"}</p>
                         {teacher?.slug && (
-                          <Link href={`/teachers/${teacher.slug}`} className="text-xs text-indigo-500 hover:text-indigo-600 truncate">
+                          <Link href={`/teachers/${teacher.slug}`} className="text-xs text-teal-500 hover:text-teal-600 truncate">
                             View profile
                           </Link>
                         )}
@@ -377,7 +377,7 @@ export default async function StudentDashboardPage({
                     </div>
 
                     <div className="col-span-2">
-                      <p className="text-indigo-600 text-sm font-semibold">
+                      <p className="text-teal-600 text-sm font-semibold">
                         {teacher?.hourly_rate ? `$${teacher.hourly_rate}/hr` : "—"}
                       </p>
                     </div>

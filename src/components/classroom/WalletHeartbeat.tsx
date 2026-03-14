@@ -73,7 +73,7 @@ export default function WalletHeartbeat({
       <div className="flex items-center gap-3">
         {/* Balance */}
         <div className="flex items-center gap-1.5 text-sm">
-          <Wallet className="h-4 w-4 text-indigo-500" />
+          <Wallet className="h-4 w-4 text-teal-500" />
           <span className={`font-bold ${balance <= 1 ? "text-red-600" : "text-slate-700"}`}>
             ${balance.toFixed(2)}
           </span>

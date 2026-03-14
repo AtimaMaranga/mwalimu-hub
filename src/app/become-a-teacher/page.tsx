@@ -60,12 +60,12 @@ export default function BecomeTeacherPage() {
   return (
     <PageWrapper>
       {/* Hero */}
-      <div className="bg-gradient-to-br from-indigo-900 to-violet-900 text-white py-20">
+      <div className="bg-gradient-to-br from-teal-800 to-teal-950 text-white py-20">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
           <h1 className="text-3xl sm:text-5xl font-bold font-heading mb-4">
             Become a Swahili Teacher
           </h1>
-          <p className="text-indigo-100 text-lg leading-relaxed">
+          <p className="text-teal-100 text-lg leading-relaxed">
             Share your language, share your culture. Join our growing community
             of Swahili educators and help learners worldwide discover the beauty
             of Swahili.
@@ -96,10 +96,10 @@ export default function BecomeTeacherPage() {
             {benefits.map(({ icon: Icon, title, desc }) => (
               <div
                 key={title}
-                className="flex gap-4 p-6 rounded-2xl bg-slate-50 hover:bg-indigo-50 transition-colors group"
+                className="flex gap-4 p-6 rounded-2xl bg-slate-50 hover:bg-teal-50 transition-colors group"
               >
-                <div className="h-12 w-12 rounded-xl bg-indigo-100 group-hover:bg-indigo-200 flex items-center justify-center shrink-0 transition-colors">
-                  <Icon className="h-6 w-6 text-indigo-700" aria-hidden="true" />
+                <div className="h-12 w-12 rounded-xl bg-teal-100 group-hover:bg-teal-200 flex items-center justify-center shrink-0 transition-colors">
+                  <Icon className="h-6 w-6 text-teal-700" aria-hidden="true" />
                 </div>
                 <div>
                   <h3 className="font-bold text-slate-900 mb-1">{title}</h3>

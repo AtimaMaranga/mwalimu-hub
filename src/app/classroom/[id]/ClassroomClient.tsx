@@ -109,7 +109,7 @@ export default function ClassroomClient({
           </p>
           <button
             onClick={() => router.push("/dashboard")}
-            className="bg-indigo-600 text-white font-semibold px-6 py-3 rounded-xl hover:bg-indigo-700 transition-colors"
+            className="bg-teal-600 text-white font-semibold px-6 py-3 rounded-xl hover:bg-teal-700 transition-colors"
           >
             Back to Dashboard
           </button>

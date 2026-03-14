@@ -68,7 +68,7 @@ export default function ChatWidget({
       <button
         onClick={handleClick}
         disabled={loading}
-        className="w-full mt-3 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-600/50 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors"
+        className="w-full mt-3 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-500 disabled:bg-teal-600/50 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors"
       >
         {loading ? (
           <div className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />

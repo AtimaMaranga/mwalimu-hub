@@ -36,7 +36,7 @@ export default function DeleteAccountButton() {
       {/* Trigger */}
       <button
         onClick={() => setOpen(true)}
-        className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-red-400/70 hover:text-red-400 hover:bg-red-500/5 transition-all w-full"
+        className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-red-500 hover:text-red-600 hover:bg-red-50 transition-all w-full"
       >
         <Trash2 className="h-4 w-4 shrink-0" />
         Delete Account
@@ -52,29 +52,29 @@ export default function DeleteAccountButton() {
           />
 
           {/* Dialog */}
-          <div className="relative z-10 bg-[#1a1b2e] border border-white/10 rounded-2xl p-6 max-w-sm w-full shadow-2xl">
+          <div className="relative z-10 bg-white border border-slate-200 rounded-2xl p-6 max-w-sm w-full shadow-2xl">
             {/* Close */}
             <button
               onClick={() => setOpen(false)}
               disabled={loading}
-              className="absolute top-4 right-4 h-7 w-7 flex items-center justify-center rounded-lg text-slate-500 hover:text-white hover:bg-white/10 transition-colors"
+              className="absolute top-4 right-4 h-7 w-7 flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
             >
               <X className="h-4 w-4" />
             </button>
 
             {/* Icon */}
-            <div className="h-12 w-12 rounded-xl bg-red-500/15 border border-red-500/20 flex items-center justify-center mb-4">
-              <AlertTriangle className="h-6 w-6 text-red-400" />
+            <div className="h-12 w-12 rounded-xl bg-red-50 border border-red-200 flex items-center justify-center mb-4">
+              <AlertTriangle className="h-6 w-6 text-red-600" />
             </div>
 
-            <h2 className="text-white font-bold text-lg mb-2">Delete your account?</h2>
-            <p className="text-slate-400 text-sm leading-relaxed mb-6">
+            <h2 className="text-slate-900 font-bold text-lg mb-2">Delete your account?</h2>
+            <p className="text-slate-500 text-sm leading-relaxed mb-6">
               This will permanently delete your account and all associated data.
-              This action <span className="text-white font-semibold">cannot be undone</span>.
+              This action <span className="text-slate-900 font-semibold">cannot be undone</span>.
             </p>
 
             {error && (
-              <p className="text-red-400 text-xs bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2 mb-4">
+              <p className="text-red-600 text-xs bg-red-50 border border-red-200 rounded-lg px-3 py-2 mb-4">
                 {error}
               </p>
             )}
@@ -83,7 +83,7 @@ export default function DeleteAccountButton() {
               <button
                 onClick={() => setOpen(false)}
                 disabled={loading}
-                className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-300 bg-white/5 hover:bg-white/10 transition-colors disabled:opacity-50"
+                className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors disabled:opacity-50"
               >
                 Cancel
               </button>

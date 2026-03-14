@@ -21,7 +21,7 @@ export default function TeachersError({
         </p>
         <button
           onClick={reset}
-          className="bg-indigo-600 text-white font-semibold text-sm px-5 py-2.5 rounded-xl hover:bg-indigo-700 transition-colors"
+          className="bg-teal-600 text-white font-semibold text-sm px-5 py-2.5 rounded-xl hover:bg-teal-700 transition-colors"
         >
           Try Again
         </button>

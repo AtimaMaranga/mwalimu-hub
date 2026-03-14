@@ -22,7 +22,7 @@ export default function AnimatedStat({
   label,
   className = "text-center",
   valueClassName = "text-2xl font-bold text-white",
-  labelClassName = "text-xs text-indigo-200 mt-0.5",
+  labelClassName = "text-xs text-teal-200 mt-0.5",
 }: AnimatedStatProps) {
   const { num, suffix } = parseValue(value);
   const [count, setCount] = useState(0);

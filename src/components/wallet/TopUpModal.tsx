@@ -62,8 +62,8 @@ export default function TopUpModal({ onClose, onSuccess }: TopUpModalProps) {
         </button>
 
         <div className="flex items-center gap-3 mb-6">
-          <div className="h-10 w-10 rounded-xl bg-indigo-50 flex items-center justify-center">
-            <CreditCard className="h-5 w-5 text-indigo-600" />
+          <div className="h-10 w-10 rounded-xl bg-teal-50 flex items-center justify-center">
+            <CreditCard className="h-5 w-5 text-teal-600" />
           </div>
           <div>
             <h3 className="font-bold text-slate-900">Add Funds</h3>
@@ -79,7 +79,7 @@ export default function TopUpModal({ onClose, onSuccess }: TopUpModalProps) {
               onClick={() => { setAmount(preset); setIsCustom(false); }}
               className={`py-3 rounded-xl text-sm font-bold transition-all ${
                 !isCustom && amount === preset
-                  ? "bg-indigo-600 text-white shadow-md"
+                  ? "bg-teal-600 text-white shadow-md"
                   : "bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200"
               }`}
             >
@@ -92,7 +92,7 @@ export default function TopUpModal({ onClose, onSuccess }: TopUpModalProps) {
         <div className="mb-6">
           <button
             onClick={() => setIsCustom(true)}
-            className={`text-sm font-medium mb-2 ${isCustom ? "text-indigo-600" : "text-slate-400 hover:text-slate-600"}`}
+            className={`text-sm font-medium mb-2 ${isCustom ? "text-teal-600" : "text-slate-400 hover:text-slate-600"}`}
           >
             Custom amount
           </button>
@@ -107,7 +107,7 @@ export default function TopUpModal({ onClose, onSuccess }: TopUpModalProps) {
                 value={customAmount}
                 onChange={(e) => setCustomAmount(e.target.value)}
                 placeholder="0.00"
-                className="w-full pl-8 pr-4 py-3 rounded-xl border border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+                className="w-full pl-8 pr-4 py-3 rounded-xl border border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-300"
                 autoFocus
               />
             </div>
@@ -121,7 +121,7 @@ export default function TopUpModal({ onClose, onSuccess }: TopUpModalProps) {
         <button
           onClick={handleTopUp}
           disabled={loading || effectiveAmount <= 0}
-          className="w-full bg-indigo-600 text-white font-semibold py-3 rounded-xl hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="w-full bg-teal-600 text-white font-semibold py-3 rounded-xl hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {loading ? "Processing..." : `Add $${effectiveAmount.toFixed(2)}`}
         </button>

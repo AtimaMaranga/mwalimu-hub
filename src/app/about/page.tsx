@@ -40,12 +40,12 @@ export default function AboutPage() {
   return (
     <PageWrapper>
       {/* Header */}
-      <div className="bg-gradient-to-br from-indigo-900 to-violet-900 text-white py-20">
+      <div className="bg-gradient-to-br from-teal-800 to-teal-950 text-white py-20">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
           <h1 className="text-3xl sm:text-5xl font-bold font-heading mb-4">
             About Swahili Tutors
           </h1>
-          <p className="text-indigo-100 text-lg">
+          <p className="text-teal-100 text-lg">
             We are on a mission to connect every Swahili learner with the right teacher.
           </p>
         </div>
@@ -83,7 +83,7 @@ export default function AboutPage() {
                 </p>
               </div>
             </div>
-            <div className="bg-gradient-to-br from-indigo-50 to-violet-50 rounded-3xl p-8">
+            <div className="bg-gradient-to-br from-teal-50 to-teal-50 rounded-3xl p-8">
               <div className="grid grid-cols-2 gap-6">
                 {[
                   { value: "200M+", label: "Swahili speakers" },
@@ -95,7 +95,7 @@ export default function AboutPage() {
                     key={label}
                     className="text-center p-4 bg-white rounded-2xl shadow-sm"
                   >
-                    <p className="text-2xl font-bold text-indigo-700">{value}</p>
+                    <p className="text-2xl font-bold text-teal-700">{value}</p>
                     <p className="text-xs text-slate-400 mt-1">{label}</p>
                   </div>
                 ))}
@@ -155,8 +155,8 @@ export default function AboutPage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {values.map(({ icon: Icon, title, desc }) => (
               <div key={title} className="text-center p-6">
-                <div className="h-14 w-14 rounded-2xl bg-indigo-100 flex items-center justify-center mx-auto mb-4">
-                  <Icon className="h-7 w-7 text-indigo-700" aria-hidden="true" />
+                <div className="h-14 w-14 rounded-2xl bg-teal-100 flex items-center justify-center mx-auto mb-4">
+                  <Icon className="h-7 w-7 text-teal-700" aria-hidden="true" />
                 </div>
                 <h3 className="font-bold text-slate-900 mb-2">{title}</h3>
                 <p className="text-sm text-slate-500 leading-relaxed">{desc}</p>
@@ -167,12 +167,12 @@ export default function AboutPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 bg-gradient-to-br from-indigo-900 to-violet-900 text-white text-center">
+      <section className="py-20 bg-gradient-to-br from-teal-800 to-teal-950 text-white text-center">
         <div className="max-w-2xl mx-auto px-4 sm:px-6">
           <h2 className="text-3xl font-bold font-heading mb-4">
             Join Our Community
           </h2>
-          <p className="text-indigo-100 mb-8">
+          <p className="text-teal-100 mb-8">
             Whether you want to learn Swahili or share your expertise,
             there&apos;s a place for you on Swahili Tutors.
           </p>
@@ -181,7 +181,7 @@ export default function AboutPage() {
               <Button
                 variant="primary"
                 size="lg"
-                className="bg-white text-indigo-700 hover:bg-indigo-50"
+                className="bg-white text-teal-700 hover:bg-teal-50"
               >
                 Find a Teacher
               </Button>

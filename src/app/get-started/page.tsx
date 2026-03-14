@@ -100,14 +100,14 @@ function ProgressBar({ current, total }: { current: number; total: number }) {
   return (
     <div className="w-full">
       <div className="flex items-center justify-between mb-2">
-        <span className="text-xs font-semibold text-indigo-300 uppercase tracking-widest">
+        <span className="text-xs font-semibold text-teal-300 uppercase tracking-widest">
           Step {current} of {total}
         </span>
-        <span className="text-xs text-indigo-300">{Math.round((current / total) * 100)}% complete</span>
+        <span className="text-xs text-teal-300">{Math.round((current / total) * 100)}% complete</span>
       </div>
       <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
         <div
-          className="h-full bg-gradient-to-r from-indigo-400 to-violet-400 rounded-full transition-all duration-500"
+          className="h-full bg-gradient-to-r from-teal-400 to-teal-400 rounded-full transition-all duration-500"
           style={{ width: `${(current / total) * 100}%` }}
         />
       </div>
@@ -136,7 +136,7 @@ function QuizStep({
       <h2 className="text-2xl sm:text-3xl font-bold font-heading text-white mb-2 leading-snug">
         {step.question}
       </h2>
-      <p className="text-indigo-200 text-sm mb-8">{step.subtitle}</p>
+      <p className="text-teal-200 text-sm mb-8">{step.subtitle}</p>
 
       <div className={`grid gap-3 ${step.options.length <= 4 ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"}`}>
         {step.options.map(({ value, label, desc, icon: Icon }) => {
@@ -153,17 +153,17 @@ function QuizStep({
               }`}
             >
               <div className={`h-10 w-10 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
-                isSelected ? "bg-white text-indigo-600" : "bg-white/10 text-white/70"
+                isSelected ? "bg-white text-teal-600" : "bg-white/10 text-white/70"
               }`}>
                 {step.id === "level" ? (
                   <div className="flex items-end gap-0.5 h-5">
                     {["h-2","h-3","h-4","h-5"].slice(0,
                       value === "beginner" ? 1 : value === "elementary" ? 2 : value === "intermediate" ? 3 : 4
                     ).map((h, i) => (
-                      <div key={i} className={`w-1.5 ${h} rounded-sm ${isSelected ? "bg-indigo-600" : "bg-white/60"}`} />
+                      <div key={i} className={`w-1.5 ${h} rounded-sm ${isSelected ? "bg-teal-600" : "bg-white/60"}`} />
                     ))}
                     {Array.from({ length: 4 - (value === "beginner" ? 1 : value === "elementary" ? 2 : value === "intermediate" ? 3 : 4) }).map((_, i) => (
-                      <div key={i} className={`w-1.5 h-5 rounded-sm opacity-20 ${isSelected ? "bg-indigo-300" : "bg-white/20"}`} />
+                      <div key={i} className={`w-1.5 h-5 rounded-sm opacity-20 ${isSelected ? "bg-teal-300" : "bg-white/20"}`} />
                     ))}
                   </div>
                 ) : (
@@ -172,11 +172,11 @@ function QuizStep({
               </div>
               <div className="flex-1 min-w-0">
                 <p className={`text-sm font-semibold leading-snug ${isSelected ? "text-white" : "text-white/90"}`}>{label}</p>
-                <p className={`text-xs mt-0.5 leading-relaxed ${isSelected ? "text-indigo-100" : "text-white/50"}`}>{desc}</p>
+                <p className={`text-xs mt-0.5 leading-relaxed ${isSelected ? "text-teal-100" : "text-white/50"}`}>{desc}</p>
               </div>
               {isSelected && (
                 <div className="h-5 w-5 rounded-full bg-white flex items-center justify-center shrink-0 mt-0.5">
-                  <Check className="h-3 w-3 text-indigo-600" />
+                  <Check className="h-3 w-3 text-teal-600" />
                 </div>
               )}
             </button>
@@ -198,7 +198,7 @@ function QuizStep({
           type="button"
           onClick={onNext}
           disabled={!selected}
-          className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-white text-indigo-700 text-sm font-bold hover:bg-indigo-50 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-lg shadow-black/10"
+          className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-white text-teal-700 text-sm font-bold hover:bg-teal-50 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-lg shadow-black/10"
         >
           {stepIndex === totalSteps - 1 ? "See my teacher matches" : "Continue"}
           <ArrowRight className="h-4 w-4" />
@@ -308,7 +308,7 @@ function SignupForm({ answers, onSuccess }: { answers: Answers; onSuccess: (emai
       <h2 className="text-2xl sm:text-3xl font-bold font-heading text-white mb-2">
         Almost there! Create your free account
       </h2>
-      <p className="text-indigo-200 text-sm mb-6">
+      <p className="text-teal-200 text-sm mb-6">
         We&apos;ve built your learner profile. Sign up to see your personalised teacher matches.
       </p>
 
@@ -317,7 +317,7 @@ function SignupForm({ answers, onSuccess }: { answers: Answers; onSuccess: (emai
         {summaryItems.map(({ label, value }) => (
           <span key={label} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs text-white font-medium">
             <Check className="h-3 w-3 text-emerald-400" />
-            {label}: <span className="text-indigo-200">{value}</span>
+            {label}: <span className="text-teal-200">{value}</span>
           </span>
         ))}
       </div>
@@ -331,7 +331,7 @@ function SignupForm({ answers, onSuccess }: { answers: Answers; onSuccess: (emai
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-semibold text-indigo-200 mb-1.5 uppercase tracking-wide">Full name *</label>
+            <label className="block text-xs font-semibold text-teal-200 mb-1.5 uppercase tracking-wide">Full name *</label>
             <input
               type="text"
               value={fullName}
@@ -343,7 +343,7 @@ function SignupForm({ answers, onSuccess }: { answers: Answers; onSuccess: (emai
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-indigo-200 mb-1.5 uppercase tracking-wide">Email address *</label>
+            <label className="block text-xs font-semibold text-teal-200 mb-1.5 uppercase tracking-wide">Email address *</label>
             <input
               type="email"
               value={email}
@@ -357,13 +357,13 @@ function SignupForm({ answers, onSuccess }: { answers: Answers; onSuccess: (emai
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-indigo-200 mb-1.5 uppercase tracking-wide">Password *</label>
+          <label className="block text-xs font-semibold text-teal-200 mb-1.5 uppercase tracking-wide">Password *</label>
           <PasswordInput value={password} onChange={setPassword} />
           <PasswordRules password={password} />
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-indigo-200 mb-1.5 uppercase tracking-wide">Confirm password *</label>
+          <label className="block text-xs font-semibold text-teal-200 mb-1.5 uppercase tracking-wide">Confirm password *</label>
           <PasswordInput value={confirmPassword} onChange={setConfirmPassword} placeholder="Repeat your password" />
           {confirmPassword && (
             <p className={`text-xs mt-1.5 font-medium ${password === confirmPassword ? "text-emerald-300" : "text-red-300"}`}>
@@ -375,10 +375,10 @@ function SignupForm({ answers, onSuccess }: { answers: Answers; onSuccess: (emai
         <button
           type="submit"
           disabled={loading}
-          className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-white text-indigo-700 text-sm font-bold hover:bg-indigo-50 transition-all disabled:opacity-60 shadow-lg shadow-black/10 mt-2"
+          className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-white text-teal-700 text-sm font-bold hover:bg-teal-50 transition-all disabled:opacity-60 shadow-lg shadow-black/10 mt-2"
         >
           {loading ? (
-            <><div className="h-4 w-4 rounded-full border-2 border-indigo-200 border-t-indigo-600 animate-spin" /> Creating account…</>
+            <><div className="h-4 w-4 rounded-full border-2 border-teal-200 border-t-teal-600 animate-spin" /> Creating account…</>
           ) : (
             <>View my teacher matches <ArrowRight className="h-4 w-4" /></>
           )}
@@ -386,11 +386,11 @@ function SignupForm({ answers, onSuccess }: { answers: Answers; onSuccess: (emai
 
         <p className="text-xs text-white/40 text-center leading-relaxed">
           By signing up you agree to our{" "}
-          <Link href="/terms" className="text-indigo-300 hover:underline">Terms of Service</Link>
+          <Link href="/terms" className="text-teal-300 hover:underline">Terms of Service</Link>
           {" "}and{" "}
-          <Link href="/privacy" className="text-indigo-300 hover:underline">Privacy Policy</Link>.
+          <Link href="/privacy" className="text-teal-300 hover:underline">Privacy Policy</Link>.
           Already have an account?{" "}
-          <Link href="/auth/login" className="text-indigo-300 hover:underline">Sign in</Link>
+          <Link href="/auth/login" className="text-teal-300 hover:underline">Sign in</Link>
         </p>
       </form>
     </div>
@@ -408,11 +408,11 @@ function SuccessScreen({ email }: { email: string }) {
       <h2 className="text-2xl sm:text-3xl font-bold font-heading text-white mb-3">
         Check your inbox!
       </h2>
-      <p className="text-indigo-200 text-sm mb-2">We&apos;ve sent a confirmation link to</p>
+      <p className="text-teal-200 text-sm mb-2">We&apos;ve sent a confirmation link to</p>
       <p className="text-white font-bold text-base mb-6">{email}</p>
       <div className="bg-white/10 border border-white/20 rounded-2xl px-5 py-4 text-left mb-6">
         <p className="text-white text-xs font-semibold mb-1">Your learner profile is ready</p>
-        <p className="text-indigo-200 text-xs leading-relaxed">
+        <p className="text-teal-200 text-xs leading-relaxed">
           Once you confirm your email, you&apos;ll be taken straight to your personalised list of matching teachers.
         </p>
       </div>
@@ -475,7 +475,7 @@ export default function GetStartedPage() {
   const totalSteps = STEPS.length + 1; // +1 for signup step
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-violet-900 to-purple-900 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-teal-900 via-violet-900 to-purple-900 flex flex-col">
 
       {/* Decorative background rings */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">

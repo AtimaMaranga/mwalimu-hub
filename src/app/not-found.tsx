@@ -7,7 +7,7 @@ export default function NotFound() {
     <PageWrapper>
       <div className="min-h-[60vh] flex items-center justify-center px-4">
         <div className="text-center max-w-lg">
-          <p className="text-8xl font-bold font-heading text-indigo-100 mb-4">
+          <p className="text-8xl font-bold font-heading text-teal-100 mb-4">
             404
           </p>
           <h1 className="text-2xl font-bold font-heading text-slate-900 mb-3">

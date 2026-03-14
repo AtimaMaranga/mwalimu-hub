@@ -88,8 +88,8 @@ export default function BookLessonModal({
         </button>
 
         <div className="flex items-center gap-3 mb-6">
-          <div className="h-10 w-10 rounded-xl bg-indigo-50 flex items-center justify-center">
-            <CalendarPlus className="h-5 w-5 text-indigo-600" />
+          <div className="h-10 w-10 rounded-xl bg-teal-50 flex items-center justify-center">
+            <CalendarPlus className="h-5 w-5 text-teal-600" />
           </div>
           <div>
             <h3 className="font-bold text-slate-900">Schedule a Lesson</h3>
@@ -122,7 +122,7 @@ export default function BookLessonModal({
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
                 required
-                className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300"
+                className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300"
               />
             </div>
 
@@ -137,7 +137,7 @@ export default function BookLessonModal({
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
                 required
-                className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300"
+                className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300"
               />
             </div>
 
@@ -149,7 +149,7 @@ export default function BookLessonModal({
               <select
                 value={duration}
                 onChange={(e) => setDuration(Number(e.target.value))}
-                className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300"
+                className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300"
               >
                 <option value={30}>30 minutes</option>
                 <option value={60}>1 hour</option>
@@ -168,7 +168,7 @@ export default function BookLessonModal({
                 maxLength={1000}
                 rows={3}
                 placeholder="Tell the teacher what you'd like to focus on..."
-                className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-slate-900 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-300 resize-none"
+                className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-slate-900 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-300 resize-none"
               />
             </div>
 
@@ -187,7 +187,7 @@ export default function BookLessonModal({
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-indigo-600 text-white font-semibold py-3 rounded-xl hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="w-full bg-teal-600 text-white font-semibold py-3 rounded-xl hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {loading ? "Sending Request..." : "Request Lesson"}
             </button>
