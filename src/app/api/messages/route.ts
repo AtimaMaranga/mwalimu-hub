@@ -79,17 +79,27 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    const { data: messages, error } = await adminClient
+    // Paginate messages — default last 50, with offset support
+    const limit = Math.min(Number(searchParams.get("limit")) || 50, 200);
+    const offset = Math.max(Number(searchParams.get("offset")) || 0, 0);
+
+    const { data: messages, error, count } = await adminClient
       .from("messages")
-      .select("*")
+      .select("*", { count: "exact" })
       .eq("conversation_id", conversationId)
-      .order("created_at", { ascending: true });
+      .order("created_at", { ascending: true })
+      .range(offset, offset + limit - 1);
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    return NextResponse.json({ messages: messages ?? [] });
+    return NextResponse.json({
+      messages: messages ?? [],
+      total: count ?? 0,
+      limit,
+      offset,
+    });
   } catch (err) {
     console.error("GET /api/messages error:", err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

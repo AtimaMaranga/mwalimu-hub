@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -9,6 +9,7 @@ import {
   LayoutDashboard, User, MessageCircle, BookOpen, Users,
 } from "lucide-react";
 import DeleteAccountButton from "./DeleteAccountButton";
+import { usePresence } from "@/hooks/usePresence";
 
 const NAV_ITEMS = {
   student: [
@@ -46,13 +47,7 @@ export default function DashboardShell({
   const navItems = NAV_ITEMS[role];
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // Presence heartbeat — keep last_seen_at fresh while dashboard is open
-  useEffect(() => {
-    const ping = () => fetch("/api/user/presence", { method: "PATCH" }).catch(() => {});
-    ping();
-    const interval = setInterval(ping, 30_000);
-    return () => clearInterval(interval);
-  }, []);
+  usePresence();
 
   const SidebarContent = () => (
     <>
@@ -193,16 +188,6 @@ export default function DashboardShell({
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
-            {/* Search */}
-            <div className="relative hidden lg:block">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
-              <input
-                type="text"
-                placeholder="Search..."
-                className="bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-4 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all w-44"
-              />
-            </div>
-
             {/* Bell */}
             <button className="relative h-9 w-9 flex items-center justify-center rounded-xl bg-slate-50 border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-300 transition-all shrink-0">
               <Bell className="h-4 w-4" />

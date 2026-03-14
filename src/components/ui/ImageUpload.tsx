@@ -14,14 +14,21 @@ interface Props {
 export default function ImageUpload({ currentUrl, userId, onUpload, initials = "?" }: Props) {
   const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState(currentUrl ?? "");
+  const [error, setError] = useState("");
   const ref = useRef<HTMLInputElement>(null);
 
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    setError("");
+
+    if (!file.type.startsWith("image/")) {
+      setError("Please upload an image file (JPEG, PNG, WebP, etc.).");
+      return;
+    }
 
     if (file.size > 5 * 1024 * 1024) {
-      alert("Image must be under 5MB.");
+      setError("Image must be under 5 MB.");
       return;
     }
 
@@ -30,12 +37,12 @@ export default function ImageUpload({ currentUrl, userId, onUpload, initials = "
     const ext = file.name.split(".").pop();
     const path = `${userId}/${Date.now()}.${ext}`;
 
-    const { error } = await supabase.storage
+    const { error: uploadError } = await supabase.storage
       .from("avatars")
       .upload(path, file, { upsert: true });
 
-    if (error) {
-      alert("Upload failed: " + error.message);
+    if (uploadError) {
+      setError("Upload failed: " + uploadError.message);
       setUploading(false);
       return;
     }
@@ -69,7 +76,11 @@ export default function ImageUpload({ currentUrl, userId, onUpload, initials = "
           )}
         </div>
       </button>
-      <p className="text-xs text-slate-500">Click to upload · Max 5MB</p>
+      {error ? (
+        <p className="text-xs text-red-600">{error}</p>
+      ) : (
+        <p className="text-xs text-slate-500">Click to upload · Max 5MB</p>
+      )}
       <input ref={ref} type="file" accept="image/*" className="hidden" onChange={handleChange} />
     </div>
   );

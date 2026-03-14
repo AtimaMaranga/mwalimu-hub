@@ -1,17 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient, createAdminClient, createPureAdminClient } from "@/lib/supabase/server";
 import { sendTeacherApprovedEmail, sendTeacherRejectedEmail } from "@/lib/email";
+import { isAdminEmail } from "@/lib/env";
 import { slugify } from "@/lib/utils";
-
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "")
-  .split(",")
-  .map((e) => e.trim().toLowerCase());
 
 export async function POST(request: NextRequest) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
-  if (!user || !ADMIN_EMAILS.includes(user.email?.toLowerCase() ?? "")) {
+  if (!user || !isAdminEmail(user.email)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -20,7 +17,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 
-  // Use SSR admin client (service role) to bypass RLS for all DB operations
   const adminClient = await createAdminClient();
 
   const { data: application, error: fetchError } = await adminClient
@@ -72,7 +68,6 @@ export async function POST(request: NextRequest) {
     );
 
     if (existingUser) {
-      // Teacher already has an account — update their profile to teacher role and link
       await adminClient
         .from("profiles")
         .upsert({
@@ -82,7 +77,7 @@ export async function POST(request: NextRequest) {
           teacher_id: teacher!.id,
         });
     } else {
-      // 3. Invite the teacher — creates auth user + triggers handle_new_user()
+      // 3. Invite the teacher
       const { data: inviteData, error: inviteError } = await adminClient.auth.admin.inviteUserByEmail(
         application.email,
         {
@@ -93,9 +88,7 @@ export async function POST(request: NextRequest) {
 
       if (inviteError) {
         console.error("Invite error:", inviteError);
-        // Don't fail the whole approval if invite fails — teacher record is created
       } else if (inviteData?.user) {
-        // 4. Link the profile to the teacher record
         await adminClient
           .from("profiles")
           .upsert({
@@ -107,7 +100,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // 5. Mark application as approved
+    // 4. Mark application as approved
     const { error: approveError } = await adminClient
       .from("teacher_applications")
       .update({ status: "approved" })

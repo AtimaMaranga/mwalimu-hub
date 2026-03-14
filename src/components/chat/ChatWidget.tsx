@@ -23,6 +23,7 @@ export default function ChatWidget({
   const [loading, setLoading] = useState(false);
   const [conversation, setConversation] = useState<Conversation | null>(null);
   const [chatOpen, setChatOpen] = useState(false);
+  const [error, setError] = useState("");
 
   const handleClick = async () => {
     if (!currentUserId) {
@@ -36,6 +37,7 @@ export default function ChatWidget({
     }
 
     setLoading(true);
+    setError("");
     try {
       const res = await fetch("/api/conversations", {
         method: "POST",
@@ -47,7 +49,12 @@ export default function ChatWidget({
         const data = await res.json();
         setConversation(data.conversation);
         setChatOpen(true);
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || "Could not open chat. Please try again.");
       }
+    } catch {
+      setError("Network error. Please check your connection and try again.");
     } finally {
       setLoading(false);
     }
@@ -55,6 +62,9 @@ export default function ChatWidget({
 
   return (
     <>
+      {error && (
+        <p className="text-red-600 text-xs mt-2 mb-1">{error}</p>
+      )}
       <button
         onClick={handleClick}
         disabled={loading}

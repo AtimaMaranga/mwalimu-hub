@@ -28,15 +28,33 @@ export async function DELETE() {
   );
 
   // 2. Look up the user's profile to get their teacher_id (if they're a teacher).
-  //    maybeSingle() returns null cleanly when no profile row exists (no error thrown).
   const { data: profile } = await admin
     .from("profiles")
     .select("teacher_id")
     .eq("id", userId)
     .maybeSingle();
 
-  // 3. If they're a teacher, delete the teacher record first.
+  // 3. End any active lessons for this user (as student)
+  await admin
+    .from("lessons")
+    .update({ status: "cancelled", ended_at: new Date().toISOString() })
+    .eq("student_id", userId)
+    .eq("status", "active");
+
+  // 4. Delete wallet (cascade deletes wallet_transactions)
+  await admin
+    .from("wallets")
+    .delete()
+    .eq("user_id", userId);
+
+  // 5. If they're a teacher, end any active lessons as teacher, then delete teacher record
   if (profile?.teacher_id) {
+    await admin
+      .from("lessons")
+      .update({ status: "cancelled", ended_at: new Date().toISOString() })
+      .eq("teacher_id", profile.teacher_id)
+      .eq("status", "active");
+
     const { error: teacherErr } = await admin
       .from("teachers")
       .delete()
@@ -46,8 +64,7 @@ export async function DELETE() {
     }
   }
 
-  // 4. For students: delete any inquiries linked to their email.
-  //    This clears any FK or orphaned records before the auth user is removed.
+  // 6. For students: delete any inquiries linked to their email.
   if (userEmail && !profile?.teacher_id) {
     await admin
       .from("student_inquiries")
@@ -55,14 +72,14 @@ export async function DELETE() {
       .eq("student_email", userEmail);
   }
 
-  // 5. Delete the auth user.
+  // 7. Delete the auth user.
   //    The profiles table has ON DELETE CASCADE → profile is deleted automatically.
   const { error: deleteError } = await admin.auth.admin.deleteUser(userId);
   if (deleteError) {
     return NextResponse.json({ error: `Failed to delete account: ${deleteError.message}` }, { status: 500 });
   }
 
-  // 6. Clear the session cookie (best-effort — user is already deleted).
+  // 8. Clear the session cookie (best-effort).
   try {
     await supabase.auth.signOut();
   } catch {

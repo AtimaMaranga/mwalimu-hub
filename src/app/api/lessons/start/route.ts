@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
 
-const MIN_BALANCE = 0.50; // minimum wallet balance to start a lesson
+const MIN_BALANCE = 0.50;
 
 export async function POST(request: NextRequest) {
   const supabase = await createClient();
@@ -11,17 +11,25 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const body = await request.json();
+  let body: { teacher_id?: string };
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+  }
+
   const { teacher_id } = body;
 
-  if (!teacher_id) {
+  if (!teacher_id || typeof teacher_id !== "string") {
     return NextResponse.json({ error: "teacher_id is required" }, { status: 400 });
   }
 
-  // Fetch teacher
-  const { data: teacher } = await supabase
+  const admin = await createAdminClient();
+
+  // Fetch teacher — must exist, be published, and ideally be online
+  const { data: teacher } = await admin
     .from("teachers")
-    .select("id, rate_per_minute, hourly_rate, is_online, name")
+    .select("id, rate_per_minute, hourly_rate, is_online, name, is_published")
     .eq("id", teacher_id)
     .single();
 
@@ -29,20 +37,23 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Teacher not found" }, { status: 404 });
   }
 
+  if (!teacher.is_published) {
+    return NextResponse.json({ error: "Teacher is not available" }, { status: 404 });
+  }
+
   // Determine per-minute rate — fall back to hourly_rate / 60
   const ratePerMinute = teacher.rate_per_minute
     ?? (teacher.hourly_rate ? Number((teacher.hourly_rate / 60).toFixed(4)) : 0.20);
 
   // Check wallet balance
-  let { data: wallet } = await supabase
+  let { data: wallet } = await admin
     .from("wallets")
     .select("*")
     .eq("user_id", user.id)
     .single();
 
   if (!wallet) {
-    // Auto-create wallet
-    const { data: newWallet } = await supabase
+    const { data: newWallet } = await admin
       .from("wallets")
       .insert({ user_id: user.id, balance: 0, currency: "USD" })
       .select()
@@ -58,13 +69,13 @@ export async function POST(request: NextRequest) {
   }
 
   // Check for existing active lesson
-  const { data: existingLesson } = await supabase
+  const { data: existingLesson } = await admin
     .from("lessons")
     .select("id")
     .eq("student_id", user.id)
     .eq("status", "active")
     .limit(1)
-    .single();
+    .maybeSingle();
 
   if (existingLesson) {
     return NextResponse.json(
@@ -74,7 +85,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Create lesson
-  const { data: lesson, error } = await supabase
+  const { data: lesson, error } = await admin
     .from("lessons")
     .insert({
       student_id: user.id,

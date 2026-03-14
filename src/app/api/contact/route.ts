@@ -7,11 +7,11 @@ import {
 } from "@/lib/email";
 
 const schema = z.object({
-  name: z.string().min(2),
-  email: z.string().email(),
-  subject: z.string().min(1),
-  message: z.string().min(20),
-  phone: z.string().optional(),
+  name: z.string().min(2).max(100),
+  email: z.string().email().max(254),
+  subject: z.string().min(1).max(200),
+  message: z.string().min(20).max(5000),
+  phone: z.string().max(30).optional(),
   honeypot: z.string().max(0).optional(), // spam protection
 });
 

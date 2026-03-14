@@ -1,14 +1,15 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, lazy, Suspense } from "react";
 import { useRouter } from "next/navigation";
 import type { Lesson } from "@/types";
-import VideoPanel from "@/components/classroom/VideoPanel";
-import Whiteboard from "@/components/classroom/Whiteboard";
-import NounClassSidebar from "@/components/classroom/NounClassSidebar";
 import LessonTimer from "@/components/classroom/LessonTimer";
 import WalletHeartbeat from "@/components/classroom/WalletHeartbeat";
 import ControlBar from "@/components/classroom/ControlBar";
+
+const VideoPanel = lazy(() => import("@/components/classroom/VideoPanel"));
+const Whiteboard = lazy(() => import("@/components/classroom/Whiteboard"));
+const NounClassSidebar = lazy(() => import("@/components/classroom/NounClassSidebar"));
 
 interface ClassroomClientProps {
   lesson: Lesson;
@@ -125,24 +126,30 @@ export default function ClassroomClient({
         <div className="flex-1 flex flex-col min-w-0">
           {/* Video */}
           <div className={`${isWhiteboardOpen ? "h-1/2" : "flex-1"} flex p-2`}>
-            <VideoPanel
-              lessonId={lesson.id}
-              localStream={localStream}
-              isCameraOn={isCameraOn}
-            />
+            <Suspense fallback={<div className="flex-1 bg-slate-800 rounded-xl animate-pulse" />}>
+              <VideoPanel
+                lessonId={lesson.id}
+                localStream={localStream}
+                isCameraOn={isCameraOn}
+              />
+            </Suspense>
           </div>
 
           {/* Whiteboard */}
           {isWhiteboardOpen && (
             <div className="h-1/2 border-t border-slate-700 bg-white">
-              <Whiteboard />
+              <Suspense fallback={<div className="h-full bg-slate-100 animate-pulse" />}>
+                <Whiteboard />
+              </Suspense>
             </div>
           )}
         </div>
 
         {/* Right: Noun class sidebar */}
         <div className="w-64 shrink-0 hidden lg:block">
-          <NounClassSidebar />
+          <Suspense fallback={<div className="h-full bg-slate-800 animate-pulse" />}>
+            <NounClassSidebar />
+          </Suspense>
         </div>
       </div>
 

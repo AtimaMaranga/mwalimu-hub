@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { Search, SlidersHorizontal, X, Users } from "lucide-react";
 import type { Teacher } from "@/types";
 import { SPECIALIZATIONS, DIALECTS } from "@/types";
@@ -64,6 +64,14 @@ export default function TeachersClient({ initialTeachers }: TeachersClientProps)
 
   const totalPages = Math.ceil(filtered.length / TEACHERS_PER_PAGE);
   const paginated = filtered.slice((page - 1) * TEACHERS_PER_PAGE, page * TEACHERS_PER_PAGE);
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  // Scroll to top of grid when page changes (not on initial render)
+  const isFirstRender = useRef(true);
+  useEffect(() => {
+    if (isFirstRender.current) { isFirstRender.current = false; return; }
+    gridRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [page]);
 
   const toggleSpec = (spec: string) => {
     setSelectedSpecs((prev) =>
@@ -267,7 +275,7 @@ export default function TeachersClient({ initialTeachers }: TeachersClientProps)
           </aside>
 
           {/* Grid */}
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-0" ref={gridRef}>
             {paginated.length > 0 ? (
               <>
                 <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-5">

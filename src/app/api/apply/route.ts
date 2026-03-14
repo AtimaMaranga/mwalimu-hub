@@ -7,18 +7,18 @@ import {
 } from "@/lib/email";
 
 const schema = z.object({
-  name: z.string().min(2),
-  email: z.string().email(),
-  phone: z.string().optional(),
-  gender: z.string().optional(),
-  age_bracket: z.string().optional(),
-  country: z.string().optional(),
-  city: z.string().optional(),
-  experience: z.string().min(10),
-  qualifications: z.string().min(5),
+  name: z.string().min(2).max(100),
+  email: z.string().email().max(254),
+  phone: z.string().max(30).optional(),
+  gender: z.string().max(20).optional(),
+  age_bracket: z.string().max(20).optional(),
+  country: z.string().max(100).optional(),
+  city: z.string().max(100).optional(),
+  experience: z.string().min(10).max(5000),
+  qualifications: z.string().min(5).max(3000),
   available_hours: z.number().min(1).max(168),
   rate_expectation: z.number().min(5).max(200),
-  teaching_philosophy: z.string().min(50),
+  teaching_philosophy: z.string().min(50).max(5000),
   agree_terms: z.boolean(),
 });
 

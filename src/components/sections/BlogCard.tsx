@@ -17,7 +17,7 @@ function ImagePlaceholder() {
       <div className="text-center px-6 select-none">
         <p
           className="text-7xl font-bold text-white/15 leading-none italic"
-          style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+          style={{ fontFamily: "var(--font-heading, Georgia), serif" }}
           aria-hidden="true"
         >
           ST
