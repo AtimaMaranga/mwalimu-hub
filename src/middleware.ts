@@ -25,11 +25,7 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  // Refresh session — required for SSR auth to work
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
+  const { data: { user } } = await supabase.auth.getUser();
   const { pathname } = request.nextUrl;
 
   // Protect /dashboard — redirect to login if not authenticated
@@ -44,6 +40,14 @@ export async function middleware(request: NextRequest) {
   if (!user && pathname.startsWith("/admin") && pathname !== "/admin/login") {
     const url = request.nextUrl.clone();
     url.pathname = "/admin/login";
+    return NextResponse.redirect(url);
+  }
+
+  // Protect /teachers (list + individual profiles) — unauthenticated visitors
+  // must go through the onboarding quiz before seeing teachers
+  if (!user && pathname.startsWith("/teachers")) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/get-started";
     return NextResponse.redirect(url);
   }
 
@@ -62,5 +66,12 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/admin/:path*", "/auth/login", "/auth/signup"],
+  matcher: [
+    "/dashboard/:path*",
+    "/admin/:path*",
+    "/auth/login",
+    "/auth/signup",
+    "/teachers/:path*",
+    "/teachers",
+  ],
 };

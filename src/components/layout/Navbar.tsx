@@ -9,8 +9,7 @@ import Button from "@/components/ui/Button";
 import { createClient } from "@/lib/supabase/client";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 
-const navLinks = [
-  { label: "Find a Teacher", href: "/teachers" },
+const NAV_LINKS_BASE = [
   { label: "Blog", href: "/blog" },
   { label: "How It Works", href: "/how-it-works" },
   { label: "About", href: "/about" },
@@ -91,7 +90,10 @@ export default function Navbar() {
 
             {/* Desktop Nav */}
             <ul className="hidden md:flex items-center gap-0.5" role="list">
-              {navLinks.map((link) => {
+              {[
+                { label: "Find a Teacher", href: user ? "/teachers" : "/get-started" },
+                ...NAV_LINKS_BASE,
+              ].map((link) => {
                 const isActive =
                   pathname === link.href || pathname.startsWith(link.href + "/");
                 return (
@@ -206,7 +208,10 @@ export default function Navbar() {
             )}
           >
             <ul className="flex flex-col gap-1 pt-2" role="list">
-              {navLinks.map((link) => (
+              {[
+                { label: "Find a Teacher", href: user ? "/teachers" : "/get-started" },
+                ...NAV_LINKS_BASE,
+              ].map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
