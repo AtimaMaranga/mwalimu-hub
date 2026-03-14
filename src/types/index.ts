@@ -73,6 +73,22 @@ export const DIALECTS = [
 
 export type Dialect = (typeof DIALECTS)[number];
 
+/** Lesson booking / schedule request */
+export interface Booking {
+  id: string;
+  student_id: string;
+  teacher_id: string;
+  proposed_date: string;
+  proposed_time: string;
+  duration_minutes: number;
+  message?: string;
+  status: 'pending' | 'confirmed' | 'declined' | 'cancelled' | 'completed';
+  teacher_note?: string;
+  lesson_id?: string;
+  created_at: string;
+  updated_at: string;
+}
+
 /** Student review for a teacher */
 export interface Review {
   id: string;

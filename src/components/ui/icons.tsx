@@ -31,4 +31,5 @@ export {
   GraduationCap,
   Filter,
   X,
+  CalendarDays,
 } from "lucide-react";

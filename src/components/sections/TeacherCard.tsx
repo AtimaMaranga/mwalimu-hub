@@ -7,6 +7,7 @@ import StarRating from "@/components/ui/StarRating";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import EnterClassroomButton from "@/components/classroom/EnterClassroomButton";
+import BookLessonButton from "@/components/booking/BookLessonButton";
 
 interface TeacherCardProps {
   teacher: Teacher;
@@ -151,8 +152,10 @@ export default function TeacherCard({ teacher }: TeacherCardProps) {
             View Profile
           </Button>
         </Link>
-        {teacher.is_online && (
+        {teacher.is_online ? (
           <EnterClassroomButton teacherId={teacher.id} teacherName={teacher.name} />
+        ) : (
+          <BookLessonButton teacherId={teacher.id} teacherName={teacher.name} hourlyRate={teacher.hourly_rate} />
         )}
       </div>
     </article>

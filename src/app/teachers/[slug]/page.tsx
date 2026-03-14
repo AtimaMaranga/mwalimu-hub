@@ -22,6 +22,7 @@ import ReviewList from "./ReviewList";
 import JsonLd from "@/components/seo/JsonLd";
 import ChatWidget from "@/components/chat/ChatWidget";
 import EnterClassroomButton from "@/components/classroom/EnterClassroomButton";
+import BookLessonButton from "@/components/booking/BookLessonButton";
 import { getTeacherBySlug, getTeacherSlugs, getTeacherReviews } from "@/lib/supabase/queries";
 import { formatCurrency, getInitials } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/server";
@@ -341,13 +342,22 @@ export default async function TeacherProfilePage({
 
                 <TeacherContactModal teacher={teacher} />
 
-                {teacher.is_online && !isOwnProfile && user && (
+                {!isOwnProfile && user && (
                   <div className="mt-3">
-                    <EnterClassroomButton
-                      teacherId={teacher.id}
-                      teacherName={teacher.name}
-                      size="md"
-                    />
+                    {teacher.is_online ? (
+                      <EnterClassroomButton
+                        teacherId={teacher.id}
+                        teacherName={teacher.name}
+                        size="md"
+                      />
+                    ) : (
+                      <BookLessonButton
+                        teacherId={teacher.id}
+                        teacherName={teacher.name}
+                        hourlyRate={teacher.hourly_rate}
+                        size="md"
+                      />
+                    )}
                   </div>
                 )}
 
