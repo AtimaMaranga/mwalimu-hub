@@ -13,7 +13,7 @@ interface BlogCardProps {
 /** Brand placeholder shown when a post has no featured image */
 function ImagePlaceholder() {
   return (
-    <div className="h-full w-full bg-gradient-to-br from-teal-700 via-teal-600 to-teal-700 flex items-center justify-center">
+    <div className="h-full w-full bg-gradient-to-br from-indigo-700 via-indigo-600 to-violet-700 flex items-center justify-center">
       <div className="text-center px-6 select-none">
         <p
           className="text-7xl font-bold text-white/15 leading-none italic"
@@ -53,7 +53,7 @@ export default function BlogCard({ post, featured = false }: BlogCardProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
           {post.category && (
             <div className="absolute bottom-4 left-4">
-              <span className="bg-white/95 backdrop-blur-sm text-teal-700 text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
+              <span className="bg-white/95 backdrop-blur-sm text-indigo-700 text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
                 {post.category}
               </span>
             </div>
@@ -80,7 +80,7 @@ export default function BlogCard({ post, featured = false }: BlogCardProps) {
                 </>
               )}
             </div>
-            <h2 className="text-xl font-bold text-slate-900 mb-3 leading-snug group-hover:text-teal-700 transition-colors duration-200">
+            <h2 className="text-xl font-bold text-slate-900 mb-3 leading-snug group-hover:text-indigo-700 transition-colors duration-200">
               {post.title}
             </h2>
             {post.excerpt && (
@@ -91,7 +91,7 @@ export default function BlogCard({ post, featured = false }: BlogCardProps) {
           </div>
           <Link
             href={`/blog/${post.slug}`}
-            className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-teal-600 hover:text-teal-800 transition-colors group/link"
+            className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-indigo-600 hover:text-indigo-800 transition-colors group/link"
           >
             Read article
             <ArrowRight className="h-3.5 w-3.5 group-hover/link:translate-x-0.5 transition-transform" aria-hidden="true" />
@@ -119,7 +119,7 @@ export default function BlogCard({ post, featured = false }: BlogCardProps) {
         <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
         {post.category && (
           <div className="absolute bottom-3 left-3">
-            <span className="bg-white/95 backdrop-blur-sm text-teal-700 text-xs font-semibold px-2.5 py-1 rounded-full shadow-sm">
+            <span className="bg-white/95 backdrop-blur-sm text-indigo-700 text-xs font-semibold px-2.5 py-1 rounded-full shadow-sm">
               {post.category}
             </span>
           </div>
@@ -141,7 +141,7 @@ export default function BlogCard({ post, featured = false }: BlogCardProps) {
           )}
         </div>
 
-        <h3 className="font-semibold text-slate-900 text-base leading-snug mb-2 line-clamp-2 group-hover:text-teal-700 transition-colors duration-200">
+        <h3 className="font-semibold text-slate-900 text-base leading-snug mb-2 line-clamp-2 group-hover:text-indigo-700 transition-colors duration-200">
           {post.title}
         </h3>
 
@@ -153,7 +153,7 @@ export default function BlogCard({ post, featured = false }: BlogCardProps) {
 
         <Link
           href={`/blog/${post.slug}`}
-          className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-teal-600 hover:text-teal-800 transition-colors group/link"
+          className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-indigo-600 hover:text-indigo-800 transition-colors group/link"
           aria-label={`Read article: ${post.title}`}
         >
           Read article

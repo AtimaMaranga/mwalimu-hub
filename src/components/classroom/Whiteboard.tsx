@@ -87,21 +87,21 @@ export default function Whiteboard() {
       <div className="flex items-center gap-2 p-2 bg-slate-50 border-b border-slate-200">
         <button
           onClick={() => setTool("pen")}
-          className={`p-2 rounded-lg transition-colors ${tool === "pen" ? "bg-teal-100 text-teal-700" : "text-slate-500 hover:bg-slate-100"}`}
+          className={`p-2 rounded-lg transition-colors ${tool === "pen" ? "bg-indigo-100 text-indigo-700" : "text-slate-500 hover:bg-slate-100"}`}
           title="Pen"
         >
           <Pen className="h-4 w-4" />
         </button>
         <button
           onClick={() => setTool("eraser")}
-          className={`p-2 rounded-lg transition-colors ${tool === "eraser" ? "bg-teal-100 text-teal-700" : "text-slate-500 hover:bg-slate-100"}`}
+          className={`p-2 rounded-lg transition-colors ${tool === "eraser" ? "bg-indigo-100 text-indigo-700" : "text-slate-500 hover:bg-slate-100"}`}
           title="Eraser"
         >
           <Eraser className="h-4 w-4" />
         </button>
         <button
           onClick={() => setTool("text")}
-          className={`p-2 rounded-lg transition-colors ${tool === "text" ? "bg-teal-100 text-teal-700" : "text-slate-500 hover:bg-slate-100"}`}
+          className={`p-2 rounded-lg transition-colors ${tool === "text" ? "bg-indigo-100 text-indigo-700" : "text-slate-500 hover:bg-slate-100"}`}
           title="Text"
         >
           <Type className="h-4 w-4" />

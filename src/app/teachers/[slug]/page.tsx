@@ -25,7 +25,6 @@ import EnterClassroomButton from "@/components/classroom/EnterClassroomButton";
 import BookLessonButton from "@/components/booking/BookLessonButton";
 import { getTeacherBySlug, getTeacherSlugs, getTeacherReviews } from "@/lib/supabase/queries";
 import { formatCurrency, getInitials } from "@/lib/utils";
-import { getTutorDisplayName } from "@/lib/displayName";
 import { createClient } from "@/lib/supabase/server";
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://swahili-tutors.com";
@@ -77,8 +76,6 @@ export default async function TeacherProfilePage({
     : { data: null };
 
   const isOwnProfile = profile?.teacher_id === teacher.id;
-  const isAuthenticated = !!user;
-  const displayName = getTutorDisplayName(teacher, isAuthenticated);
 
   const [reviews] = await Promise.all([getTeacherReviews(teacher.id)]);
   const avgRating =
@@ -126,7 +123,7 @@ export default async function TeacherProfilePage({
         {/* Back */}
         <Link
           href="/teachers"
-          className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-teal-700 transition-colors mb-6"
+          className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-indigo-700 transition-colors mb-6"
         >
           <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           Back to all teachers
@@ -149,7 +146,7 @@ export default async function TeacherProfilePage({
                       className="rounded-2xl object-cover w-32 h-32"
                     />
                   ) : (
-                    <div className="w-32 h-32 rounded-2xl bg-teal-100 flex items-center justify-center text-teal-700 font-bold text-4xl">
+                    <div className="w-32 h-32 rounded-2xl bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold text-4xl">
                       {getInitials(teacher.name)}
                     </div>
                   )}
@@ -164,7 +161,7 @@ export default async function TeacherProfilePage({
                 <div className="flex-1">
                   <div className="flex items-center gap-3 flex-wrap mb-1">
                     <h1 className="text-2xl sm:text-3xl font-bold font-heading text-slate-900">
-                      {displayName}
+                      {teacher.name}
                     </h1>
                     <span
                       className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full ${
@@ -222,7 +219,7 @@ export default async function TeacherProfilePage({
             {teacher.bio && (
               <section aria-labelledby="about-heading" className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 sm:p-8">
                 <h2 id="about-heading" className="text-xl font-bold font-heading text-slate-900 mb-4">
-                  About {displayName}
+                  About {teacher.name}
                 </h2>
                 <div className="prose-custom">
                   {teacher.bio.split("\n\n").map((para, i) => (
@@ -252,7 +249,7 @@ export default async function TeacherProfilePage({
               <div className="space-y-3">
                 {teacher.qualifications && (
                   <div className="flex gap-3">
-                    <Award className="h-5 w-5 text-teal-600 shrink-0 mt-0.5" aria-hidden="true" />
+                    <Award className="h-5 w-5 text-indigo-600 shrink-0 mt-0.5" aria-hidden="true" />
                     <div>
                       <p className="font-medium text-slate-900 text-sm">Education</p>
                       <p className="text-sm text-slate-500">{teacher.qualifications}</p>
@@ -261,13 +258,13 @@ export default async function TeacherProfilePage({
                 )}
                 {teacher.certifications && teacher.certifications.length > 0 && (
                   <div className="flex gap-3">
-                    <Award className="h-5 w-5 text-teal-600 shrink-0 mt-0.5" aria-hidden="true" />
+                    <Award className="h-5 w-5 text-violet-600 shrink-0 mt-0.5" aria-hidden="true" />
                     <div>
                       <p className="font-medium text-slate-900 text-sm">Certifications</p>
                       <ul className="mt-1 space-y-1">
                         {teacher.certifications.map((cert) => (
                           <li key={cert} className="text-sm text-slate-500 flex items-center gap-2">
-                            <span className="h-1.5 w-1.5 rounded-full bg-teal-400 shrink-0" />
+                            <span className="h-1.5 w-1.5 rounded-full bg-indigo-400 shrink-0" />
                             {cert}
                           </li>
                         ))}
@@ -287,7 +284,7 @@ export default async function TeacherProfilePage({
                 <div className="flex flex-wrap gap-3">
                   {languages.map((lang) => (
                     <div key={lang.language} className="flex items-center gap-2 bg-slate-50 rounded-xl px-4 py-2">
-                      <Globe className="h-4 w-4 text-teal-600" aria-hidden="true" />
+                      <Globe className="h-4 w-4 text-indigo-600" aria-hidden="true" />
                       <span className="font-medium text-sm text-slate-800">{lang.language}</span>
                       <span className="text-xs text-slate-400">· {lang.level}</span>
                     </div>
@@ -300,7 +297,7 @@ export default async function TeacherProfilePage({
             {teacher.video_intro_url && (
               <section aria-labelledby="video-heading" className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 sm:p-8">
                 <h2 id="video-heading" className="text-xl font-bold font-heading text-slate-900 mb-4 flex items-center gap-2">
-                  <PlayCircle className="h-5 w-5 text-teal-600" aria-hidden="true" />
+                  <PlayCircle className="h-5 w-5 text-indigo-600" aria-hidden="true" />
                   Video Introduction
                 </h2>
                 <div className="aspect-video rounded-xl overflow-hidden bg-slate-100">
@@ -337,7 +334,7 @@ export default async function TeacherProfilePage({
             <div className="sticky top-24 space-y-5">
               <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
                 <div className="text-center mb-6">
-                  <p className="text-3xl font-bold text-teal-700">
+                  <p className="text-3xl font-bold text-indigo-700">
                     {teacher.hourly_rate ? formatCurrency(teacher.hourly_rate) : "Free"}
                   </p>
                   <p className="text-slate-400 text-sm">per hour</p>
@@ -382,7 +379,7 @@ export default async function TeacherProfilePage({
               {teacher.availability_description && (
                 <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
                   <h3 className="font-semibold text-slate-900 mb-3 flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-teal-600" aria-hidden="true" />
+                    <Clock className="h-4 w-4 text-indigo-600" aria-hidden="true" />
                     Availability
                   </h3>
                   <p className="text-sm text-slate-500 leading-relaxed">
@@ -392,25 +389,25 @@ export default async function TeacherProfilePage({
               )}
 
               {/* Quick facts */}
-              <div className="bg-teal-50 rounded-2xl p-5">
-                <h3 className="font-semibold text-teal-900 mb-3 text-sm">Quick Facts</h3>
+              <div className="bg-indigo-50 rounded-2xl p-5">
+                <h3 className="font-semibold text-indigo-900 mb-3 text-sm">Quick Facts</h3>
                 <ul className="space-y-2 text-sm">
-                  <li className="flex items-center gap-2 text-teal-700">
-                    <span className="h-1.5 w-1.5 rounded-full bg-teal-500 shrink-0" />
+                  <li className="flex items-center gap-2 text-indigo-700">
+                    <span className="h-1.5 w-1.5 rounded-full bg-indigo-500 shrink-0" />
                     {teacher.is_native_speaker ? "Native Swahili speaker" : "Qualified Swahili teacher"}
                   </li>
                   {teacher.experience_years && (
-                    <li className="flex items-center gap-2 text-teal-700">
-                      <span className="h-1.5 w-1.5 rounded-full bg-teal-500 shrink-0" />
+                    <li className="flex items-center gap-2 text-indigo-700">
+                      <span className="h-1.5 w-1.5 rounded-full bg-indigo-500 shrink-0" />
                       {teacher.experience_years} years teaching
                     </li>
                   )}
-                  <li className="flex items-center gap-2 text-teal-700">
-                    <span className="h-1.5 w-1.5 rounded-full bg-teal-500 shrink-0" />
+                  <li className="flex items-center gap-2 text-indigo-700">
+                    <span className="h-1.5 w-1.5 rounded-full bg-indigo-500 shrink-0" />
                     {teacher.total_students} students taught
                   </li>
-                  <li className="flex items-center gap-2 text-teal-700">
-                    <span className="h-1.5 w-1.5 rounded-full bg-teal-500 shrink-0" />
+                  <li className="flex items-center gap-2 text-indigo-700">
+                    <span className="h-1.5 w-1.5 rounded-full bg-indigo-500 shrink-0" />
                     Lessons via video call
                   </li>
                 </ul>

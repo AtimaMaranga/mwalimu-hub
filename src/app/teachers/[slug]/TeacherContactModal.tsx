@@ -86,7 +86,7 @@ export default function TeacherContactModal({ teacher }: TeacherContactModalProp
                 <input
                   id="student_name"
                   {...register("student_name")}
-                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-300 text-sm"
+                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-300 text-sm"
                   placeholder="John Smith"
                 />
                 {errors.student_name && (
@@ -102,7 +102,7 @@ export default function TeacherContactModal({ teacher }: TeacherContactModalProp
                   id="student_email"
                   type="email"
                   {...register("student_email")}
-                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-300 text-sm"
+                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-300 text-sm"
                   placeholder="you@example.com"
                 />
                 {errors.student_email && (
@@ -117,7 +117,7 @@ export default function TeacherContactModal({ teacher }: TeacherContactModalProp
                 <select
                   id="experience_level"
                   {...register("experience_level")}
-                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-300 text-sm bg-white"
+                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-300 text-sm bg-white"
                 >
                   <option value="beginner">Beginner — little to no Swahili</option>
                   <option value="intermediate">Intermediate — some knowledge</option>
@@ -132,7 +132,7 @@ export default function TeacherContactModal({ teacher }: TeacherContactModalProp
                 <input
                   id="preferred_times"
                   {...register("preferred_times")}
-                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-300 text-sm"
+                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-300 text-sm"
                   placeholder="e.g. Weekday evenings, UTC+0"
                 />
               </div>
@@ -145,7 +145,7 @@ export default function TeacherContactModal({ teacher }: TeacherContactModalProp
                   id="message"
                   {...register("message")}
                   rows={4}
-                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-300 text-sm resize-none"
+                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-300 text-sm resize-none"
                   placeholder="Tell the teacher about your goals, why you want to learn Swahili, and any specific topics you'd like to cover..."
                 />
                 {errors.message && (

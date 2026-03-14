@@ -9,12 +9,11 @@ import Button from "@/components/ui/Button";
 
 interface TeachersClientProps {
   initialTeachers: Teacher[];
-  isAuthenticated?: boolean;
 }
 
 const TEACHERS_PER_PAGE = 12;
 
-export default function TeachersClient({ initialTeachers, isAuthenticated = false }: TeachersClientProps) {
+export default function TeachersClient({ initialTeachers }: TeachersClientProps) {
   const [search, setSearch] = useState("");
   const [selectedSpecs, setSelectedSpecs] = useState<string[]>([]);
   const [nativeOnly, setNativeOnly] = useState(false);
@@ -67,6 +66,7 @@ export default function TeachersClient({ initialTeachers, isAuthenticated = fals
   const paginated = filtered.slice((page - 1) * TEACHERS_PER_PAGE, page * TEACHERS_PER_PAGE);
   const gridRef = useRef<HTMLDivElement>(null);
 
+  // Scroll to top of grid when page changes (not on initial render)
   const isFirstRender = useRef(true);
   useEffect(() => {
     if (isFirstRender.current) { isFirstRender.current = false; return; }
@@ -100,26 +100,15 @@ export default function TeachersClient({ initialTeachers, isAuthenticated = fals
   const hasActiveFilters =
     search || selectedSpecs.length > 0 || selectedDialects.length > 0 || nativeOnly || maxPrice < 50 || sortBy !== "rating";
 
-  // Collect active filter chips for display
-  const activeChips: { label: string; onRemove: () => void }[] = [];
-  selectedSpecs.forEach((s) =>
-    activeChips.push({ label: s, onRemove: () => toggleSpec(s) })
-  );
-  selectedDialects.forEach((d) =>
-    activeChips.push({ label: d, onRemove: () => toggleDialect(d) })
-  );
-  if (nativeOnly) activeChips.push({ label: "Native Only", onRemove: () => { setNativeOnly(false); setPage(1); } });
-  if (maxPrice < 50) activeChips.push({ label: `≤ $${maxPrice}/hr`, onRemove: () => { setMaxPrice(50); setPage(1); } });
-
   return (
     <>
       {/* Header */}
-      <div className="bg-gradient-to-br from-teal-800 to-teal-950 text-white py-16 sm:py-20">
+      <div className="bg-gradient-to-br from-indigo-900 to-violet-900 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-3xl sm:text-5xl font-bold font-heading mb-4 tracking-tight">
+          <h1 className="text-3xl sm:text-5xl font-bold font-heading mb-4">
             Find Your Swahili Teacher
           </h1>
-          <p className="text-teal-100 text-lg max-w-2xl mx-auto mb-8">
+          <p className="text-indigo-100 text-lg max-w-2xl mx-auto mb-8">
             Browse our community of verified native Swahili teachers and find the
             perfect match for your learning goals.
           </p>
@@ -134,7 +123,7 @@ export default function TeachersClient({ initialTeachers, isAuthenticated = fals
               placeholder="Search by name, specialisation, or keywords..."
               value={search}
               onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-              className="w-full pl-12 pr-4 py-3.5 rounded-lg bg-white text-slate-900 placeholder-slate-400 shadow-lg focus:outline-none focus:ring-2 focus:ring-teal-400 text-sm"
+              className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-white text-slate-900 placeholder-slate-400 shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-300"
               aria-label="Search teachers"
             />
             {search && (
@@ -151,65 +140,45 @@ export default function TeachersClient({ initialTeachers, isAuthenticated = fals
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Sticky toolbar */}
-        <div className="sticky top-16 z-40 bg-white/95 backdrop-blur-sm -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-4 border-b border-slate-100 mb-6">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <div className="flex items-center gap-3 flex-wrap">
-              <button
-                onClick={() => setFiltersOpen((v) => !v)}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-200 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors"
-              >
-                <SlidersHorizontal className="h-4 w-4" aria-hidden="true" />
-                Filters
-                {hasActiveFilters && (
-                  <span className="ml-1 h-5 w-5 rounded-full bg-teal-600 text-white text-xs flex items-center justify-center">
-                    {activeChips.length}
-                  </span>
-                )}
-              </button>
-
-              <p className="text-sm text-slate-500 font-medium">
-                Showing <span className="text-slate-900 font-semibold">{filtered.length}</span> tutor{filtered.length !== 1 ? "s" : ""}
-              </p>
-
-              {hasActiveFilters && (
-                <button
-                  onClick={clearFilters}
-                  className="text-sm text-teal-600 hover:text-teal-800 font-medium"
-                >
-                  Clear all
-                </button>
-              )}
-            </div>
-
-            <select
-              value={sortBy}
-              onChange={(e) => { setSortBy(e.target.value as typeof sortBy); setPage(1); }}
-              className="px-3 py-2 rounded-lg border border-slate-200 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white"
-              aria-label="Sort teachers"
+        {/* Toolbar */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setFiltersOpen((v) => !v)}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-200 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors"
             >
-              <option value="rating">Highest Rated</option>
-              <option value="price_asc">Price: Low to High</option>
-              <option value="price_desc">Price: High to Low</option>
-              <option value="newest">Newest First</option>
-            </select>
+              <SlidersHorizontal className="h-4 w-4" aria-hidden="true" />
+              Filters
+              {hasActiveFilters && (
+                <span className="ml-1 h-5 w-5 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center">
+                  {selectedSpecs.length + selectedDialects.length + (nativeOnly ? 1 : 0) + (maxPrice < 50 ? 1 : 0)}
+                </span>
+              )}
+            </button>
+            {hasActiveFilters && (
+              <button
+                onClick={clearFilters}
+                className="text-sm text-indigo-600 hover:text-indigo-800 font-medium"
+              >
+                Clear all
+              </button>
+            )}
+            <p className="text-sm text-slate-500">
+              {filtered.length} teacher{filtered.length !== 1 ? "s" : ""} found
+            </p>
           </div>
 
-          {/* Active filter chips */}
-          {activeChips.length > 0 && (
-            <div className="flex flex-wrap gap-2 mt-3">
-              {activeChips.map((chip) => (
-                <button
-                  key={chip.label}
-                  onClick={chip.onRemove}
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 text-teal-700 text-xs font-medium hover:bg-teal-100 transition-colors group"
-                >
-                  {chip.label}
-                  <X className="h-3 w-3 text-teal-400 group-hover:text-teal-600" />
-                </button>
-              ))}
-            </div>
-          )}
+          <select
+            value={sortBy}
+            onChange={(e) => { setSortBy(e.target.value as typeof sortBy); setPage(1); }}
+            className="px-3 py-2 rounded-xl border border-slate-200 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+            aria-label="Sort teachers"
+          >
+            <option value="rating">Highest Rated</option>
+            <option value="price_asc">Price: Low to High</option>
+            <option value="price_desc">Price: High to Low</option>
+            <option value="newest">Newest First</option>
+          </select>
         </div>
 
         <div className="flex gap-8">
@@ -218,7 +187,7 @@ export default function TeachersClient({ initialTeachers, isAuthenticated = fals
             className={`${filtersOpen ? "block" : "hidden"} lg:block w-full lg:w-64 shrink-0`}
             aria-label="Filter options"
           >
-            <div className="bg-white rounded-xl border border-slate-200 p-5 sticky top-36 space-y-6">
+            <div className="bg-white rounded-2xl border border-slate-100 p-5 sticky top-24 space-y-6">
               {/* Price */}
               <div>
                 <h3 className="font-semibold text-slate-900 mb-3 text-sm">Max Price (USD/hour)</h3>
@@ -229,12 +198,12 @@ export default function TeachersClient({ initialTeachers, isAuthenticated = fals
                   step={5}
                   value={maxPrice}
                   onChange={(e) => { setMaxPrice(Number(e.target.value)); setPage(1); }}
-                  className="w-full accent-teal-600"
+                  className="w-full accent-indigo-600"
                   aria-label={`Maximum price: $${maxPrice} per hour`}
                 />
                 <div className="flex justify-between text-xs text-slate-400 mt-1">
                   <span>$5</span>
-                  <span className="font-semibold text-teal-700">${maxPrice}/hr</span>
+                  <span className="font-semibold text-indigo-700">${maxPrice}/hr</span>
                   <span>$50+</span>
                 </div>
               </div>
@@ -249,7 +218,7 @@ export default function TeachersClient({ initialTeachers, isAuthenticated = fals
                         type="checkbox"
                         checked={selectedSpecs.includes(spec)}
                         onChange={() => toggleSpec(spec)}
-                        className="h-4 w-4 rounded text-teal-600 focus:ring-teal-500"
+                        className="h-4 w-4 rounded text-indigo-600 focus:ring-indigo-500"
                       />
                       <span className="text-sm text-slate-600 group-hover:text-slate-900 transition-colors">
                         {spec}
@@ -269,7 +238,7 @@ export default function TeachersClient({ initialTeachers, isAuthenticated = fals
                         type="checkbox"
                         checked={selectedDialects.includes(dialect)}
                         onChange={() => toggleDialect(dialect)}
-                        className="h-4 w-4 rounded text-teal-600 focus:ring-teal-500"
+                        className="h-4 w-4 rounded text-indigo-600 focus:ring-indigo-500"
                       />
                       <span className="text-sm text-slate-600 group-hover:text-slate-900 transition-colors">
                         {dialect}
@@ -287,7 +256,7 @@ export default function TeachersClient({ initialTeachers, isAuthenticated = fals
                     type="checkbox"
                     checked={nativeOnly}
                     onChange={(e) => { setNativeOnly(e.target.checked); setPage(1); }}
-                    className="h-4 w-4 rounded text-teal-600 focus:ring-teal-500"
+                    className="h-4 w-4 rounded text-indigo-600 focus:ring-indigo-500"
                   />
                   <span className="text-sm text-slate-600">Native speakers only</span>
                 </label>
@@ -298,6 +267,7 @@ export default function TeachersClient({ initialTeachers, isAuthenticated = fals
                 size="sm"
                 onClick={clearFilters}
                 fullWidth
+                className="text-slate-500 hover:text-slate-700"
               >
                 Reset filters
               </Button>
@@ -308,9 +278,9 @@ export default function TeachersClient({ initialTeachers, isAuthenticated = fals
           <div className="flex-1 min-w-0" ref={gridRef}>
             {paginated.length > 0 ? (
               <>
-                <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-5">
                   {paginated.map((teacher) => (
-                    <TeacherCard key={teacher.id} teacher={teacher} isAuthenticated={isAuthenticated} />
+                    <TeacherCard key={teacher.id} teacher={teacher} />
                   ))}
                 </div>
 
@@ -332,7 +302,7 @@ export default function TeachersClient({ initialTeachers, isAuthenticated = fals
                           onClick={() => setPage(p)}
                           className={`h-9 w-9 rounded-lg text-sm font-medium transition-colors ${
                             p === page
-                              ? "bg-teal-600 text-white"
+                              ? "bg-indigo-600 text-white"
                               : "text-slate-600 hover:bg-slate-100"
                           }`}
                           aria-label={`Go to page ${p}`}
@@ -355,12 +325,10 @@ export default function TeachersClient({ initialTeachers, isAuthenticated = fals
               </>
             ) : (
               <div className="text-center py-20">
-                <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100 mb-4">
-                  <Users className="h-8 w-8 text-slate-300" aria-hidden="true" />
-                </div>
-                <h3 className="text-lg font-semibold text-slate-700 mb-2">No tutors found</h3>
-                <p className="text-slate-400 text-sm mb-6 max-w-sm mx-auto">
-                  No tutors match your current filters. Try adjusting your criteria.
+                <Users className="h-16 w-16 mx-auto mb-4 text-slate-200" aria-hidden="true" />
+                <h3 className="text-lg font-semibold text-slate-700 mb-2">No teachers found</h3>
+                <p className="text-slate-400 mb-6">
+                  Try adjusting your filters or search terms.
                 </p>
                 <Button variant="outline" onClick={clearFilters}>
                   Clear all filters

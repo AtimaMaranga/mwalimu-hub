@@ -29,13 +29,13 @@ export default function WalletCard() {
 
   return (
     <>
-      <div className="bg-gradient-to-br from-teal-600 to-teal-700 rounded-2xl p-5 text-white shadow-lg shadow-teal-200">
+      <div className="bg-gradient-to-br from-indigo-600 to-violet-700 rounded-2xl p-5 text-white shadow-lg shadow-indigo-200">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <div className="h-8 w-8 rounded-lg bg-white/20 flex items-center justify-center">
               <Wallet className="h-4 w-4" />
             </div>
-            <p className="text-sm font-semibold text-teal-100">My Wallet</p>
+            <p className="text-sm font-semibold text-indigo-100">My Wallet</p>
           </div>
           <span className="text-xs bg-white/20 px-2 py-0.5 rounded-full">USD</span>
         </div>
@@ -43,7 +43,7 @@ export default function WalletCard() {
         <p className="text-3xl font-bold mb-1">
           {loading ? "—" : `$${(balance ?? 0).toFixed(2)}`}
         </p>
-        <p className="text-teal-200 text-xs mb-4">Available balance</p>
+        <p className="text-indigo-200 text-xs mb-4">Available balance</p>
 
         <button
           onClick={() => setShowTopUp(true)}

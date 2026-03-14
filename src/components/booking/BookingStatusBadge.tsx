@@ -3,7 +3,7 @@ const STATUS_STYLES: Record<string, string> = {
   confirmed: "bg-emerald-50 text-emerald-700",
   declined: "bg-red-50 text-red-700",
   cancelled: "bg-slate-100 text-slate-500",
-  completed: "bg-teal-50 text-teal-700",
+  completed: "bg-indigo-50 text-indigo-700",
 };
 
 export default function BookingStatusBadge({ status }: { status: string }) {

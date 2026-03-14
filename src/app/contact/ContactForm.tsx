@@ -86,7 +86,7 @@ export default function ContactForm() {
             <input
               id="name"
               {...register("name")}
-              className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-300 text-sm transition-shadow"
+              className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-300 text-sm transition-shadow"
               placeholder="Jane Smith"
               aria-describedby={errors.name ? "name-error" : undefined}
             />
@@ -105,7 +105,7 @@ export default function ContactForm() {
               id="email"
               type="email"
               {...register("email")}
-              className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-300 text-sm transition-shadow"
+              className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-300 text-sm transition-shadow"
               placeholder="jane@example.com"
               aria-describedby={errors.email ? "email-error" : undefined}
             />
@@ -125,7 +125,7 @@ export default function ContactForm() {
             <select
               id="subject"
               {...register("subject")}
-              className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-300 text-sm bg-white"
+              className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-300 text-sm bg-white"
               aria-describedby={errors.subject ? "subject-error" : undefined}
             >
               <option value="">Select a subject...</option>
@@ -148,7 +148,7 @@ export default function ContactForm() {
               id="phone"
               type="tel"
               {...register("phone")}
-              className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-300 text-sm"
+              className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-300 text-sm"
               placeholder="+1 555 000 0000"
             />
           </div>
@@ -162,7 +162,7 @@ export default function ContactForm() {
             id="message"
             {...register("message")}
             rows={5}
-            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-300 text-sm resize-none"
+            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-300 text-sm resize-none"
             placeholder="Tell us how we can help you..."
             aria-describedby={errors.message ? "message-error" : undefined}
           />

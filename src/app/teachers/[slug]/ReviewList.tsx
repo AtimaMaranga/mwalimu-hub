@@ -34,7 +34,7 @@ export default function ReviewList({ reviews, averageRating }: ReviewListProps) 
         {reviews.map((review) => (
           <div key={review.id} className="flex gap-4">
             {/* Avatar */}
-            <div className="h-10 w-10 rounded-xl bg-teal-100 text-teal-700 font-bold text-sm flex items-center justify-center shrink-0">
+            <div className="h-10 w-10 rounded-xl bg-indigo-100 text-indigo-700 font-bold text-sm flex items-center justify-center shrink-0">
               {getInitials(review.student_name)}
             </div>
             {/* Content */}

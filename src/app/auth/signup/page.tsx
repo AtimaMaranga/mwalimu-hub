@@ -35,7 +35,7 @@ function Input({ className = "", ...props }: React.InputHTMLAttributes<HTMLInput
   return (
     <input
       {...props}
-      className={`w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all placeholder:text-slate-300 ${className}`}
+      className={`w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all placeholder:text-slate-300 ${className}`}
     />
   );
 }
@@ -44,7 +44,7 @@ function Select({ className = "", children, ...props }: React.SelectHTMLAttribut
   return (
     <select
       {...props}
-      className={`w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all text-slate-700 ${className}`}
+      className={`w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-slate-700 ${className}`}
     >
       {children}
     </select>
@@ -55,7 +55,7 @@ function Textarea({ className = "", ...props }: React.TextareaHTMLAttributes<HTM
   return (
     <textarea
       {...props}
-      className={`w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all placeholder:text-slate-300 resize-none leading-relaxed ${className}`}
+      className={`w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all placeholder:text-slate-300 resize-none leading-relaxed ${className}`}
     />
   );
 }
@@ -115,7 +115,7 @@ function PasswordStrengthBar({ password }: { password: string }) {
     pct <= 0.2 ? "bg-red-400" :
     pct <= 0.4 ? "bg-orange-400" :
     pct <= 0.6 ? "bg-amber-400" :
-    pct <= 0.8 ? "bg-teal-400" :
+    pct <= 0.8 ? "bg-indigo-400" :
     "bg-emerald-500";
 
   const strengthLabel =
@@ -128,7 +128,7 @@ function PasswordStrengthBar({ password }: { password: string }) {
   const labelColor =
     pct <= 0.4 ? "text-red-500" :
     pct <= 0.6 ? "text-amber-500" :
-    pct <= 0.8 ? "text-teal-500" :
+    pct <= 0.8 ? "text-indigo-500" :
     "text-emerald-600";
 
   return (
@@ -178,7 +178,7 @@ function ErrorBox({ message }: { message: string }) {
 
 function DecorativePanel() {
   return (
-    <div className="hidden lg:flex flex-col items-center justify-center bg-gradient-to-br from-teal-600 via-teal-600 to-purple-700 relative overflow-hidden">
+    <div className="hidden lg:flex flex-col items-center justify-center bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-700 relative overflow-hidden">
       {/* Concentric ring decorations */}
       <div className="absolute inset-0 flex items-center justify-end">
         {[700, 560, 420, 300, 200, 120].map((size, i) => (
@@ -217,7 +217,7 @@ function DecorativePanel() {
         <h2 className="text-white text-2xl font-bold font-heading leading-snug mb-4">
           Join thousands learning<br />Swahili online
         </h2>
-        <p className="text-teal-200 text-sm leading-relaxed mb-10">
+        <p className="text-indigo-200 text-sm leading-relaxed mb-10">
           Connect with native Swahili teachers from East Africa and start your language journey today.
         </p>
 
@@ -231,7 +231,7 @@ function DecorativePanel() {
           ].map(({ value, label }) => (
             <div key={label} className="bg-white/10 backdrop-blur-sm rounded-2xl px-4 py-4 border border-white/15 text-left">
               <p className="text-white text-xl font-bold leading-none mb-1">{value}</p>
-              <p className="text-teal-200 text-xs">{label}</p>
+              <p className="text-indigo-200 text-xs">{label}</p>
             </div>
           ))}
         </div>
@@ -244,11 +244,11 @@ function DecorativePanel() {
 
 function SuccessScreen({ email, isTeacher }: { email: string; isTeacher: boolean }) {
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-slate-50 via-teal-50/30 to-slate-50">
+    <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-slate-50 via-indigo-50/30 to-slate-50">
       <div className="w-full max-w-md">
         <div className="bg-white border border-slate-200 rounded-2xl p-10 shadow-sm text-center">
-          <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-teal-50 border border-teal-100 mb-6">
-            <Mail className="h-7 w-7 text-teal-600" />
+          <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-50 border border-indigo-100 mb-6">
+            <Mail className="h-7 w-7 text-indigo-600" />
           </div>
           <h2 className="text-2xl font-bold font-heading text-slate-900 mb-3">Check your inbox</h2>
           <p className="text-slate-500 text-sm leading-relaxed mb-2">
@@ -384,11 +384,11 @@ function StudentSignupForm({
         </div>
 
         {/* Benefits */}
-        <div className="bg-teal-50 rounded-xl px-4 py-3.5 space-y-2">
+        <div className="bg-indigo-50 rounded-xl px-4 py-3.5 space-y-2">
           {["Browse all native Swahili teachers", "Send free inquiries to teachers", "Track your learning journey"].map((item) => (
-            <div key={item} className="flex items-center gap-2.5 text-xs text-teal-700">
-              <span className="flex h-4 w-4 items-center justify-center rounded-full bg-teal-100 shrink-0">
-                <Check className="h-2.5 w-2.5 text-teal-600" />
+            <div key={item} className="flex items-center gap-2.5 text-xs text-indigo-700">
+              <span className="flex h-4 w-4 items-center justify-center rounded-full bg-indigo-100 shrink-0">
+                <Check className="h-2.5 w-2.5 text-indigo-600" />
               </span>
               {item}
             </div>
@@ -398,7 +398,7 @@ function StudentSignupForm({
         <button
           type="submit"
           disabled={loading}
-          className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold transition-colors disabled:opacity-60 shadow-sm shadow-teal-200"
+          className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition-colors disabled:opacity-60 shadow-sm shadow-indigo-200"
         >
           {loading ? (
             <><div className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white animate-spin" /> Creating account…</>
@@ -409,9 +409,9 @@ function StudentSignupForm({
 
         <p className="text-xs text-slate-400 text-center leading-relaxed">
           By signing up you agree to our{" "}
-          <Link href="/terms" className="text-teal-500 hover:underline">Terms of Service</Link>
+          <Link href="/terms" className="text-indigo-500 hover:underline">Terms of Service</Link>
           {" "}and{" "}
-          <Link href="/privacy" className="text-teal-500 hover:underline">Privacy Policy</Link>.
+          <Link href="/privacy" className="text-indigo-500 hover:underline">Privacy Policy</Link>.
         </p>
       </form>
     </div>
@@ -433,18 +433,18 @@ function TeacherStepIndicator({ step }: { step: number }) {
         <div key={id} className="flex items-center gap-2">
           <div className="flex items-center gap-1.5">
             <div className={`h-7 w-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
-              id < step  ? "bg-teal-600 text-white" :
-              id === step ? "bg-teal-600 text-white ring-4 ring-teal-100" :
+              id < step  ? "bg-indigo-600 text-white" :
+              id === step ? "bg-indigo-600 text-white ring-4 ring-indigo-100" :
               "bg-slate-100 text-slate-400"
             }`}>
               {id < step ? <Check className="h-3.5 w-3.5" /> : <Icon className="h-3.5 w-3.5" />}
             </div>
-            <span className={`text-xs font-medium hidden sm:block ${id === step ? "text-teal-700" : id < step ? "text-slate-500" : "text-slate-300"}`}>
+            <span className={`text-xs font-medium hidden sm:block ${id === step ? "text-indigo-700" : id < step ? "text-slate-500" : "text-slate-300"}`}>
               {label}
             </span>
           </div>
           {idx < TEACHER_STEPS.length - 1 && (
-            <div className={`h-px w-6 transition-colors ${id < step ? "bg-teal-400" : "bg-slate-200"}`} />
+            <div className={`h-px w-6 transition-colors ${id < step ? "bg-indigo-400" : "bg-slate-200"}`} />
           )}
         </div>
       ))}
@@ -588,7 +588,7 @@ function TeacherSignupForm({ onSuccess }: { onSuccess: (email: string) => void }
             </div>
           </div>
 
-          <button type="submit" className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold transition-colors shadow-sm shadow-teal-200">
+          <button type="submit" className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition-colors shadow-sm shadow-indigo-200">
             Continue <ArrowRight className="h-4 w-4" />
           </button>
         </form>
@@ -642,7 +642,7 @@ function TeacherSignupForm({ onSuccess }: { onSuccess: (email: string) => void }
             >
               <ArrowLeft className="h-4 w-4" /> Back
             </button>
-            <button type="submit" className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold transition-colors shadow-sm shadow-teal-200">
+            <button type="submit" className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition-colors shadow-sm shadow-indigo-200">
               Continue <ArrowRight className="h-4 w-4" />
             </button>
           </div>
@@ -735,16 +735,16 @@ function TeacherSignupForm({ onSuccess }: { onSuccess: (email: string) => void }
                 className="sr-only"
               />
               <div className={`h-4.5 w-4.5 rounded border-2 flex items-center justify-center transition-colors ${
-                agreeTerms ? "bg-teal-600 border-teal-600" : "border-slate-300 group-hover:border-teal-400"
+                agreeTerms ? "bg-indigo-600 border-indigo-600" : "border-slate-300 group-hover:border-indigo-400"
               }`} style={{ width: 18, height: 18 }}>
                 {agreeTerms && <Check className="h-2.5 w-2.5 text-white" />}
               </div>
             </div>
             <span className="text-xs text-slate-500 leading-relaxed">
               I agree to the{" "}
-              <Link href="/terms" className="text-teal-500 hover:underline" target="_blank">Terms of Service</Link>
+              <Link href="/terms" className="text-indigo-500 hover:underline" target="_blank">Terms of Service</Link>
               {" "}and{" "}
-              <Link href="/privacy" className="text-teal-500 hover:underline" target="_blank">Privacy Policy</Link>. I confirm the information above is accurate.
+              <Link href="/privacy" className="text-indigo-500 hover:underline" target="_blank">Privacy Policy</Link>. I confirm the information above is accurate.
             </span>
           </label>
 
@@ -759,7 +759,7 @@ function TeacherSignupForm({ onSuccess }: { onSuccess: (email: string) => void }
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold transition-colors shadow-sm shadow-teal-200 disabled:opacity-60"
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition-colors shadow-sm shadow-indigo-200 disabled:opacity-60"
             >
               {loading ? (
                 <><div className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white animate-spin" /> Submitting…</>
@@ -808,7 +808,7 @@ export default function SignupPage() {
 
             {/* Logo (mobile shows on left panel) */}
             <Link href="/" className="flex items-center gap-2.5 mb-8 group w-fit">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-teal-600 to-teal-700 shadow-md shadow-teal-200 text-white font-bold text-sm font-heading italic">
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-violet-700 shadow-md shadow-indigo-200 text-white font-bold text-sm font-heading italic">
                 ST
               </span>
               <span className="font-heading font-bold text-slate-900 text-base tracking-tight">Swahili Tutors</span>
@@ -833,17 +833,17 @@ export default function SignupPage() {
                   onClick={() => setRole(value)}
                   className={`flex flex-col items-center gap-1 py-4 px-3 rounded-2xl border-2 text-sm font-medium transition-all ${
                     role === value
-                      ? "border-teal-600 bg-teal-50 text-teal-700"
+                      ? "border-indigo-600 bg-indigo-50 text-indigo-700"
                       : "border-slate-200 text-slate-500 hover:border-slate-300 hover:bg-slate-50"
                   }`}
                 >
                   <span className={`flex h-9 w-9 items-center justify-center rounded-xl mb-0.5 transition-colors ${
-                    role === value ? "bg-teal-100" : "bg-slate-100"
+                    role === value ? "bg-indigo-100" : "bg-slate-100"
                   }`}>
-                    <Icon className={`h-4.5 w-4.5 ${role === value ? "text-teal-600" : "text-slate-400"}`} />
+                    <Icon className={`h-4.5 w-4.5 ${role === value ? "text-indigo-600" : "text-slate-400"}`} />
                   </span>
                   <span className="font-semibold text-xs sm:text-sm">{label}</span>
-                  <span className={`text-[10px] sm:text-xs font-normal ${role === value ? "text-teal-500" : "text-slate-400"}`}>{sub}</span>
+                  <span className={`text-[10px] sm:text-xs font-normal ${role === value ? "text-indigo-500" : "text-slate-400"}`}>{sub}</span>
                 </button>
               ))}
             </div>
@@ -861,7 +861,7 @@ export default function SignupPage() {
 
             <p className="text-center text-sm text-slate-500 mt-6">
               Already have an account?{" "}
-              <Link href="/auth/login" className="text-teal-600 font-semibold hover:text-teal-700">
+              <Link href="/auth/login" className="text-indigo-600 font-semibold hover:text-indigo-700">
                 Sign in
               </Link>
             </p>

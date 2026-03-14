@@ -118,7 +118,7 @@ export default function ReviewForm({ teacherId, teacherName }: ReviewFormProps) 
           <input
             {...register("student_name")}
             placeholder="Jane Doe"
-            className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+            className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
           />
           {errors.student_name && (
             <p className="text-xs text-red-500 mt-1">{errors.student_name.message}</p>
@@ -132,7 +132,7 @@ export default function ReviewForm({ teacherId, teacherName }: ReviewFormProps) 
             {...register("student_email")}
             type="email"
             placeholder="jane@example.com"
-            className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+            className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
           />
           {errors.student_email && (
             <p className="text-xs text-red-500 mt-1">{errors.student_email.message}</p>
@@ -149,7 +149,7 @@ export default function ReviewForm({ teacherId, teacherName }: ReviewFormProps) 
           {...register("comment")}
           rows={4}
           placeholder="Tell others about your experience…"
-          className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent resize-none"
+          className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"
         />
         {errors.comment && (
           <p className="text-xs text-red-500 mt-1">{errors.comment.message}</p>

@@ -51,7 +51,7 @@ export default function ControlBar({
         onClick={onToggleWhiteboard}
         className={`h-12 w-12 rounded-full flex items-center justify-center transition-colors ${
           isWhiteboardOpen
-            ? "bg-teal-600 text-white hover:bg-teal-700"
+            ? "bg-indigo-600 text-white hover:bg-indigo-700"
             : "bg-slate-700 text-white hover:bg-slate-600"
         }`}
         title={isWhiteboardOpen ? "Close whiteboard" : "Open whiteboard"}

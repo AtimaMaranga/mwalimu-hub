@@ -41,12 +41,12 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 export default function FaqContent() {
   return (
     <PageWrapper>
-      <div className="bg-gradient-to-br from-teal-800 to-teal-950 text-white py-16">
+      <div className="bg-gradient-to-br from-indigo-900 to-violet-900 text-white py-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
           <h1 className="text-3xl sm:text-5xl font-bold font-heading mb-4">
             Frequently Asked Questions
           </h1>
-          <p className="text-teal-100 text-lg">
+          <p className="text-indigo-100 text-lg">
             Everything you need to know about learning and teaching Swahili on
             Swahili Tutors.
           </p>
@@ -61,7 +61,7 @@ export default function FaqContent() {
               className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2"
             >
               <span
-                className="h-6 w-1.5 rounded-full bg-teal-600 inline-block"
+                className="h-6 w-1.5 rounded-full bg-indigo-600 inline-block"
                 aria-hidden="true"
               />
               {category}
@@ -74,7 +74,7 @@ export default function FaqContent() {
           </section>
         ))}
 
-        <div className="bg-teal-50 rounded-2xl p-8 text-center">
+        <div className="bg-indigo-50 rounded-2xl p-8 text-center">
           <h3 className="font-bold text-slate-900 mb-2">
             Still have questions?
           </h3>
@@ -84,7 +84,7 @@ export default function FaqContent() {
           </p>
           <Link
             href="/contact"
-            className="inline-flex items-center px-5 py-2.5 rounded-xl bg-teal-600 text-white text-sm font-semibold hover:bg-teal-700 transition-colors"
+            className="inline-flex items-center px-5 py-2.5 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition-colors"
           >
             Contact Us
           </Link>

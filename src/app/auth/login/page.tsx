@@ -99,7 +99,7 @@ function LoginForm() {
             onChange={(e) => setEmail(e.target.value)}
             required
             autoComplete="email"
-            className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-shadow"
+            className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
             placeholder="you@example.com"
           />
         </div>
@@ -109,7 +109,7 @@ function LoginForm() {
             <label className="block text-sm font-medium text-slate-700">Password</label>
             <Link
               href="/auth/forgot-password"
-              className="text-xs text-teal-600 hover:text-teal-700 font-medium"
+              className="text-xs text-indigo-600 hover:text-indigo-700 font-medium"
             >
               Forgot password?
             </Link>
@@ -121,7 +121,7 @@ function LoginForm() {
               onChange={(e) => setPassword(e.target.value)}
               required
               autoComplete="current-password"
-              className="w-full px-4 py-2.5 pr-10 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-shadow"
+              className="w-full px-4 py-2.5 pr-10 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
               placeholder="••••••••"
             />
             <button
@@ -158,7 +158,7 @@ export default function LoginPage() {
           {/* Logo */}
           <div className="text-center mb-8">
             <Link href="/" className="inline-flex items-center gap-2.5 justify-center mb-6">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-teal-600 to-teal-700 shadow-sm">
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-violet-700 shadow-sm">
                 <span className="text-white font-bold text-sm font-heading italic">ST</span>
               </span>
               <span className="font-heading font-bold text-slate-900 text-lg">Swahili Tutors</span>
@@ -173,7 +173,7 @@ export default function LoginPage() {
 
           <p className="text-center text-sm text-slate-500 mt-6">
             Don&apos;t have an account?{" "}
-            <Link href="/auth/signup" className="text-teal-600 font-semibold hover:text-teal-700">
+            <Link href="/auth/signup" className="text-indigo-600 font-semibold hover:text-indigo-700">
               Create one free
             </Link>
           </p>

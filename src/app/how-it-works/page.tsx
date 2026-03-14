@@ -132,12 +132,12 @@ export default function HowItWorksPage() {
     <PageWrapper>
       <JsonLd data={howToSchema} />
       {/* Header */}
-      <div className="bg-gradient-to-br from-teal-800 to-teal-950 text-white py-20">
+      <div className="bg-gradient-to-br from-indigo-900 to-violet-900 text-white py-20">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
           <h1 className="text-3xl sm:text-5xl font-bold font-heading mb-4">
             How It Works
           </h1>
-          <p className="text-teal-100 text-lg">
+          <p className="text-indigo-100 text-lg">
             Getting started on Swahili Tutors is simple. Here is everything you
             need to know.
           </p>
@@ -154,7 +154,7 @@ export default function HowItWorksPage() {
             id="students-heading"
             className="text-2xl font-bold font-heading text-slate-900 mb-10 flex items-center gap-3"
           >
-            <span className="h-8 w-8 rounded-lg bg-teal-600 flex items-center justify-center text-white text-sm font-bold">
+            <span className="h-8 w-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white text-sm font-bold">
               S
             </span>
             For Students
@@ -163,10 +163,10 @@ export default function HowItWorksPage() {
             {studentSteps.map(({ step, icon: Icon, title, desc }) => (
               <div key={step} className="flex gap-6">
                 <div className="relative shrink-0 flex flex-col items-center">
-                  <div className="h-12 w-12 rounded-2xl bg-teal-600 flex items-center justify-center shadow">
+                  <div className="h-12 w-12 rounded-2xl bg-indigo-600 flex items-center justify-center shadow">
                     <Icon className="h-5 w-5 text-white" aria-hidden="true" />
                   </div>
-                  <span className="text-xs font-bold text-teal-600 mt-1">
+                  <span className="text-xs font-bold text-indigo-600 mt-1">
                     {step}
                   </span>
                 </div>
@@ -201,7 +201,7 @@ export default function HowItWorksPage() {
             id="teachers-section-heading"
             className="text-2xl font-bold font-heading text-slate-900 mb-10 flex items-center gap-3"
           >
-            <span className="h-8 w-8 rounded-lg bg-teal-600 flex items-center justify-center text-white text-sm font-bold">
+            <span className="h-8 w-8 rounded-lg bg-violet-600 flex items-center justify-center text-white text-sm font-bold">
               T
             </span>
             For Teachers
@@ -210,10 +210,10 @@ export default function HowItWorksPage() {
             {teacherSteps.map(({ step, icon: Icon, title, desc }) => (
               <div key={step} className="flex gap-6">
                 <div className="relative shrink-0 flex flex-col items-center">
-                  <div className="h-12 w-12 rounded-2xl bg-teal-600 flex items-center justify-center shadow">
+                  <div className="h-12 w-12 rounded-2xl bg-violet-600 flex items-center justify-center shadow">
                     <Icon className="h-5 w-5 text-white" aria-hidden="true" />
                   </div>
-                  <span className="text-xs font-bold text-teal-600 mt-1">
+                  <span className="text-xs font-bold text-violet-600 mt-1">
                     {step}
                   </span>
                 </div>
@@ -258,7 +258,7 @@ export default function HowItWorksPage() {
           <div className="text-center mt-8">
             <Link
               href="/faq"
-              className="text-teal-600 font-semibold hover:text-teal-800 text-sm"
+              className="text-indigo-600 font-semibold hover:text-indigo-800 text-sm"
             >
               View all frequently asked questions →
             </Link>

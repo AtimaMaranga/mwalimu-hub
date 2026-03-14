@@ -36,7 +36,7 @@ export default function ForgotPasswordPage() {
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
             <Link href="/" className="inline-flex items-center gap-2.5 justify-center mb-6">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-teal-600 to-teal-700 shadow-sm">
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-violet-700 shadow-sm">
                 <span className="text-white font-bold text-sm font-heading italic">ST</span>
               </span>
               <span className="font-heading font-bold text-slate-900 text-lg">Swahili Tutors</span>
@@ -50,7 +50,7 @@ export default function ForgotPasswordPage() {
           <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
             {sent ? (
               <div className="text-center py-4">
-                <div className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-teal-50 mb-4">
+                <div className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-indigo-50 mb-4">
                   <span className="text-2xl">📧</span>
                 </div>
                 <p className="text-slate-700 font-medium mb-1">Check your inbox</p>
@@ -74,7 +74,7 @@ export default function ForgotPasswordPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                    className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                     placeholder="you@example.com"
                   />
                 </div>
@@ -86,7 +86,7 @@ export default function ForgotPasswordPage() {
           </div>
 
           <p className="text-center text-sm text-slate-500 mt-6">
-            <Link href="/auth/login" className="text-teal-600 font-semibold hover:text-teal-700">
+            <Link href="/auth/login" className="text-indigo-600 font-semibold hover:text-indigo-700">
               ← Back to login
             </Link>
           </p>

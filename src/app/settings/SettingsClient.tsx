@@ -19,12 +19,12 @@ function Section({ title, icon: Icon, children }: {
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
-      <div className="flex items-center gap-3 px-6 py-4 border-b border-slate-200">
-        <div className="h-8 w-8 rounded-lg bg-slate-50 flex items-center justify-center">
+    <div className="bg-[#1a1b2e] border border-white/5 rounded-2xl overflow-hidden">
+      <div className="flex items-center gap-3 px-6 py-4 border-b border-white/5">
+        <div className="h-8 w-8 rounded-lg bg-white/5 flex items-center justify-center">
           <Icon className="h-4 w-4 text-slate-400" />
         </div>
-        <h2 className="text-sm font-semibold text-slate-900">{title}</h2>
+        <h2 className="text-sm font-semibold text-white">{title}</h2>
       </div>
       <div className="p-6">{children}</div>
     </div>
@@ -82,7 +82,7 @@ export default function SettingsClient({ userId, userEmail, fullName, role }: Pr
       type="button"
       onClick={() => onChange(!checked)}
       className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${
-        checked ? "bg-teal-500" : "bg-slate-200"
+        checked ? "bg-cyan-500" : "bg-white/10"
       }`}
     >
       <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform ${
@@ -94,7 +94,7 @@ export default function SettingsClient({ userId, userEmail, fullName, role }: Pr
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Settings</h1>
+        <h1 className="text-2xl font-bold text-white">Settings</h1>
         <p className="text-slate-400 text-sm mt-1">Manage your account preferences.</p>
       </div>
 
@@ -102,26 +102,26 @@ export default function SettingsClient({ userId, userEmail, fullName, role }: Pr
       <Section title="Account" icon={User}>
         <form onSubmit={handleSaveName} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">Full name</label>
+            <label className="block text-sm font-medium text-slate-300 mb-1.5">Full name</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
+              className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-cyan-500/50 transition-all"
               placeholder="Your full name"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">Email address</label>
-            <div className="flex items-center gap-3 px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl">
+            <label className="block text-sm font-medium text-slate-300 mb-1.5">Email address</label>
+            <div className="flex items-center gap-3 px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl">
               <Mail className="h-4 w-4 text-slate-500 shrink-0" />
               <span className="text-sm text-slate-400">{userEmail}</span>
             </div>
-            <p className="text-xs text-slate-400 mt-1">Email changes are managed through Supabase Auth.</p>
+            <p className="text-xs text-slate-600 mt-1">Email changes are managed through Supabase Auth.</p>
           </div>
 
           {nameError && (
-            <p className="text-red-600 text-xs bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+            <p className="text-red-400 text-xs bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
               {nameError}
             </p>
           )}
@@ -131,7 +131,7 @@ export default function SettingsClient({ userId, userEmail, fullName, role }: Pr
               Save changes
             </Button>
             {nameSuccess && (
-              <span className="flex items-center gap-1.5 text-emerald-600 text-sm">
+              <span className="flex items-center gap-1.5 text-emerald-400 text-sm">
                 <CheckCircle className="h-4 w-4" /> Saved
               </span>
             )}
@@ -143,12 +143,12 @@ export default function SettingsClient({ userId, userEmail, fullName, role }: Pr
       <Section title="Security" icon={Lock}>
         <div className="space-y-4">
           <div>
-            <p className="text-sm font-medium text-slate-700 mb-1">Password</p>
+            <p className="text-sm font-medium text-slate-300 mb-1">Password</p>
             <p className="text-xs text-slate-500 mb-3">
               We&apos;ll send a password reset link to <span className="text-slate-400">{userEmail}</span>.
             </p>
             {resetSent ? (
-              <div className="flex items-center gap-2 text-emerald-600 text-sm">
+              <div className="flex items-center gap-2 text-emerald-400 text-sm">
                 <CheckCircle className="h-4 w-4" />
                 Reset link sent — check your inbox.
               </div>
@@ -185,7 +185,7 @@ export default function SettingsClient({ userId, userEmail, fullName, role }: Pr
           ].map(({ label, desc, checked, onChange }) => (
             <div key={label} className="flex items-center justify-between gap-4">
               <div>
-                <p className="text-sm font-medium text-slate-700">{label}</p>
+                <p className="text-sm font-medium text-slate-300">{label}</p>
                 <p className="text-xs text-slate-500 mt-0.5">{desc}</p>
               </div>
               <Toggle checked={checked} onChange={onChange} />
@@ -195,12 +195,12 @@ export default function SettingsClient({ userId, userEmail, fullName, role }: Pr
       </Section>
 
       {/* Danger zone */}
-      <div className="bg-red-50 border border-red-200 rounded-2xl overflow-hidden">
-        <div className="flex items-center gap-3 px-6 py-4 border-b border-red-100">
-          <div className="h-8 w-8 rounded-lg bg-red-50 flex items-center justify-center">
-            <Trash2 className="h-4 w-4 text-red-600" />
+      <div className="bg-red-500/5 border border-red-500/20 rounded-2xl overflow-hidden">
+        <div className="flex items-center gap-3 px-6 py-4 border-b border-red-500/10">
+          <div className="h-8 w-8 rounded-lg bg-red-500/10 flex items-center justify-center">
+            <Trash2 className="h-4 w-4 text-red-400" />
           </div>
-          <h2 className="text-sm font-semibold text-red-600">Danger Zone</h2>
+          <h2 className="text-sm font-semibold text-red-400">Danger Zone</h2>
         </div>
         <div className="p-6">
           <p className="text-sm text-slate-400 mb-4">

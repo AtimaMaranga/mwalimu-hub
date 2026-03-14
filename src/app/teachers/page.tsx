@@ -3,7 +3,6 @@ import PageWrapper from "@/components/layout/PageWrapper";
 import TeachersClient from "./TeachersClient";
 import JsonLd from "@/components/seo/JsonLd";
 import { getTeachers } from "@/lib/supabase/queries";
-import { createClient } from "@/lib/supabase/server";
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://swahili-tutors.com";
 
@@ -15,9 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default async function TeachersPage() {
-  const [teachers, supabase] = await Promise.all([getTeachers(), createClient()]);
-  const { data: { user } } = await supabase.auth.getUser();
-  const isAuthenticated = !!user;
+  const teachers = await getTeachers();
 
   const itemListSchema = {
     "@context": "https://schema.org",
@@ -36,7 +33,7 @@ export default async function TeachersPage() {
   return (
     <PageWrapper>
       <JsonLd data={itemListSchema} />
-      <TeachersClient initialTeachers={teachers} isAuthenticated={isAuthenticated} />
+      <TeachersClient initialTeachers={teachers} />
     </PageWrapper>
   );
 }

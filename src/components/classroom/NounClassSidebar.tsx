@@ -32,7 +32,7 @@ export default function NounClassSidebar() {
     <div className="h-full flex flex-col bg-slate-50 border-l border-slate-200">
       <div className="p-4 border-b border-slate-200 bg-white">
         <div className="flex items-center gap-2">
-          <BookOpen className="h-4 w-4 text-teal-600" />
+          <BookOpen className="h-4 w-4 text-indigo-600" />
           <h3 className="font-bold text-sm text-slate-900">Noun Classes</h3>
         </div>
         <p className="text-xs text-slate-400 mt-1">Swahili noun class reference</p>
@@ -45,7 +45,7 @@ export default function NounClassSidebar() {
               onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
               className={`w-full flex items-center justify-between px-3 py-2.5 text-left transition-colors rounded-xl ${
                 openIndex === idx
-                  ? "bg-teal-50 text-teal-700"
+                  ? "bg-indigo-50 text-indigo-700"
                   : "hover:bg-white text-slate-700"
               }`}
             >
@@ -62,11 +62,11 @@ export default function NounClassSidebar() {
                 <div className="grid grid-cols-2 gap-1 text-xs">
                   <div className="bg-white rounded-lg p-2 border border-slate-100">
                     <p className="text-slate-400 text-[10px] uppercase tracking-wider mb-0.5">Prefix</p>
-                    <p className="font-mono font-bold text-teal-700">{nc.prefix}</p>
+                    <p className="font-mono font-bold text-indigo-700">{nc.prefix}</p>
                   </div>
                   <div className="bg-white rounded-lg p-2 border border-slate-100">
                     <p className="text-slate-400 text-[10px] uppercase tracking-wider mb-0.5">Agreement</p>
-                    <p className="font-mono font-bold text-teal-700">{nc.agreement}</p>
+                    <p className="font-mono font-bold text-violet-700">{nc.agreement}</p>
                   </div>
                 </div>
 

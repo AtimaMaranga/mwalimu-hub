@@ -136,7 +136,7 @@ export default async function BlogPostPage({
         {/* Back */}
         <Link
           href="/blog"
-          className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-teal-700 transition-colors mb-8"
+          className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-indigo-700 transition-colors mb-8"
         >
           <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           Back to Blog
@@ -245,9 +245,9 @@ export default async function BlogPostPage({
         </div>
 
         {/* Author bio */}
-        <div className="mt-8 p-6 bg-teal-50 rounded-2xl">
+        <div className="mt-8 p-6 bg-indigo-50 rounded-2xl">
           <div className="flex items-center gap-3 mb-3">
-            <div className="h-12 w-12 rounded-full bg-teal-200 flex items-center justify-center text-teal-700 font-bold text-lg">
+            <div className="h-12 w-12 rounded-full bg-indigo-200 flex items-center justify-center text-indigo-700 font-bold text-lg">
               {post.author.charAt(0)}
             </div>
             <div>

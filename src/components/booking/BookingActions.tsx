@@ -96,7 +96,7 @@ export default function BookingActions({ bookingId, status, proposedDate }: Book
           <button
             onClick={handleStartLesson}
             disabled={!!loading}
-            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-teal-600 text-white text-xs font-semibold hover:bg-teal-700 disabled:opacity-50 transition-colors"
+            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-indigo-600 text-white text-xs font-semibold hover:bg-indigo-700 disabled:opacity-50 transition-colors"
           >
             <PlayCircle className="h-3 w-3" />
             {loading === "start" ? "Starting..." : "Start Lesson"}

@@ -57,12 +57,12 @@ export default function StudentProfileForm({ userId, userEmail, fullName, avatar
   return (
     <div className="max-w-xl mx-auto space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">My Profile</h1>
+        <h1 className="text-2xl font-bold text-white">My Profile</h1>
         <p className="text-slate-400 text-sm mt-1">Update your name and profile photo.</p>
       </div>
 
       {success && (
-        <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm px-4 py-3 rounded-xl">
+        <div className="flex items-center gap-2 bg-emerald-500/15 border border-emerald-500/20 text-emerald-400 text-sm px-4 py-3 rounded-xl">
           <CheckCircle className="h-4 w-4 shrink-0" />
           Profile saved! Redirecting…
         </div>
@@ -70,7 +70,7 @@ export default function StudentProfileForm({ userId, userEmail, fullName, avatar
 
       <form onSubmit={handleSave} className="space-y-5">
         {/* Profile image */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-6 flex items-center gap-6">
+        <div className="bg-[#1a1b2e] border border-white/5 rounded-2xl p-6 flex items-center gap-6">
           <ImageUpload
             currentUrl={imageUrl}
             userId={userId}
@@ -78,42 +78,42 @@ export default function StudentProfileForm({ userId, userEmail, fullName, avatar
             onUpload={setImageUrl}
           />
           <div>
-            <p className="text-slate-900 font-medium text-sm">Profile Photo</p>
+            <p className="text-white font-medium text-sm">Profile Photo</p>
             <p className="text-slate-500 text-xs mt-1">JPG, PNG or WebP, max 5MB.</p>
           </div>
         </div>
 
         {/* Name */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-6 space-y-4">
+        <div className="bg-[#1a1b2e] border border-white/5 rounded-2xl p-6 space-y-4">
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Account Details</p>
 
           {error && (
-            <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl border border-red-100">
+            <div className="bg-red-500/10 text-red-400 text-sm px-4 py-3 rounded-xl border border-red-500/20">
               {error}
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">Full name *</label>
+            <label className="block text-sm font-medium text-slate-300 mb-1.5">Full name *</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
+              className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-cyan-500/50 transition-all"
               placeholder="Your full name"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">Email address</label>
+            <label className="block text-sm font-medium text-slate-300 mb-1.5">Email address</label>
             <input
               type="email"
               value={userEmail}
               disabled
-              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-500 cursor-not-allowed"
+              className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm text-slate-500 cursor-not-allowed"
             />
-            <p className="text-xs text-slate-400 mt-1">Email cannot be changed here. Go to Settings to update it.</p>
+            <p className="text-xs text-slate-600 mt-1">Email cannot be changed here. Go to Settings to update it.</p>
           </div>
         </div>
 
