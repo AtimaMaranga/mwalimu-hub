@@ -154,6 +154,156 @@ export async function sendTeacherRejectedEmail(data: {
   });
 }
 
+// ─── Booking Notifications ────────────────────────────────────────────────
+
+export async function sendBookingCreatedToTeacher(data: {
+  teacher_name: string;
+  teacher_email: string;
+  student_name: string;
+  student_email: string;
+  proposed_date: string;
+  proposed_time: string;
+  duration_minutes: number;
+  message?: string | null;
+}) {
+  const teacherName = escapeHtml(data.teacher_name);
+  const studentName = escapeHtml(data.student_name);
+  const studentEmail = escapeHtml(data.student_email);
+  const messageHtml = data.message ? escapeHtmlWithBreaks(data.message) : null;
+
+  return getResend().emails.send({
+    from: FROM,
+    to: data.teacher_email,
+    subject: `New lesson booking from ${data.student_name} — Swahili Tutors`,
+    html: `
+      <h2>Habari ${teacherName}!</h2>
+      <p>A student has requested to book a lesson with you.</p>
+      <table style="border-collapse:collapse;width:100%;margin:16px 0">
+        <tr><td style="padding:8px;font-weight:bold;width:140px">Student</td><td style="padding:8px">${studentName} (${studentEmail})</td></tr>
+        <tr style="background:#f8f8f8"><td style="padding:8px;font-weight:bold">Date</td><td style="padding:8px">${escapeHtml(data.proposed_date)}</td></tr>
+        <tr><td style="padding:8px;font-weight:bold">Time</td><td style="padding:8px">${escapeHtml(data.proposed_time)}</td></tr>
+        <tr style="background:#f8f8f8"><td style="padding:8px;font-weight:bold">Duration</td><td style="padding:8px">${data.duration_minutes} minutes</td></tr>
+      </table>
+      ${messageHtml ? `<p><strong>Student's message:</strong></p><blockquote style="border-left:3px solid #6366f1;padding-left:12px;color:#444">${messageHtml}</blockquote>` : ""}
+      <p><a href="${SITE()}/dashboard/teacher" style="display:inline-block;padding:12px 24px;background:#6366f1;color:#fff;text-decoration:none;border-radius:8px;font-weight:bold">View &amp; Respond in Dashboard</a></p>
+      <p style="color:#888;font-size:13px">Please confirm or decline this booking from your dashboard. The student will be notified of your response.</p>
+      <p>Asante,<br/>The Swahili Tutors Team</p>
+    `,
+  });
+}
+
+export async function sendBookingCreatedToStudent(data: {
+  student_name: string;
+  student_email: string;
+  teacher_name: string;
+  proposed_date: string;
+  proposed_time: string;
+  duration_minutes: number;
+}) {
+  const studentName = escapeHtml(data.student_name);
+  const teacherName = escapeHtml(data.teacher_name);
+
+  return getResend().emails.send({
+    from: FROM,
+    to: data.student_email,
+    subject: `Booking request sent to ${data.teacher_name} — Swahili Tutors`,
+    html: `
+      <h2>Habari ${studentName}!</h2>
+      <p>Your lesson booking request has been sent to <strong>${teacherName}</strong>.</p>
+      <table style="border-collapse:collapse;width:100%;margin:16px 0">
+        <tr><td style="padding:8px;font-weight:bold;width:140px">Date</td><td style="padding:8px">${escapeHtml(data.proposed_date)}</td></tr>
+        <tr style="background:#f8f8f8"><td style="padding:8px;font-weight:bold">Time</td><td style="padding:8px">${escapeHtml(data.proposed_time)}</td></tr>
+        <tr><td style="padding:8px;font-weight:bold">Duration</td><td style="padding:8px">${data.duration_minutes} minutes</td></tr>
+      </table>
+      <p>The teacher will confirm or decline your request. You'll receive an email when they respond.</p>
+      <p><a href="${SITE()}/dashboard/student">View your bookings</a></p>
+      <p>Asante,<br/>The Swahili Tutors Team</p>
+    `,
+  });
+}
+
+export async function sendBookingConfirmedToStudent(data: {
+  student_name: string;
+  student_email: string;
+  teacher_name: string;
+  proposed_date: string;
+  proposed_time: string;
+  duration_minutes: number;
+  teacher_note?: string | null;
+}) {
+  const studentName = escapeHtml(data.student_name);
+  const teacherName = escapeHtml(data.teacher_name);
+  const noteHtml = data.teacher_note ? escapeHtmlWithBreaks(data.teacher_note) : null;
+
+  return getResend().emails.send({
+    from: FROM,
+    to: data.student_email,
+    subject: `Lesson confirmed with ${data.teacher_name}! — Swahili Tutors`,
+    html: `
+      <h2>Great news, ${studentName}!</h2>
+      <p><strong>${teacherName}</strong> has confirmed your lesson booking.</p>
+      <table style="border-collapse:collapse;width:100%;margin:16px 0">
+        <tr><td style="padding:8px;font-weight:bold;width:140px">Date</td><td style="padding:8px">${escapeHtml(data.proposed_date)}</td></tr>
+        <tr style="background:#f8f8f8"><td style="padding:8px;font-weight:bold">Time</td><td style="padding:8px">${escapeHtml(data.proposed_time)}</td></tr>
+        <tr><td style="padding:8px;font-weight:bold">Duration</td><td style="padding:8px">${data.duration_minutes} minutes</td></tr>
+      </table>
+      ${noteHtml ? `<p><strong>Note from teacher:</strong></p><blockquote style="border-left:3px solid #22c55e;padding-left:12px;color:#444">${noteHtml}</blockquote>` : ""}
+      <p><a href="${SITE()}/dashboard/student" style="display:inline-block;padding:12px 24px;background:#6366f1;color:#fff;text-decoration:none;border-radius:8px;font-weight:bold">View in Dashboard</a></p>
+      <p>On the day of the lesson, log in to your dashboard and click "Join Lesson" to start.</p>
+      <p>Asante,<br/>The Swahili Tutors Team</p>
+    `,
+  });
+}
+
+export async function sendBookingDeclinedToStudent(data: {
+  student_name: string;
+  student_email: string;
+  teacher_name: string;
+  proposed_date: string;
+  proposed_time: string;
+  teacher_note?: string | null;
+}) {
+  const studentName = escapeHtml(data.student_name);
+  const teacherName = escapeHtml(data.teacher_name);
+  const noteHtml = data.teacher_note ? escapeHtmlWithBreaks(data.teacher_note) : null;
+
+  return getResend().emails.send({
+    from: FROM,
+    to: data.student_email,
+    subject: `Booking update from ${data.teacher_name} — Swahili Tutors`,
+    html: `
+      <h2>Habari ${studentName},</h2>
+      <p>Unfortunately, <strong>${teacherName}</strong> was unable to accept your booking for ${escapeHtml(data.proposed_date)} at ${escapeHtml(data.proposed_time)}.</p>
+      ${noteHtml ? `<p><strong>Teacher's note:</strong></p><blockquote style="border-left:3px solid #ef4444;padding-left:12px;color:#444">${noteHtml}</blockquote>` : ""}
+      <p>Don't worry — you can try a different time or <a href="${SITE()}/teachers">browse other teachers</a>.</p>
+      <p>Asante,<br/>The Swahili Tutors Team</p>
+    `,
+  });
+}
+
+export async function sendBookingCancelledToTeacher(data: {
+  teacher_name: string;
+  teacher_email: string;
+  student_name: string;
+  proposed_date: string;
+  proposed_time: string;
+}) {
+  const teacherName = escapeHtml(data.teacher_name);
+  const studentName = escapeHtml(data.student_name);
+
+  return getResend().emails.send({
+    from: FROM,
+    to: data.teacher_email,
+    subject: `Booking cancelled by ${data.student_name} — Swahili Tutors`,
+    html: `
+      <h2>Habari ${teacherName},</h2>
+      <p><strong>${studentName}</strong> has cancelled their booking for ${escapeHtml(data.proposed_date)} at ${escapeHtml(data.proposed_time)}.</p>
+      <p><a href="${SITE()}/dashboard/teacher">View your dashboard</a></p>
+      <p>Asante,<br/>The Swahili Tutors Team</p>
+    `,
+  });
+}
+
 // ─── Student Inquiry ──────────────────────────────────────────────────────
 
 export async function sendInquiryNotification(data: {

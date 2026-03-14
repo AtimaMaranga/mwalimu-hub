@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { sendBookingConfirmedToStudent, sendBookingDeclinedToStudent } from "@/lib/email";
 
 export async function PATCH(
   request: NextRequest,
@@ -71,6 +72,52 @@ export async function PATCH(
   if (error || !updated) {
     return NextResponse.json({ error: "Failed to update booking" }, { status: 500 });
   }
+
+  // Send email notification to student (non-blocking)
+  (async () => {
+    try {
+      // Get student email and name
+      const { data: studentUser } = await admin.auth.admin.getUserById(booking.student_id);
+      const { data: studentProfile } = await admin
+        .from("profiles")
+        .select("full_name")
+        .eq("id", booking.student_id)
+        .single();
+      // Get teacher name
+      const { data: teacher } = await admin
+        .from("teachers")
+        .select("name")
+        .eq("id", profile.teacher_id)
+        .single();
+
+      const studentEmail = studentUser?.user?.email;
+      const studentName = studentProfile?.full_name || studentEmail?.split("@")[0] || "Student";
+      const teacherName = teacher?.name || "Your teacher";
+
+      if (studentEmail) {
+        if (newStatus === "confirmed") {
+          await sendBookingConfirmedToStudent({
+            student_name: studentName,
+            student_email: studentEmail,
+            teacher_name: teacherName,
+            proposed_date: booking.proposed_date,
+            proposed_time: booking.proposed_time,
+            duration_minutes: booking.duration_minutes,
+            teacher_note: teacher_note || null,
+          });
+        } else {
+          await sendBookingDeclinedToStudent({
+            student_name: studentName,
+            student_email: studentEmail,
+            teacher_name: teacherName,
+            proposed_date: booking.proposed_date,
+            proposed_time: booking.proposed_time,
+            teacher_note: teacher_note || null,
+          });
+        }
+      }
+    } catch {}
+  })();
 
   return NextResponse.json({ booking: updated });
 }

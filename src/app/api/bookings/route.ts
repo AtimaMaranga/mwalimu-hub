@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { sendBookingCreatedToTeacher, sendBookingCreatedToStudent } from "@/lib/email";
 
 export async function POST(request: NextRequest) {
   const supabase = await createClient();
@@ -51,13 +52,23 @@ export async function POST(request: NextRequest) {
   // Teacher must exist and be published
   const { data: teacher } = await admin
     .from("teachers")
-    .select("id, name, is_published")
+    .select("id, name, email, is_published")
     .eq("id", teacher_id)
     .single();
 
   if (!teacher || !teacher.is_published) {
     return NextResponse.json({ error: "Teacher not found" }, { status: 404 });
   }
+
+  // Get student profile for email notifications
+  const { data: studentProfile } = await admin
+    .from("profiles")
+    .select("full_name")
+    .eq("id", user.id)
+    .single();
+
+  const studentName = studentProfile?.full_name || user.email?.split("@")[0] || "Student";
+  const studentEmail = user.email || "";
 
   // Prevent duplicate pending bookings for same teacher/date/time
   const { data: existing } = await admin
@@ -95,6 +106,26 @@ export async function POST(request: NextRequest) {
   if (error || !booking) {
     return NextResponse.json({ error: "Failed to create booking" }, { status: 500 });
   }
+
+  // Send email notifications (non-blocking)
+  const emailData = {
+    teacher_name: teacher.name,
+    student_name: studentName,
+    student_email: studentEmail,
+    proposed_date,
+    proposed_time,
+    duration_minutes,
+    message: message || null,
+  };
+
+  Promise.allSettled([
+    teacher.email
+      ? sendBookingCreatedToTeacher({ ...emailData, teacher_email: teacher.email })
+      : Promise.resolve(),
+    studentEmail
+      ? sendBookingCreatedToStudent(emailData)
+      : Promise.resolve(),
+  ]).catch(() => {});
 
   return NextResponse.json({ booking }, { status: 201 });
 }
