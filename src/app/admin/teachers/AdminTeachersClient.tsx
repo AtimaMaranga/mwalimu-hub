@@ -220,7 +220,7 @@ export default function AdminTeachersClient({
     const res = await fetch("/api/admin/approve-teacher", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ teacherId, action: "reject" }),
+      body: JSON.stringify({ teacherId, action: "unpublish" }),
     });
     if (res.ok) {
       const teacher = published.find((t) => t.id === teacherId);

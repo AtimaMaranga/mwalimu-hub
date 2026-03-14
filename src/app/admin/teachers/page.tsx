@@ -1,5 +1,6 @@
+import { unstable_noStore as noStore } from "next/cache";
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/server";
 import AdminTeachersClient from "./AdminTeachersClient";
 
 const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "")
@@ -8,7 +9,8 @@ const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "")
   .filter(Boolean);
 
 export default async function AdminTeachersPage() {
-  const supabase = await createClient();
+  noStore();
+  const supabase = await createAdminClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user || !ADMIN_EMAILS.includes(user.email?.toLowerCase() ?? "")) {
