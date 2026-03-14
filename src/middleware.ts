@@ -28,6 +28,14 @@ export async function middleware(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
   const { pathname } = request.nextUrl;
 
+  // Protect /classroom — redirect to login if not authenticated
+  if (!user && pathname.startsWith("/classroom")) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/auth/login";
+    url.searchParams.set("next", pathname);
+    return NextResponse.redirect(url);
+  }
+
   // Protect /dashboard — redirect to login if not authenticated
   if (!user && pathname.startsWith("/dashboard")) {
     const url = request.nextUrl.clone();
@@ -73,5 +81,6 @@ export const config = {
     "/auth/signup",
     "/teachers/:path*",
     "/teachers",
+    "/classroom/:path*",
   ],
 };

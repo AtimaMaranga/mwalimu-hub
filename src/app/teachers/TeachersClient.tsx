@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { Search, SlidersHorizontal, X, Users } from "lucide-react";
 import type { Teacher } from "@/types";
-import { SPECIALIZATIONS } from "@/types";
+import { SPECIALIZATIONS, DIALECTS } from "@/types";
 import TeacherCard from "@/components/sections/TeacherCard";
 import Button from "@/components/ui/Button";
 
@@ -18,6 +18,7 @@ export default function TeachersClient({ initialTeachers }: TeachersClientProps)
   const [selectedSpecs, setSelectedSpecs] = useState<string[]>([]);
   const [nativeOnly, setNativeOnly] = useState(false);
   const [maxPrice, setMaxPrice] = useState(50);
+  const [selectedDialects, setSelectedDialects] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<"rating" | "price_asc" | "price_desc" | "newest">("rating");
   const [page, setPage] = useState(1);
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -41,6 +42,10 @@ export default function TeachersClient({ initialTeachers }: TeachersClientProps)
       );
     }
 
+    if (selectedDialects.length > 0) {
+      result = result.filter((t) => t.dialect && selectedDialects.includes(t.dialect));
+    }
+
     if (nativeOnly) {
       result = result.filter((t) => t.is_native_speaker);
     }
@@ -55,7 +60,7 @@ export default function TeachersClient({ initialTeachers }: TeachersClientProps)
     });
 
     return result;
-  }, [initialTeachers, search, selectedSpecs, nativeOnly, maxPrice, sortBy]);
+  }, [initialTeachers, search, selectedSpecs, selectedDialects, nativeOnly, maxPrice, sortBy]);
 
   const totalPages = Math.ceil(filtered.length / TEACHERS_PER_PAGE);
   const paginated = filtered.slice((page - 1) * TEACHERS_PER_PAGE, page * TEACHERS_PER_PAGE);
@@ -67,9 +72,17 @@ export default function TeachersClient({ initialTeachers }: TeachersClientProps)
     setPage(1);
   };
 
+  const toggleDialect = (dialect: string) => {
+    setSelectedDialects((prev) =>
+      prev.includes(dialect) ? prev.filter((d) => d !== dialect) : [...prev, dialect]
+    );
+    setPage(1);
+  };
+
   const clearFilters = () => {
     setSearch("");
     setSelectedSpecs([]);
+    setSelectedDialects([]);
     setNativeOnly(false);
     setMaxPrice(50);
     setSortBy("rating");
@@ -77,7 +90,7 @@ export default function TeachersClient({ initialTeachers }: TeachersClientProps)
   };
 
   const hasActiveFilters =
-    search || selectedSpecs.length > 0 || nativeOnly || maxPrice < 50 || sortBy !== "rating";
+    search || selectedSpecs.length > 0 || selectedDialects.length > 0 || nativeOnly || maxPrice < 50 || sortBy !== "rating";
 
   return (
     <>
@@ -130,7 +143,7 @@ export default function TeachersClient({ initialTeachers }: TeachersClientProps)
               Filters
               {hasActiveFilters && (
                 <span className="ml-1 h-5 w-5 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center">
-                  {selectedSpecs.length + (nativeOnly ? 1 : 0) + (maxPrice < 50 ? 1 : 0)}
+                  {selectedSpecs.length + selectedDialects.length + (nativeOnly ? 1 : 0) + (maxPrice < 50 ? 1 : 0)}
                 </span>
               )}
             </button>
@@ -201,6 +214,26 @@ export default function TeachersClient({ initialTeachers }: TeachersClientProps)
                       />
                       <span className="text-sm text-slate-600 group-hover:text-slate-900 transition-colors">
                         {spec}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Dialect */}
+              <div>
+                <h3 className="font-semibold text-slate-900 mb-3 text-sm">Dialect</h3>
+                <div className="space-y-2">
+                  {DIALECTS.map((dialect) => (
+                    <label key={dialect} className="flex items-center gap-2 cursor-pointer group">
+                      <input
+                        type="checkbox"
+                        checked={selectedDialects.includes(dialect)}
+                        onChange={() => toggleDialect(dialect)}
+                        className="h-4 w-4 rounded text-indigo-600 focus:ring-indigo-500"
+                      />
+                      <span className="text-sm text-slate-600 group-hover:text-slate-900 transition-colors">
+                        {dialect}
                       </span>
                     </label>
                   ))}

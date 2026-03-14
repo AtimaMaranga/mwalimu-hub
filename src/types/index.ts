@@ -23,9 +23,55 @@ export interface Teacher {
   is_online: boolean;
   rating: number;
   total_students: number;
+  dialect?: string;
+  rate_per_minute?: number;
   created_at: string;
   updated_at: string;
 }
+
+/** Student wallet */
+export interface Wallet {
+  id: string;
+  user_id: string;
+  balance: number;
+  currency: string;
+  created_at: string;
+  updated_at: string;
+}
+
+/** Wallet transaction ledger entry */
+export interface WalletTransaction {
+  id: string;
+  wallet_id: string;
+  amount: number;
+  type: 'top_up' | 'lesson_charge' | 'refund';
+  description?: string;
+  lesson_id?: string;
+  created_at: string;
+}
+
+/** Lesson session */
+export interface Lesson {
+  id: string;
+  student_id: string;
+  teacher_id: string;
+  status: 'active' | 'completed' | 'cancelled';
+  started_at: string;
+  ended_at?: string;
+  duration_seconds: number;
+  rate_per_minute: number;
+  total_charged: number;
+  created_at: string;
+}
+
+/** Swahili dialect options */
+export const DIALECTS = [
+  'Standard',
+  'Coastal/Zanzibari',
+  'Congolese/Kingwana',
+] as const;
+
+export type Dialect = (typeof DIALECTS)[number];
 
 /** Student review for a teacher */
 export interface Review {

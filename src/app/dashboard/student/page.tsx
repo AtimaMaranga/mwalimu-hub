@@ -7,7 +7,9 @@ import ConversationInbox from "@/components/chat/ConversationInbox";
 import {
   ArrowRight, Clock, ChevronRight, Users, TrendingUp,
   MessageCircle, Search, GraduationCap, BookOpen, Star,
+  Video,
 } from "@/components/ui/icons";
+import WalletCard from "@/components/wallet/WalletCard";
 import { getInitials } from "@/lib/utils";
 
 const levelColors: Record<string, { bg: string; text: string; dot: string; border: string }> = {
@@ -146,6 +148,14 @@ export default async function StudentDashboardPage({
           <StatCard label="Teachers Contacted" value={teachersContacted} sub="Unique teachers"              icon={Users}         iconBg="bg-violet-50"  iconColor="text-violet-600" />
           <StatCard label="Teachers Available" value={publishedTeachers} sub="Ready to teach"               icon={Search}        iconBg="bg-cyan-50"    iconColor="text-cyan-600" />
           <StatCard label="Learning Progress"  value="0%"                sub="Lessons completed"           icon={TrendingUp}    iconBg="bg-amber-50"   iconColor="text-amber-600" />
+        </div>
+
+        {/* ── Wallet ── */}
+        <div className="grid lg:grid-cols-4 gap-4">
+          <WalletCard />
+          <div className="lg:col-span-3">
+            {/* Recent lessons placeholder — will be populated as lessons are taken */}
+          </div>
         </div>
 
         {/* ── Middle row ── */}

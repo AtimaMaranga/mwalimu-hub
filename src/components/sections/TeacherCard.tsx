@@ -6,6 +6,7 @@ import { formatCurrency, getInitials } from "@/lib/utils";
 import StarRating from "@/components/ui/StarRating";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
+import EnterClassroomButton from "@/components/classroom/EnterClassroomButton";
 
 interface TeacherCardProps {
   teacher: Teacher;
@@ -144,12 +145,15 @@ export default function TeacherCard({ teacher }: TeacherCardProps) {
       </div>
 
       {/* CTA */}
-      <div className="px-5 pb-5 pt-4">
+      <div className="px-5 pb-5 pt-4 space-y-2">
         <Link href={`/teachers/${teacher.slug}`} className="block">
           <Button variant="primary" fullWidth>
             View Profile
           </Button>
         </Link>
+        {teacher.is_online && (
+          <EnterClassroomButton teacherId={teacher.id} teacherName={teacher.name} />
+        )}
       </div>
     </article>
   );
