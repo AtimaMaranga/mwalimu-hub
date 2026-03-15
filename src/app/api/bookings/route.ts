@@ -1,6 +1,9 @@
 import { NextResponse, type NextRequest, after } from "next/server";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { sendBookingCreatedToTeacher, sendBookingCreatedToStudent } from "@/lib/email";
+import { createNotification, getTeacherUserId } from "@/lib/notifications";
+
+export const dynamic = "force-dynamic";
 
 export async function POST(request: NextRequest) {
   const supabase = await createClient();
@@ -119,18 +122,47 @@ export async function POST(request: NextRequest) {
   };
 
   after(async () => {
-    try {
-      await Promise.allSettled([
-        teacher.email
-          ? sendBookingCreatedToTeacher({ ...emailData, teacher_email: teacher.email })
-          : Promise.resolve(),
-        studentEmail
-          ? sendBookingCreatedToStudent(emailData)
-          : Promise.resolve(),
-      ]);
-    } catch (err) {
-      console.error("Booking email error:", err);
+    // Create in-app notification for teacher
+    const teacherUserId = await getTeacherUserId(teacher_id);
+    if (teacherUserId) {
+      await createNotification({
+        userId: teacherUserId,
+        type: "booking_created",
+        title: "New lesson request",
+        body: `${studentName} wants to book a ${duration_minutes}-min lesson on ${proposed_date} at ${proposed_time}`,
+        link: "/dashboard/teacher",
+        metadata: { booking_id: booking.id, student_name: studentName },
+      });
     }
+
+    // Create in-app notification for student
+    await createNotification({
+      userId: user.id,
+      type: "booking_created",
+      title: "Booking request sent",
+      body: `Your lesson request to ${teacher.name} for ${proposed_date} has been sent`,
+      link: "/dashboard/student",
+      metadata: { booking_id: booking.id, teacher_name: teacher.name },
+    });
+
+    // Send emails
+    const results = await Promise.allSettled([
+      teacher.email
+        ? sendBookingCreatedToTeacher({ ...emailData, teacher_email: teacher.email })
+        : Promise.resolve(),
+      studentEmail
+        ? sendBookingCreatedToStudent(emailData)
+        : Promise.resolve(),
+    ]);
+
+    results.forEach((result, i) => {
+      const label = i === 0 ? "teacher" : "student";
+      if (result.status === "rejected") {
+        console.error(`Booking email to ${label} failed:`, result.reason);
+      } else if (result.status === "fulfilled" && result.value && typeof result.value === "object" && "error" in result.value && result.value.error) {
+        console.error(`Booking email to ${label} API error:`, result.value.error);
+      }
+    });
   });
 
   return NextResponse.json({ booking }, { status: 201 });
@@ -156,6 +188,8 @@ export async function GET(request: NextRequest) {
     .eq("id", user.id)
     .single();
 
+  let bookings;
+
   if (role === "teacher" && profile?.teacher_id) {
     let query = admin
       .from("bookings")
@@ -166,20 +200,26 @@ export async function GET(request: NextRequest) {
 
     if (status) query = query.eq("status", status);
 
-    const { data: bookings } = await query;
-    return NextResponse.json({ bookings: bookings ?? [] });
+    const { data } = await query;
+    bookings = data;
+  } else {
+    // Default: student view
+    let query = admin
+      .from("bookings")
+      .select("*, teachers!bookings_teacher_id_fkey(name, slug, profile_image_url)")
+      .eq("student_id", user.id)
+      .order("proposed_date", { ascending: false })
+      .order("proposed_time", { ascending: false });
+
+    if (status) query = query.eq("status", status);
+
+    const { data } = await query;
+    bookings = data;
   }
 
-  // Default: student view
-  let query = admin
-    .from("bookings")
-    .select("*, teachers!bookings_teacher_id_fkey(name, slug, profile_image_url)")
-    .eq("student_id", user.id)
-    .order("proposed_date", { ascending: false })
-    .order("proposed_time", { ascending: false });
-
-  if (status) query = query.eq("status", status);
-
-  const { data: bookings } = await query;
-  return NextResponse.json({ bookings: bookings ?? [] });
+  // Prevent caching so polling always gets fresh data
+  return NextResponse.json(
+    { bookings: bookings ?? [] },
+    { headers: { "Cache-Control": "no-store, max-age=0" } }
+  );
 }

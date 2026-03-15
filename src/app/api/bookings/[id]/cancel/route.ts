@@ -1,6 +1,7 @@
 import { NextResponse, after } from "next/server";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { sendBookingCancelledToTeacher } from "@/lib/email";
+import { createNotification, getTeacherUserId } from "@/lib/notifications";
 
 export async function PATCH(
   _request: Request,
@@ -60,7 +61,7 @@ export async function PATCH(
     );
   }
 
-  // Send email notification to teacher after response
+  // Send notifications after cancellation
   after(async () => {
     try {
       const { data: teacher } = await admin
@@ -77,6 +78,20 @@ export async function PATCH(
 
       const studentName = studentProfile?.full_name || user.email?.split("@")[0] || "Student";
 
+      // In-app notification for teacher
+      const teacherUserId = await getTeacherUserId(booking.teacher_id);
+      if (teacherUserId) {
+        await createNotification({
+          userId: teacherUserId,
+          type: "booking_cancelled",
+          title: "Booking cancelled",
+          body: `${studentName} cancelled their lesson on ${booking.proposed_date} at ${booking.proposed_time}`,
+          link: "/dashboard/teacher",
+          metadata: { booking_id: booking.id, student_name: studentName },
+        });
+      }
+
+      // Send email
       if (teacher?.email) {
         await sendBookingCancelledToTeacher({
           teacher_name: teacher.name,

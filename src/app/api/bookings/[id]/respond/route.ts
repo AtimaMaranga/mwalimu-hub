@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest, after } from "next/server";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { sendBookingConfirmedToStudent, sendBookingDeclinedToStudent } from "@/lib/email";
+import { createNotification } from "@/lib/notifications";
 
 export async function PATCH(
   request: NextRequest,
@@ -73,7 +74,7 @@ export async function PATCH(
     return NextResponse.json({ error: "Failed to update booking" }, { status: 500 });
   }
 
-  // Send email notification to student after response
+  // Send notifications after response
   const teacherId = profile.teacher_id;
   after(async () => {
     try {
@@ -93,6 +94,19 @@ export async function PATCH(
       const studentName = studentProfile?.full_name || studentEmail?.split("@")[0] || "Student";
       const teacherName = teacher?.name || "Your teacher";
 
+      // In-app notification for student
+      await createNotification({
+        userId: booking.student_id,
+        type: newStatus === "confirmed" ? "booking_confirmed" : "booking_declined",
+        title: newStatus === "confirmed" ? "Lesson confirmed!" : "Booking declined",
+        body: newStatus === "confirmed"
+          ? `${teacherName} confirmed your lesson on ${booking.proposed_date} at ${booking.proposed_time}`
+          : `${teacherName} was unable to accept your booking for ${booking.proposed_date}`,
+        link: "/dashboard/student",
+        metadata: { booking_id: id, teacher_name: teacherName },
+      });
+
+      // Send email
       if (studentEmail) {
         if (newStatus === "confirmed") {
           await sendBookingConfirmedToStudent({

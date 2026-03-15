@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   CalendarDays, Clock, X, ChevronRight, ChevronDown,
   Video, MessageCircle, Check, PlayCircle, AlertCircle,
+  Bell, RefreshCw,
 } from "lucide-react";
 import { getInitials } from "@/lib/utils";
 
@@ -26,6 +27,8 @@ interface ScheduledSessionsProps {
   bookings: SessionBooking[];
   role: "student" | "teacher";
 }
+
+const POLL_INTERVAL = 15_000; // 15 seconds
 
 type TabKey = "upcoming" | "pending" | "past";
 
@@ -417,7 +420,59 @@ function EmptyState({ tab, role }: { tab: TabKey; role: string }) {
 
 /* ─── Main Component ─── */
 
-export default function ScheduledSessions({ bookings, role }: ScheduledSessionsProps) {
+export default function ScheduledSessions({ bookings: initialBookings, role }: ScheduledSessionsProps) {
+  const [bookings, setBookings] = useState<SessionBooking[]>(initialBookings);
+  const [newBookingAlert, setNewBookingAlert] = useState<string | null>(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const knownIdsRef = useRef<Set<string>>(new Set(initialBookings.map(b => b.id)));
+  const router = useRouter();
+
+  // Poll for new bookings
+  const fetchBookings = useCallback(async (showRefreshIndicator = false) => {
+    if (showRefreshIndicator) setIsRefreshing(true);
+    try {
+      const res = await fetch(`/api/bookings?role=${role}`);
+      if (!res.ok) return;
+      const data = await res.json();
+      const fetched: SessionBooking[] = data.bookings ?? [];
+
+      // Detect new bookings
+      const newOnes = fetched.filter(b => !knownIdsRef.current.has(b.id));
+      if (newOnes.length > 0) {
+        const personName = role === "teacher"
+          ? newOnes[0].profiles?.full_name ?? "A student"
+          : newOnes[0].teachers?.name ?? "A teacher";
+        setNewBookingAlert(
+          newOnes.length === 1
+            ? `New session request from ${personName}`
+            : `${newOnes.length} new session requests`
+        );
+        // Auto-dismiss after 8 seconds
+        setTimeout(() => setNewBookingAlert(null), 8000);
+      }
+
+      // Update known IDs
+      knownIdsRef.current = new Set(fetched.map(b => b.id));
+      setBookings(fetched);
+    } catch {
+      // Silently ignore polling errors
+    } finally {
+      if (showRefreshIndicator) setIsRefreshing(false);
+    }
+  }, [role]);
+
+  // Start polling
+  useEffect(() => {
+    const interval = setInterval(() => fetchBookings(false), POLL_INTERVAL);
+    return () => clearInterval(interval);
+  }, [fetchBookings]);
+
+  // Sync when initial bookings change (e.g. router.refresh)
+  useEffect(() => {
+    setBookings(initialBookings);
+    knownIdsRef.current = new Set(initialBookings.map(b => b.id));
+  }, [initialBookings]);
+
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -442,6 +497,13 @@ export default function ScheduledSessions({ bookings, role }: ScheduledSessionsP
   const defaultTab: TabKey = role === "teacher" && pending.length > 0 && upcoming.length === 0 ? "pending" : "upcoming";
   const [activeTab, setActiveTab] = useState<TabKey>(defaultTab);
 
+  // Auto-switch to pending tab when new pending bookings arrive (for teachers)
+  useEffect(() => {
+    if (role === "teacher" && newBookingAlert && pending.length > 0) {
+      setActiveTab("pending");
+    }
+  }, [newBookingAlert, pending.length, role]);
+
   const tabs: { key: TabKey; label: string; count: number; alert?: boolean }[] = [
     { key: "upcoming", label: "Upcoming", count: upcoming.length, alert: todaySessions.length > 0 },
     { key: "pending", label: "Pending", count: pending.length, alert: pending.length > 0 },
@@ -452,6 +514,22 @@ export default function ScheduledSessions({ bookings, role }: ScheduledSessionsP
 
   return (
     <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+      {/* New booking alert banner */}
+      {newBookingAlert && (
+        <div className="px-4 py-3 bg-indigo-600 text-white flex items-center justify-between gap-3 animate-in slide-in-from-top">
+          <div className="flex items-center gap-2">
+            <Bell className="h-4 w-4 shrink-0" />
+            <p className="text-sm font-semibold">{newBookingAlert}</p>
+          </div>
+          <button
+            onClick={() => setNewBookingAlert(null)}
+            className="text-indigo-200 hover:text-white shrink-0"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+      )}
+
       {/* Header */}
       <div className="px-6 py-4 border-b border-slate-50">
         <div className="flex items-center justify-between mb-3">
@@ -466,12 +544,22 @@ export default function ScheduledSessions({ bookings, role }: ScheduledSessionsP
               </p>
             </div>
           </div>
-          {todaySessions.length > 0 && (
-            <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold">
-              <span className="h-2 w-2 rounded-full bg-indigo-500 animate-pulse" />
-              {todaySessions.length} today
-            </span>
-          )}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => fetchBookings(true)}
+              disabled={isRefreshing}
+              className="inline-flex items-center justify-center h-8 w-8 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors disabled:opacity-50"
+              title="Refresh bookings"
+            >
+              <RefreshCw className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`} />
+            </button>
+            {todaySessions.length > 0 && (
+              <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold">
+                <span className="h-2 w-2 rounded-full bg-indigo-500 animate-pulse" />
+                {todaySessions.length} today
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Tabs */}
