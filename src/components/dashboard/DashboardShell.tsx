@@ -5,10 +5,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
-  Search, Bell, Settings, LogOut, Menu, X,
+  Search, Settings, LogOut, Menu, X,
   LayoutDashboard, User, MessageCircle, BookOpen, Users,
 } from "lucide-react";
 import DeleteAccountButton from "./DeleteAccountButton";
+import NotificationDropdown from "./NotificationDropdown";
 import { usePresence } from "@/hooks/usePresence";
 
 const NAV_ITEMS = {
@@ -188,11 +189,8 @@ export default function DashboardShell({
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
-            {/* Bell */}
-            <button className="relative h-9 w-9 flex items-center justify-center rounded-xl bg-slate-50 border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-300 transition-all shrink-0">
-              <Bell className="h-4 w-4" />
-              <span className="absolute top-2 right-2 h-1.5 w-1.5 rounded-full bg-indigo-500" />
-            </button>
+            {/* Notifications */}
+            <NotificationDropdown />
 
             {/* Divider */}
             <div className="h-8 w-px bg-slate-100" />
