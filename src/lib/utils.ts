@@ -57,6 +57,16 @@ export function getInitials(name: string): string {
     .slice(0, 2);
 }
 
+/** Display name: first name + last initial for public, full name for authenticated */
+export function getTutorDisplayName(fullName: string, isAuthenticated: boolean): string {
+  if (isAuthenticated) return fullName;
+  const parts = fullName.trim().split(/\s+/);
+  if (parts.length === 1) return parts[0];
+  const firstName = parts.slice(0, -1).join(" ");
+  const lastInitial = parts[parts.length - 1].charAt(0);
+  return `${firstName} ${lastInitial}.`;
+}
+
 /** Build absolute URL */
 export function absoluteUrl(path: string): string {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "https://swahili-tutors.com";
