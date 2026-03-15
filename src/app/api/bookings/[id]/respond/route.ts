@@ -1,4 +1,4 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { NextResponse, type NextRequest, after } from "next/server";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { sendBookingConfirmedToStudent, sendBookingDeclinedToStudent } from "@/lib/email";
 
@@ -73,21 +73,20 @@ export async function PATCH(
     return NextResponse.json({ error: "Failed to update booking" }, { status: 500 });
   }
 
-  // Send email notification to student (non-blocking)
-  (async () => {
+  // Send email notification to student after response
+  const teacherId = profile.teacher_id;
+  after(async () => {
     try {
-      // Get student email and name
       const { data: studentUser } = await admin.auth.admin.getUserById(booking.student_id);
       const { data: studentProfile } = await admin
         .from("profiles")
         .select("full_name")
         .eq("id", booking.student_id)
         .single();
-      // Get teacher name
       const { data: teacher } = await admin
         .from("teachers")
         .select("name")
-        .eq("id", profile.teacher_id)
+        .eq("id", teacherId)
         .single();
 
       const studentEmail = studentUser?.user?.email;
@@ -116,8 +115,10 @@ export async function PATCH(
           });
         }
       }
-    } catch {}
-  })();
+    } catch (err) {
+      console.error("Respond booking email error:", err);
+    }
+  });
 
   return NextResponse.json({ booking: updated });
 }

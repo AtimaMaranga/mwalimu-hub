@@ -1,4 +1,4 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { NextResponse, type NextRequest, after } from "next/server";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { sendBookingCreatedToTeacher, sendBookingCreatedToStudent } from "@/lib/email";
 
@@ -107,7 +107,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Failed to create booking" }, { status: 500 });
   }
 
-  // Send email notifications (non-blocking)
+  // Send email notifications after response (keeps function alive on Vercel)
   const emailData = {
     teacher_name: teacher.name,
     student_name: studentName,
@@ -118,14 +118,20 @@ export async function POST(request: NextRequest) {
     message: message || null,
   };
 
-  Promise.allSettled([
-    teacher.email
-      ? sendBookingCreatedToTeacher({ ...emailData, teacher_email: teacher.email })
-      : Promise.resolve(),
-    studentEmail
-      ? sendBookingCreatedToStudent(emailData)
-      : Promise.resolve(),
-  ]).catch(() => {});
+  after(async () => {
+    try {
+      await Promise.allSettled([
+        teacher.email
+          ? sendBookingCreatedToTeacher({ ...emailData, teacher_email: teacher.email })
+          : Promise.resolve(),
+        studentEmail
+          ? sendBookingCreatedToStudent(emailData)
+          : Promise.resolve(),
+      ]);
+    } catch (err) {
+      console.error("Booking email error:", err);
+    }
+  });
 
   return NextResponse.json({ booking }, { status: 201 });
 }

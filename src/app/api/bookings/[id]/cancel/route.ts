@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { sendBookingCancelledToTeacher } from "@/lib/email";
 
@@ -60,8 +60,8 @@ export async function PATCH(
     );
   }
 
-  // Send email notification to teacher (non-blocking)
-  (async () => {
+  // Send email notification to teacher after response
+  after(async () => {
     try {
       const { data: teacher } = await admin
         .from("teachers")
@@ -86,8 +86,10 @@ export async function PATCH(
           proposed_time: booking.proposed_time,
         });
       }
-    } catch {}
-  })();
+    } catch (err) {
+      console.error("Cancel booking email error:", err);
+    }
+  });
 
   return NextResponse.json({ booking: updated });
 }
