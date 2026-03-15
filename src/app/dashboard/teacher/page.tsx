@@ -7,6 +7,7 @@ import OnlineToggle from "@/components/dashboard/OnlineToggle";
 import Button from "@/components/ui/Button";
 import BookingStatusBadge from "@/components/booking/BookingStatusBadge";
 import BookingActions from "@/components/booking/BookingActions";
+import UpcomingSessions from "@/components/booking/UpcomingSessions";
 import {
   User, MessageCircle, ExternalLink,
   ArrowRight, Clock, CheckCircle, DollarSign,
@@ -206,6 +207,9 @@ export default async function TeacherDashboardPage({
             icon={TrendingUp}         iconBg="bg-violet-50"    iconColor="text-violet-600"
           />
         </div>
+
+        {/* ── Upcoming Sessions ── */}
+        <UpcomingSessions bookings={bookings ?? []} role="teacher" />
 
         {/* ── Booking Requests ── */}
         <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">

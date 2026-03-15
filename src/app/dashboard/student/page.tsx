@@ -6,6 +6,7 @@ import Button from "@/components/ui/Button";
 import ConversationInbox from "@/components/chat/ConversationInbox";
 import BookingStatusBadge from "@/components/booking/BookingStatusBadge";
 import StudentBookingActions from "@/components/booking/StudentBookingActions";
+import UpcomingSessions from "@/components/booking/UpcomingSessions";
 import {
   ArrowRight, Clock, ChevronRight, Users, TrendingUp,
   MessageCircle, Search, GraduationCap, BookOpen, Star,
@@ -163,6 +164,9 @@ export default async function StudentDashboardPage({
           <StatCard label="Teachers Available" value={publishedTeachers} sub="Ready to teach"               icon={Search}        iconBg="bg-cyan-50"    iconColor="text-cyan-600" />
           <StatCard label="Learning Progress"  value="0%"                sub="Lessons completed"           icon={TrendingUp}    iconBg="bg-amber-50"   iconColor="text-amber-600" />
         </div>
+
+        {/* ── Upcoming Sessions ── */}
+        <UpcomingSessions bookings={bookings ?? []} role="student" />
 
         {/* ── Wallet ── */}
         <div className="grid lg:grid-cols-4 gap-4">

@@ -304,6 +304,44 @@ export async function sendBookingCancelledToTeacher(data: {
   });
 }
 
+// ─── Lesson Reminders ─────────────────────────────────────────────────────
+
+export async function sendLessonReminder(data: {
+  recipient_name: string;
+  recipient_email: string;
+  other_person_name: string;
+  role: "student" | "teacher";
+  proposed_date: string;
+  proposed_time: string;
+  duration_minutes: number;
+  minutes_until: number;
+}) {
+  const recipientName = escapeHtml(data.recipient_name);
+  const otherName = escapeHtml(data.other_person_name);
+  const timeLabel = data.minutes_until <= 30 ? "30 minutes" : "1 hour";
+  const roleLabel = data.role === "student" ? "teacher" : "student";
+  const dashboardUrl = data.role === "student" ? "/dashboard/student" : "/dashboard/teacher";
+
+  return getResend().emails.send({
+    from: FROM,
+    to: data.recipient_email,
+    subject: `Lesson reminder: Your session starts in ${timeLabel} — Swahili Tutors`,
+    html: `
+      <h2>Habari ${recipientName}!</h2>
+      <p>Your Swahili lesson starts <strong>in ${timeLabel}</strong>.</p>
+      <table style="border-collapse:collapse;width:100%;margin:16px 0;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden">
+        <tr style="background:#f8fafc"><td style="padding:12px;font-weight:bold;width:140px">With</td><td style="padding:12px">${otherName} (${roleLabel})</td></tr>
+        <tr><td style="padding:12px;font-weight:bold">Date</td><td style="padding:12px">${escapeHtml(data.proposed_date)}</td></tr>
+        <tr style="background:#f8fafc"><td style="padding:12px;font-weight:bold">Time</td><td style="padding:12px">${escapeHtml(data.proposed_time)}</td></tr>
+        <tr><td style="padding:12px;font-weight:bold">Duration</td><td style="padding:12px">${data.duration_minutes} minutes</td></tr>
+      </table>
+      <p><a href="${SITE()}${dashboardUrl}" style="display:inline-block;padding:14px 28px;background:#6366f1;color:#fff;text-decoration:none;border-radius:10px;font-weight:bold;font-size:15px">Go to Dashboard</a></p>
+      <p style="color:#64748b;font-size:13px">When it's time, click "Join Classroom" from your dashboard to start the session.</p>
+      <p>Asante,<br/>The Swahili Tutors Team</p>
+    `,
+  });
+}
+
 // ─── Student Inquiry ──────────────────────────────────────────────────────
 
 export async function sendInquiryNotification(data: {
