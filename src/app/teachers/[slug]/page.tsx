@@ -20,6 +20,7 @@ import TeacherContactModal from "./TeacherContactModal";
 import ReviewForm from "./ReviewForm";
 import ReviewList from "./ReviewList";
 import JsonLd from "@/components/seo/JsonLd";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
 import ChatWidget from "@/components/chat/ChatWidget";
 import EnterClassroomButton from "@/components/classroom/EnterClassroomButton";
 import BookLessonButton from "@/components/booking/BookLessonButton";
@@ -85,16 +86,24 @@ export default async function TeacherProfilePage({
 
   const languages = teacher.languages_spoken || [];
 
+  const firstName = teacher.name.split(" ")[0];
+
   const teacherSchema = {
     "@context": "https://schema.org",
     "@type": "Person",
     name: teacher.name,
-    jobTitle: "Swahili Teacher",
+    jobTitle: "Swahili Language Tutor",
     description:
       teacher.tagline ||
       `${teacher.is_native_speaker ? "Native Swahili speaker" : "Qualified Swahili teacher"} offering 1-on-1 online lessons.`,
     url: `${BASE}/teachers/${teacher.slug}`,
     ...(teacher.profile_image_url && { image: teacher.profile_image_url }),
+    worksFor: {
+      "@type": "EducationalOrganization",
+      name: "Swahili Tutors",
+      url: BASE,
+    },
+    knowsLanguage: ["sw", "en"],
     knowsAbout: ["Swahili", "Kiswahili", "East African culture", ...(teacher.specializations ?? [])],
     ...(teacher.rating && teacher.total_students && {
       aggregateRating: {
@@ -105,29 +114,31 @@ export default async function TeacherProfilePage({
         worstRating: "1",
       },
     }),
-    ...(teacher.hourly_rate && {
-      offers: {
-        "@type": "Offer",
-        price: teacher.hourly_rate.toString(),
-        priceCurrency: "USD",
-        availability: "https://schema.org/InStock",
-        description: "1-on-1 online Swahili lesson (per hour)",
+    makesOffer: teacher.hourly_rate ? {
+      "@type": "Offer",
+      itemOffered: {
+        "@type": "Course",
+        name: `Private Swahili Lessons with ${firstName}`,
+        description: teacher.tagline || `1-on-1 online Swahili lessons`,
+        provider: { "@type": "Person", name: teacher.name },
+        inLanguage: "sw",
+        courseMode: "online",
       },
-    }),
+      price: teacher.hourly_rate.toString(),
+      priceCurrency: "USD",
+      availability: "https://schema.org/InStock",
+    } : undefined,
   };
 
   return (
     <PageWrapper>
       <JsonLd data={teacherSchema} />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Back */}
-        <Link
-          href="/teachers"
-          className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-indigo-700 transition-colors mb-6"
-        >
-          <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-          Back to all teachers
-        </Link>
+        {/* Breadcrumbs */}
+        <Breadcrumbs items={[
+          { label: "Swahili Tutors", href: "/teachers" },
+          { label: teacher.name },
+        ]} />
 
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Left: Main content */}
@@ -140,7 +151,7 @@ export default async function TeacherProfilePage({
                   {teacher.profile_image_url ? (
                     <Image
                       src={teacher.profile_image_url}
-                      alt={`${teacher.name} profile photo`}
+                      alt={`Swahili tutor ${teacher.name} — profile photo`}
                       width={128}
                       height={128}
                       className="rounded-2xl object-cover w-32 h-32"

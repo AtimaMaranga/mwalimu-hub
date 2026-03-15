@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Outfit, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import AuthHashHandler from "@/components/auth/AuthHashHandler";
@@ -20,15 +21,17 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://swahili-tutors.com";
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "";
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE),
   title: {
-    default: "Learn Swahili Online with Native Teachers | Swahili Tutors",
+    default: "Learn Swahili Online | Expert Native Tutors | Swahili Tutors",
     template: "%s | Swahili Tutors",
   },
   description:
-    "Connect with verified native Swahili teachers for personalised 1-on-1 online lessons. Learn Swahili for travel, business, family or culture — from $15/hour. Start today.",
+    "Connect with certified native Swahili tutors for personalized 1-on-1 online lessons. Learn conversational, business, or travel Swahili from expert teachers from Kenya and Tanzania. Book a trial lesson today.",
   keywords: [
     "learn Swahili online",
     "Swahili tutor",
@@ -41,7 +44,9 @@ export const metadata: Metadata = {
     "Swahili for beginners",
     "Swahili private tutor",
     "East Africa language",
-    "mwalimu",
+    "Swahili for travel",
+    "business Swahili",
+    "conversational Swahili",
   ],
   authors: [{ name: "Swahili Tutors" }],
   creator: "Swahili Tutors",
@@ -50,9 +55,9 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: BASE,
     siteName: "Swahili Tutors",
-    title: "Learn Swahili Online with Native Teachers | Swahili Tutors",
+    title: "Learn Swahili Online with Native Tutors | Swahili Tutors",
     description:
-      "Connect with verified native Swahili teachers for personalised 1-on-1 online lessons. Learn Swahili for travel, business, family or culture — from $15/hour.",
+      "Personalized 1-on-1 Swahili lessons with certified native speakers. Flexible scheduling, affordable rates.",
     images: [
       {
         url: "/og-image.png",
@@ -64,9 +69,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Learn Swahili Online with Native Teachers | Swahili Tutors",
+    site: "@swahilitutors",
+    title: "Learn Swahili Online with Native Tutors | Swahili Tutors",
     description:
-      "Connect with verified native Swahili teachers for personalised 1-on-1 online lessons — from $15/hour.",
+      "Personalized 1-on-1 Swahili lessons with certified native speakers. Flexible scheduling, affordable rates.",
     images: ["/og-image.png"],
   },
   alternates: {
@@ -83,6 +89,10 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  other: {
+    "theme-color": "#4f46e5",
+    "google-site-verification": process.env.NEXT_PUBLIC_GSC_VERIFICATION || "",
+  },
 };
 
 export default function RootLayout({
@@ -92,9 +102,31 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${outfit.variable} ${plusJakarta.variable}`}>
+      <head>
+        {/* Resource hints for Supabase */}
+        {SUPABASE_URL && (
+          <>
+            <link rel="dns-prefetch" href={SUPABASE_URL} />
+            <link rel="preconnect" href={SUPABASE_URL} />
+          </>
+        )}
+      </head>
       <body className="antialiased">
         <AuthHashHandler />
         {children}
+
+        {/* Google Analytics 4 */}
+        {GA_ID && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="gtag-init" strategy="afterInteractive">
+              {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${GA_ID}');`}
+            </Script>
+          </>
+        )}
       </body>
     </html>
   );

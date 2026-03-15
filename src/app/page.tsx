@@ -14,10 +14,17 @@ import { getFeaturedTeachers, getBlogPosts } from "@/lib/supabase/queries";
 const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://swahili-tutors.com";
 
 export const metadata: Metadata = {
-  title: "Learn Swahili Online with Native Teachers | Swahili Tutors",
+  title: "Learn Swahili Online | Expert Native Tutors | Swahili Tutors",
   description:
-    "Connect with verified native Swahili teachers for personalised 1-on-1 online lessons. Learn Swahili for travel, business, family or culture — from $15/hour. Start today.",
+    "Connect with certified native Swahili tutors for personalized 1-on-1 online lessons. Learn conversational, business, or travel Swahili from expert teachers from Kenya and Tanzania. Book a trial lesson today.",
   alternates: { canonical: BASE },
+  openGraph: {
+    title: "Learn Swahili Online with Native Tutors | Swahili Tutors",
+    description:
+      "Personalized 1-on-1 Swahili lessons with certified native speakers. Flexible scheduling, affordable rates.",
+    url: BASE,
+    type: "website",
+  },
 };
 
 const stats = [
@@ -55,17 +62,26 @@ export default async function HomePage() {
 
   const orgSchema = {
     "@context": "https://schema.org",
-    "@type": "Organization",
+    "@type": "EducationalOrganization",
     name: "Swahili Tutors",
     url: BASE,
     logo: `${BASE}/og-image.png`,
     description:
-      "Online marketplace connecting Swahili language learners with verified native Swahili teachers for personalised 1-on-1 online lessons.",
+      "The world's first platform dedicated exclusively to connecting learners with native Swahili language tutors for personalized online lessons.",
+    sameAs: [
+      "https://www.facebook.com/swahilitutors",
+      "https://www.linkedin.com/company/swahili-tutors",
+      "https://twitter.com/swahilitutors",
+      "https://www.youtube.com/@swahilitutors",
+    ],
     contactPoint: {
       "@type": "ContactPoint",
-      email: "hello@swahili-tutors.com",
-      contactType: "customer service",
+      email: "support@swahili-tutors.com",
+      contactType: "customer support",
+      availableLanguage: ["English", "Swahili"],
     },
+    areaServed: "Worldwide",
+    knowsLanguage: ["en", "sw"],
   };
 
   const websiteSchema = {

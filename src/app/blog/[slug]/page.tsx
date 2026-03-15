@@ -21,6 +21,8 @@ import {
 } from "@/lib/supabase/queries";
 import { formatDate } from "@/lib/utils";
 import JsonLd from "@/components/seo/JsonLd";
+import BlogCTA from "@/components/seo/BlogCTA";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://swahili-tutors.com";
 
@@ -118,29 +120,15 @@ export default async function BlogPostPage({
     ...(post.tags && post.tags.length > 0 && { keywords: post.tags.join(", ") }),
   };
 
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: BASE },
-      { "@type": "ListItem", position: 2, name: "Blog", item: `${BASE}/blog` },
-      { "@type": "ListItem", position: 3, name: post.title, item: `${BASE}/blog/${post.slug}` },
-    ],
-  };
-
   return (
     <PageWrapper>
       <JsonLd data={articleSchema} />
-      <JsonLd data={breadcrumbSchema} />
       <article className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
-        {/* Back */}
-        <Link
-          href="/blog"
-          className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-indigo-700 transition-colors mb-8"
-        >
-          <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-          Back to Blog
-        </Link>
+        {/* Breadcrumbs */}
+        <Breadcrumbs items={[
+          { label: "Blog", href: "/blog" },
+          { label: post.title },
+        ]} />
 
         {post.category && (
           <div className="mb-4">
@@ -175,7 +163,7 @@ export default async function BlogPostPage({
           <div className="relative aspect-video rounded-2xl overflow-hidden mb-10 shadow-md">
             <Image
               src={post.featured_image_url}
-              alt={post.title}
+              alt={`Featured image for ${post.title}`}
               fill
               className="object-cover"
               priority
@@ -263,6 +251,8 @@ export default async function BlogPostPage({
             language.
           </p>
         </div>
+        {/* CTA */}
+        <BlogCTA />
       </article>
 
       {/* Related Posts */}

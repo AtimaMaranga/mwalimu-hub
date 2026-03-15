@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import PageWrapper from "@/components/layout/PageWrapper";
 
+const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://swahili-tutors.com";
+
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
     "Swahili Tutors Privacy Policy — how we collect, use, and protect your personal information.",
+  alternates: { canonical: `${BASE}/privacy` },
 };
 
 export default function PrivacyPage() {

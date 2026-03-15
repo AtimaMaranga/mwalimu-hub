@@ -170,6 +170,31 @@ export async function getRelatedPosts(
   }
 }
 
+/** Fetch published teachers matching a specialization keyword */
+export async function getTeachersBySpecialization(keyword: string): Promise<Teacher[]> {
+  noStore();
+  if (!isSupabaseConfigured()) return [];
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("teachers")
+      .select("*")
+      .eq("is_published", true)
+      .contains("specializations", [keyword])
+      .order("rating", { ascending: false })
+      .limit(8);
+
+    if (error) {
+      console.error("getTeachersBySpecialization error:", error.message);
+      return [];
+    }
+    return data as Teacher[];
+  } catch (err) {
+    console.error("getTeachersBySpecialization error:", err instanceof Error ? err.message : err);
+    return [];
+  }
+}
+
 // ─── Reviews ───────────────────────────────────────────────────────────────
 
 /** Fetch approved reviews for a teacher */

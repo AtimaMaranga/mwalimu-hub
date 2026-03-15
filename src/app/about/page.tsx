@@ -3,13 +3,14 @@ import Link from "next/link";
 import { Target, Heart, Globe, Users } from "lucide-react";
 import PageWrapper from "@/components/layout/PageWrapper";
 import Button from "@/components/ui/Button";
+import JsonLd from "@/components/seo/JsonLd";
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://swahili-tutors.com";
 
 export const metadata: Metadata = {
-  title: "About Swahili Tutors — Our Mission to Grow Swahili Learning Worldwide",
+  title: "About Swahili Tutors | Our Mission to Teach Swahili Globally",
   description:
-    "Swahili Tutors connects Swahili learners with verified native teachers for authentic 1-on-1 online lessons. Learn about our story, mission, and why Swahili matters.",
+    "Swahili Tutors is the world's first platform dedicated exclusively to Swahili language instruction. Learn about our mission to connect learners with native Swahili speakers.",
   alternates: { canonical: `${BASE}/about` },
 };
 
@@ -37,8 +38,31 @@ const values = [
 ];
 
 export default function AboutPage() {
+  const aboutSchema = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    name: "About Swahili Tutors",
+    description:
+      "Swahili Tutors is the world's first platform dedicated exclusively to Swahili language instruction.",
+    mainEntity: {
+      "@type": "EducationalOrganization",
+      name: "Swahili Tutors",
+      url: BASE,
+      description:
+        "The world's first platform dedicated exclusively to connecting learners with native Swahili speakers for 1-on-1 online lessons.",
+      foundingDate: "2024",
+      areaServed: "Worldwide",
+      knowsLanguage: ["sw", "en"],
+      sameAs: [
+        "https://twitter.com/swahilitutors",
+        "https://www.facebook.com/swahilitutors",
+      ],
+    },
+  };
+
   return (
     <PageWrapper>
+      <JsonLd data={aboutSchema} />
       {/* Header */}
       <div className="bg-gradient-to-br from-indigo-900 to-violet-900 text-white py-20">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">

@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import PageWrapper from "@/components/layout/PageWrapper";
 
+const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://swahili-tutors.com";
+
 export const metadata: Metadata = {
   title: "Terms of Service",
   description:
     "Swahili Tutors Terms of Service — please read before using our platform.",
+  alternates: { canonical: `${BASE}/terms` },
 };
 
 export default function TermsPage() {

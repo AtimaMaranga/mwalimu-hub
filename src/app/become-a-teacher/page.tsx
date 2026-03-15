@@ -13,9 +13,9 @@ import {
 const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://swahili-tutors.com";
 
 export const metadata: Metadata = {
-  title: "Teach Swahili Online | Become a Swahili Tutor on Swahili Tutors",
+  title: "Become a Swahili Tutor | Teach Online & Earn",
   description:
-    "Turn your Swahili expertise into a rewarding online teaching career. Apply to become a verified Swahili tutor on Swahili Tutors and reach motivated students worldwide.",
+    "Join our platform as a Swahili tutor. Set your own rates, teach from anywhere, and connect with students worldwide. Apply now — approval within 5 business days.",
   alternates: { canonical: `${BASE}/become-a-teacher` },
 };
 

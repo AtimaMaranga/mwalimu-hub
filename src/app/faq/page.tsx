@@ -6,9 +6,9 @@ import { faqs } from "./faq-data";
 const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://swahili-tutors.com";
 
 export const metadata: Metadata = {
-  title: "Swahili Learning FAQ — Common Questions Answered",
+  title: "Frequently Asked Questions",
   description:
-    "Get answers to the most common questions about learning Swahili online, finding a tutor, lesson costs, payment, and how Swahili Tutors works.",
+    "Find answers to common questions about Swahili lessons, pricing, booking tutors, and how our platform works.",
   alternates: { canonical: `${BASE}/faq` },
 };
 

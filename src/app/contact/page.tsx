@@ -3,10 +3,13 @@ import PageWrapper from "@/components/layout/PageWrapper";
 import ContactForm from "./ContactForm";
 import { Mail, Clock, MessageSquare } from "lucide-react";
 
+const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://swahili-tutors.com";
+
 export const metadata: Metadata = {
-  title: "Contact Us",
+  title: "Contact Us | Swahili Tutors Support",
   description:
-    "Get in touch with Swahili Tutors — whether you want to learn Swahili, become a teacher, or have a general question.",
+    "Have questions about learning Swahili or joining our platform? Contact the Swahili Tutors team. We respond within 24 hours.",
+  alternates: { canonical: `${BASE}/contact` },
 };
 
 export default function ContactPage() {
@@ -15,7 +18,7 @@ export default function ContactPage() {
       {/* Header */}
       <div className="bg-gradient-to-br from-indigo-900 to-violet-900 text-white py-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-          <h1 className="text-3xl sm:text-5xl font-bold font-heading mb-4">Get in Touch</h1>
+          <h1 className="text-3xl sm:text-5xl font-bold font-heading mb-4">Contact Swahili Tutors</h1>
           <p className="text-indigo-100 text-lg">
             Have a question? We'd love to hear from you. Send us a message and we'll
             respond as soon as possible.

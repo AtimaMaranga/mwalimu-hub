@@ -16,9 +16,9 @@ import Button from "@/components/ui/Button";
 const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://swahili-tutors.com";
 
 export const metadata: Metadata = {
-  title: "How to Learn Swahili Online | How Swahili Tutors Works",
+  title: "How It Works | Find a Swahili Tutor in 3 Simple Steps",
   description:
-    "Discover how easy it is to find a native Swahili teacher and start learning online. Browse profiles, contact your teacher, and begin your first Swahili lesson in minutes.",
+    "Browse verified Swahili tutors, book a trial lesson, and start learning. Flexible scheduling, personalized lessons, native speakers from Kenya and Tanzania.",
   alternates: { canonical: `${BASE}/how-it-works` },
 };
 
@@ -135,7 +135,7 @@ export default function HowItWorksPage() {
       <div className="bg-gradient-to-br from-indigo-900 to-violet-900 text-white py-20">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
           <h1 className="text-3xl sm:text-5xl font-bold font-heading mb-4">
-            How It Works
+            How Swahili Tutors Works
           </h1>
           <p className="text-indigo-100 text-lg">
             Getting started on Swahili Tutors is simple. Here is everything you

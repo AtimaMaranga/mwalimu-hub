@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
 import PageWrapper from "@/components/layout/PageWrapper";
 import BlogCard from "@/components/sections/BlogCard";
+import JsonLd from "@/components/seo/JsonLd";
 import { getBlogPosts } from "@/lib/supabase/queries";
 import { BookOpen } from "lucide-react";
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://swahili-tutors.com";
 
 export const metadata: Metadata = {
-  title: "Swahili Learning Blog — Tips, Guides & Stories",
+  title: "Swahili Learning Blog | Tips, Grammar, Culture",
   description:
-    "Explore Swahili language learning tips, beginner guides, cultural insights, and advice from native teachers on the Swahili Tutors blog.",
+    "Free Swahili learning resources: grammar guides, vocabulary lists, cultural insights, and tips from native speakers. Start your Swahili journey today.",
   alternates: { canonical: `${BASE}/blog` },
 };
 
@@ -18,13 +19,40 @@ export default async function BlogPage() {
   const featured = posts[0];
   const rest = posts.slice(1);
 
+  const blogSchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Swahili Learning Resources & Blog",
+    description:
+      "Free Swahili learning resources: grammar guides, vocabulary lists, cultural insights, and tips from native speakers.",
+    url: `${BASE}/blog`,
+    publisher: {
+      "@type": "EducationalOrganization",
+      name: "Swahili Tutors",
+      url: BASE,
+    },
+    ...(posts.length > 0 && {
+      mainEntity: {
+        "@type": "ItemList",
+        numberOfItems: posts.length,
+        itemListElement: posts.slice(0, 10).map((post, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          url: `${BASE}/blog/${post.slug}`,
+          name: post.title,
+        })),
+      },
+    }),
+  };
+
   return (
     <PageWrapper>
+      <JsonLd data={blogSchema} />
       {/* Header */}
       <div className="bg-gradient-to-br from-indigo-900 to-violet-900 text-white py-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
           <h1 className="text-3xl sm:text-5xl font-bold font-heading mb-4">
-            Swahili Learning Blog
+            Swahili Learning Resources & Blog
           </h1>
           <p className="text-indigo-100 text-lg">
             Tips, guides, and stories to fuel your Swahili journey — written by native speakers.

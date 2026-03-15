@@ -34,7 +34,7 @@ function GridCard({ teacher }: { teacher: Teacher }) {
             {teacher.profile_image_url ? (
               <Image
                 src={teacher.profile_image_url}
-                alt={teacher.name}
+                alt={`Swahili tutor ${teacher.name}`}
                 width={64}
                 height={64}
                 className="rounded-lg object-cover w-16 h-16"
@@ -119,7 +119,7 @@ function ListCard({ teacher }: { teacher: Teacher }) {
             {teacher.profile_image_url ? (
               <Image
                 src={teacher.profile_image_url}
-                alt={teacher.name}
+                alt={`Swahili tutor ${teacher.name}`}
                 fill
                 className="object-cover"
                 sizes="(max-width: 640px) 100vw, 176px"
