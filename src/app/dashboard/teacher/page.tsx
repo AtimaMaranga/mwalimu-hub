@@ -5,9 +5,7 @@ import DashboardShell from "@/components/dashboard/DashboardShell";
 import ConversationInbox from "@/components/chat/ConversationInbox";
 import OnlineToggle from "@/components/dashboard/OnlineToggle";
 import Button from "@/components/ui/Button";
-import BookingStatusBadge from "@/components/booking/BookingStatusBadge";
-import BookingActions from "@/components/booking/BookingActions";
-import UpcomingSessions from "@/components/booking/UpcomingSessions";
+import ScheduledSessions from "@/components/booking/ScheduledSessions";
 import {
   User, MessageCircle, ExternalLink,
   ArrowRight, Clock, CheckCircle, DollarSign,
@@ -110,13 +108,10 @@ export default async function TeacherDashboardPage({
         .from("bookings")
         .select("*, profiles!bookings_student_id_fkey(full_name)")
         .eq("teacher_id", teacher.id)
-        .in("status", ["pending", "confirmed"])
         .order("proposed_date", { ascending: true })
         .order("proposed_time", { ascending: true })
-        .limit(20)
+        .limit(30)
     : { data: [] };
-
-  const pendingBookings = bookings?.filter((b: any) => b.status === "pending") ?? [];
 
   const name = profile?.full_name || user.email?.split("@")[0] || "Teacher";
   const initials = getInitials(name);
@@ -208,74 +203,8 @@ export default async function TeacherDashboardPage({
           />
         </div>
 
-        {/* ── Upcoming Sessions ── */}
-        <UpcomingSessions bookings={bookings ?? []} role="teacher" />
-
-        {/* ── Booking Requests ── */}
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-          <div className="flex items-center justify-between px-6 py-4 border-b border-slate-50">
-            <div className="flex items-center gap-3">
-              <div className="h-8 w-8 rounded-lg bg-violet-50 flex items-center justify-center">
-                <CalendarDays className="h-4 w-4 text-violet-600" />
-              </div>
-              <div>
-                <p className="text-sm font-bold text-slate-900">Booking Requests</p>
-                <p className="text-xs text-slate-400">{pendingBookings.length} pending</p>
-              </div>
-              {pendingBookings.length > 0 && (
-                <span className="bg-amber-50 text-amber-600 text-xs font-bold px-2.5 py-0.5 rounded-full border border-amber-100">
-                  {pendingBookings.length}
-                </span>
-              )}
-            </div>
-          </div>
-
-          {!bookings || bookings.length === 0 ? (
-            <div className="text-center py-12 px-6">
-              <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-50 mb-4">
-                <CalendarDays className="h-6 w-6 text-violet-400" />
-              </div>
-              <p className="text-slate-900 font-semibold mb-1">No booking requests</p>
-              <p className="text-slate-400 text-sm max-w-xs mx-auto">
-                When students schedule lessons with you, their requests will appear here.
-              </p>
-            </div>
-          ) : (
-            <div className="divide-y divide-slate-50">
-              {bookings.map((booking: any) => {
-                const studentName = booking.profiles?.full_name || "Student";
-                const dateStr = new Date(booking.proposed_date + "T00:00:00").toLocaleDateString("en-GB", {
-                  weekday: "short", day: "numeric", month: "short",
-                });
-                const timeStr = booking.proposed_time?.slice(0, 5);
-
-                return (
-                  <div key={booking.id} className="px-6 py-4 flex items-center gap-4 hover:bg-slate-50 transition-colors">
-                    <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-white text-xs font-bold shrink-0">
-                      {studentName[0].toUpperCase()}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-slate-900 truncate">{studentName}</p>
-                      <p className="text-xs text-slate-400 flex items-center gap-1 mt-0.5">
-                        <Clock className="h-3 w-3" />
-                        {dateStr} at {timeStr} · {booking.duration_minutes} min
-                      </p>
-                      {booking.message && (
-                        <p className="text-xs text-slate-500 mt-1 line-clamp-1">{booking.message}</p>
-                      )}
-                    </div>
-                    <BookingStatusBadge status={booking.status} />
-                    <BookingActions
-                      bookingId={booking.id}
-                      status={booking.status}
-                      proposedDate={booking.proposed_date}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
+        {/* ── Scheduled Sessions ── */}
+        <ScheduledSessions bookings={bookings ?? []} role="teacher" />
 
         {/* ── Middle row ── */}
         <div className="grid lg:grid-cols-3 gap-4">

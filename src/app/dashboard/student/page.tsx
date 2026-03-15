@@ -4,9 +4,7 @@ import { createClient, createAdminClient } from "@/lib/supabase/server";
 import DashboardShell from "@/components/dashboard/DashboardShell";
 import Button from "@/components/ui/Button";
 import ConversationInbox from "@/components/chat/ConversationInbox";
-import BookingStatusBadge from "@/components/booking/BookingStatusBadge";
-import StudentBookingActions from "@/components/booking/StudentBookingActions";
-import UpcomingSessions from "@/components/booking/UpcomingSessions";
+import ScheduledSessions from "@/components/booking/ScheduledSessions";
 import {
   ArrowRight, Clock, ChevronRight, Users, TrendingUp,
   MessageCircle, Search, GraduationCap, BookOpen, Star,
@@ -118,8 +116,6 @@ export default async function StudentDashboardPage({
     .order("proposed_time", { ascending: false })
     .limit(20);
 
-  const activeBookings = bookings?.filter((b: any) => ["pending", "confirmed"].includes(b.status)) ?? [];
-
   const { data: teacherCount } = await supabase
     .from("teachers")
     .select("id", { count: "exact", head: true })
@@ -165,8 +161,8 @@ export default async function StudentDashboardPage({
           <StatCard label="Learning Progress"  value="0%"                sub="Lessons completed"           icon={TrendingUp}    iconBg="bg-amber-50"   iconColor="text-amber-600" />
         </div>
 
-        {/* ── Upcoming Sessions ── */}
-        <UpcomingSessions bookings={bookings ?? []} role="student" />
+        {/* ── Scheduled Sessions ── */}
+        <ScheduledSessions bookings={bookings ?? []} role="student" />
 
         {/* ── Wallet ── */}
         <div className="grid lg:grid-cols-4 gap-4">
@@ -174,74 +170,6 @@ export default async function StudentDashboardPage({
           <div className="lg:col-span-3">
             {/* Recent lessons placeholder — will be populated as lessons are taken */}
           </div>
-        </div>
-
-        {/* ── My Bookings ── */}
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-          <div className="flex items-center justify-between px-6 py-4 border-b border-slate-50">
-            <div className="flex items-center gap-3">
-              <div className="h-8 w-8 rounded-lg bg-violet-50 flex items-center justify-center">
-                <CalendarDays className="h-4 w-4 text-violet-600" />
-              </div>
-              <div>
-                <p className="text-sm font-bold text-slate-900">My Bookings</p>
-                <p className="text-xs text-slate-400">{activeBookings.length} active</p>
-              </div>
-            </div>
-            <Link href="/teachers" className="text-xs text-indigo-600 hover:text-indigo-700 font-semibold flex items-center gap-1">
-              Book a lesson <ArrowRight className="h-3 w-3" />
-            </Link>
-          </div>
-
-          {!bookings || bookings.length === 0 ? (
-            <div className="text-center py-12 px-6">
-              <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-50 mb-4">
-                <CalendarDays className="h-6 w-6 text-violet-400" />
-              </div>
-              <p className="text-slate-900 font-semibold mb-1">No bookings yet</p>
-              <p className="text-slate-400 text-sm max-w-xs mx-auto mb-4">
-                Browse teachers to schedule your first lesson.
-              </p>
-              <Link href="/teachers">
-                <Button variant="primary" size="sm">
-                  Find a Teacher <ArrowRight className="h-4 w-4" />
-                </Button>
-              </Link>
-            </div>
-          ) : (
-            <div className="divide-y divide-slate-50">
-              {bookings.map((booking: any) => {
-                const teacher = booking.teachers as any;
-                const dateStr = new Date(booking.proposed_date + "T00:00:00").toLocaleDateString("en-GB", {
-                  weekday: "short", day: "numeric", month: "short",
-                });
-                const timeStr = booking.proposed_time?.slice(0, 5);
-
-                return (
-                  <div key={booking.id} className="px-6 py-4 flex items-center gap-4 hover:bg-slate-50 transition-colors">
-                    <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xs font-bold shrink-0 overflow-hidden">
-                      {teacher?.profile_image_url
-                        ? <img src={teacher.profile_image_url} alt={teacher.name} className="h-full w-full object-cover" />
-                        : getInitials(teacher?.name ?? "T")}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-slate-900 truncate">{teacher?.name ?? "Teacher"}</p>
-                      <p className="text-xs text-slate-400 flex items-center gap-1 mt-0.5">
-                        <Clock className="h-3 w-3" />
-                        {dateStr} at {timeStr} · {booking.duration_minutes} min
-                      </p>
-                    </div>
-                    <BookingStatusBadge status={booking.status} />
-                    <StudentBookingActions
-                      bookingId={booking.id}
-                      status={booking.status}
-                      proposedDate={booking.proposed_date}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-          )}
         </div>
 
         {/* ── Middle row ── */}
