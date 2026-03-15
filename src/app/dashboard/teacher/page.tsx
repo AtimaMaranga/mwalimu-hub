@@ -101,17 +101,42 @@ export default async function TeacherDashboardPage({
         .limit(20)
     : { data: [] };
 
-  // Fetch pending/confirmed bookings for this teacher
+  // Fetch bookings for this teacher
+  // Note: bookings.student_id -> auth.users (not profiles), so we can't use FK join.
+  // Fetch bookings first, then batch-resolve student names from profiles.
   const admin = await createAdminClient();
-  const { data: bookings } = teacher
-    ? await admin
-        .from("bookings")
-        .select("*, profiles!bookings_student_id_fkey(full_name)")
-        .eq("teacher_id", teacher.id)
-        .order("proposed_date", { ascending: true })
-        .order("proposed_time", { ascending: true })
-        .limit(30)
-    : { data: [] };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let bookings: any[] = [];
+
+  if (teacher) {
+    const { data: rawBookings } = await admin
+      .from("bookings")
+      .select("*")
+      .eq("teacher_id", teacher.id)
+      .order("proposed_date", { ascending: true })
+      .order("proposed_time", { ascending: true })
+      .limit(30);
+
+    if (rawBookings && rawBookings.length > 0) {
+      const studentIds = [...new Set(rawBookings.map((b: { student_id: string }) => b.student_id))];
+      const { data: studentProfiles } = await admin
+        .from("profiles")
+        .select("id, full_name")
+        .in("id", studentIds);
+
+      const profileMap: Record<string, { full_name: string | null }> = Object.fromEntries(
+        (studentProfiles ?? []).map((p: { id: string; full_name: string | null }) => [
+          p.id,
+          { full_name: p.full_name },
+        ])
+      );
+
+      bookings = rawBookings.map((b: { student_id: string; [key: string]: unknown }) => ({
+        ...b,
+        profiles: profileMap[b.student_id] ?? { full_name: null },
+      }));
+    }
+  }
 
   const name = profile?.full_name || user.email?.split("@")[0] || "Teacher";
   const initials = getInitials(name);

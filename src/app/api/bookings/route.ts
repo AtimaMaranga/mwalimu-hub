@@ -191,29 +191,62 @@ export async function GET(request: NextRequest) {
   let bookings;
 
   if (role === "teacher" && profile?.teacher_id) {
+    // Teacher view: fetch bookings then resolve student names separately
+    // (bookings.student_id -> auth.users, not profiles, so FK join doesn't work)
     let query = admin
       .from("bookings")
-      .select("*, profiles!bookings_student_id_fkey(full_name)")
+      .select("*")
       .eq("teacher_id", profile.teacher_id)
       .order("proposed_date", { ascending: true })
       .order("proposed_time", { ascending: true });
 
     if (status) query = query.eq("status", status);
 
-    const { data } = await query;
-    bookings = data;
+    const { data: rawBookings, error: bookingsError } = await query;
+
+    if (bookingsError) {
+      console.error("Error fetching teacher bookings:", bookingsError);
+    }
+
+    // Batch-fetch student names from profiles
+    const studentIds = [...new Set((rawBookings ?? []).map((b: { student_id: string }) => b.student_id))];
+    let profileMap: Record<string, { full_name: string | null }> = {};
+
+    if (studentIds.length > 0) {
+      const { data: studentProfiles } = await admin
+        .from("profiles")
+        .select("id, full_name")
+        .in("id", studentIds);
+
+      profileMap = Object.fromEntries(
+        (studentProfiles ?? []).map((p: { id: string; full_name: string | null }) => [
+          p.id,
+          { full_name: p.full_name },
+        ])
+      );
+    }
+
+    bookings = (rawBookings ?? []).map((b: { student_id: string; [key: string]: unknown }) => ({
+      ...b,
+      profiles: profileMap[b.student_id] ?? { full_name: null },
+    }));
   } else {
-    // Default: student view
+    // Student view: teachers FK join works fine (bookings.teacher_id -> teachers.id)
     let query = admin
       .from("bookings")
-      .select("*, teachers!bookings_teacher_id_fkey(name, slug, profile_image_url)")
+      .select("*, teachers(name, slug, profile_image_url)")
       .eq("student_id", user.id)
       .order("proposed_date", { ascending: false })
       .order("proposed_time", { ascending: false });
 
     if (status) query = query.eq("status", status);
 
-    const { data } = await query;
+    const { data, error: bookingsError } = await query;
+
+    if (bookingsError) {
+      console.error("Error fetching student bookings:", bookingsError);
+    }
+
     bookings = data;
   }
 

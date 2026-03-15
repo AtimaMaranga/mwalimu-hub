@@ -110,7 +110,7 @@ export default async function StudentDashboardPage({
   const admin = await createAdminClient();
   const { data: bookings } = await admin
     .from("bookings")
-    .select("*, teachers!bookings_teacher_id_fkey(name, slug, profile_image_url)")
+    .select("*, teachers(name, slug, profile_image_url)")
     .eq("student_id", user.id)
     .order("proposed_date", { ascending: false })
     .order("proposed_time", { ascending: false })
