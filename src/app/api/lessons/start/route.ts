@@ -47,7 +47,17 @@ export async function POST(request: NextRequest) {
   const ratePerMinute = teacher.rate_per_minute
     ?? (teacher.hourly_rate ? Number((teacher.hourly_rate / 60).toFixed(4)) : 0.20);
 
-  // Check wallet balance
+  // Check if this is the student's first session with this teacher
+  const { count: previousLessonCount } = await admin
+    .from("lessons")
+    .select("id", { count: "exact", head: true })
+    .eq("student_id", user.id)
+    .eq("teacher_id", teacher.id)
+    .eq("status", "completed");
+
+  const isFirstSession = (previousLessonCount ?? 0) === 0;
+
+  // Check wallet balance (skip for first sessions — they get 10 free minutes)
   let { data: wallet } = await admin
     .from("wallets")
     .select("*")
@@ -63,9 +73,9 @@ export async function POST(request: NextRequest) {
     wallet = newWallet;
   }
 
-  if (!wallet || Number(wallet.balance) < MIN_BALANCE) {
+  if (!isFirstSession && (!wallet || Number(wallet.balance) < MIN_BALANCE)) {
     return NextResponse.json(
-      { error: `Insufficient balance. Minimum $${MIN_BALANCE.toFixed(2)} required.` },
+      { error: `Insufficient balance. Please top up your wallet.` },
       { status: 402 }
     );
   }
