@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { createDailyRoom } from "@/lib/daily";
 
-const MIN_BALANCE = 0.50;
+const MIN_BALANCE = 0; // First minute is free (grace period)
 
 export async function POST(
   _request: Request,
@@ -104,8 +104,11 @@ export async function POST(
   }
 
   if (!wallet || Number(wallet.balance) < MIN_BALANCE) {
+    const msg = isTeacher
+      ? "The student does not have sufficient balance to start this lesson."
+      : `Insufficient balance. Minimum $${MIN_BALANCE.toFixed(2)} required. Please top up your wallet.`;
     return NextResponse.json(
-      { error: `Insufficient balance. Minimum $${MIN_BALANCE.toFixed(2)} required.` },
+      { error: msg },
       { status: 402 }
     );
   }

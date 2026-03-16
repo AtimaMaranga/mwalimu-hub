@@ -64,6 +64,24 @@ export async function PATCH(
   const chargeAmount = Number(lesson.rate_per_minute);
   const currentBalance = Number(wallet.balance);
 
+  // Grace period: first minute is free so student and teacher can see each other
+  if (lesson.duration_seconds === 0) {
+    const newDuration = 60;
+    await admin
+      .from("lessons")
+      .update({ duration_seconds: newDuration })
+      .eq("id", id);
+
+    return NextResponse.json({
+      ended: false,
+      balance: currentBalance,
+      duration_seconds: newDuration,
+      total_charged: Number(lesson.total_charged),
+      charge: 0,
+      grace: true,
+    });
+  }
+
   // If balance is zero or negative, auto-end the lesson
   if (currentBalance <= 0) {
     await admin

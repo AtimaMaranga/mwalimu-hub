@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { createDailyRoom } from "@/lib/daily";
 
-const MIN_BALANCE = 0.50;
+const MIN_BALANCE = 0; // First minute is free (grace period)
 
 export async function POST(request: NextRequest) {
   const supabase = await createClient();
