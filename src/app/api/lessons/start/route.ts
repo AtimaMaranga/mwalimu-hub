@@ -44,8 +44,9 @@ export async function POST(request: NextRequest) {
   }
 
   // Determine per-minute rate — fall back to hourly_rate / 60
-  const ratePerMinute = teacher.rate_per_minute
-    ?? (teacher.hourly_rate ? Number((teacher.hourly_rate / 60).toFixed(4)) : 0.20);
+  const ratePerMinute = (teacher.rate_per_minute && teacher.rate_per_minute > 0)
+    ? Number(teacher.rate_per_minute)
+    : (teacher.hourly_rate ? Number((teacher.hourly_rate / 60).toFixed(4)) : 0.20);
 
   // Check if this is the student's first session with this teacher
   const { count: previousLessonCount } = await admin

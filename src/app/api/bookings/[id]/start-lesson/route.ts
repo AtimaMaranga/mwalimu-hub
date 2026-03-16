@@ -85,8 +85,9 @@ export async function POST(
     return NextResponse.json({ error: "Teacher not available" }, { status: 404 });
   }
 
-  const ratePerMinute = teacher.rate_per_minute
-    ?? (teacher.hourly_rate ? Number((teacher.hourly_rate / 60).toFixed(4)) : 0.20);
+  const ratePerMinute = (teacher.rate_per_minute && teacher.rate_per_minute > 0)
+    ? Number(teacher.rate_per_minute)
+    : (teacher.hourly_rate ? Number((teacher.hourly_rate / 60).toFixed(4)) : 0.20);
 
   // Check if this is the student's first session with this teacher
   const { count: previousLessonCount } = await admin
@@ -154,7 +155,11 @@ export async function POST(
     .single();
 
   if (lessonError || !lesson) {
-    return NextResponse.json({ error: "Failed to create lesson" }, { status: 500 });
+    console.error("Failed to create lesson:", lessonError);
+    return NextResponse.json(
+      { error: "Failed to create lesson", details: lessonError?.message },
+      { status: 500 }
+    );
   }
 
   // Create Daily.co video room
