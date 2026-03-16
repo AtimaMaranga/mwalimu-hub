@@ -18,6 +18,7 @@ interface SessionBooking {
   status: string;
   message?: string;
   teacher_note?: string;
+  lesson_id?: string;
   created_at: string;
   teachers?: { name: string; slug: string; profile_image_url?: string };
   profiles?: { full_name?: string };
@@ -119,6 +120,12 @@ function SessionCard({
   const sc = statusConfig[booking.status] ?? statusConfig.cancelled;
 
   const handleJoin = async () => {
+    // If lesson already exists, go directly to classroom
+    if (booking.lesson_id) {
+      router.push(`/classroom/${booking.lesson_id}`);
+      return;
+    }
+
     setLoading("join");
     setError("");
     try {

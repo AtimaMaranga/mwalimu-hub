@@ -138,6 +138,30 @@ export default async function TeacherDashboardPage({
     }
   }
 
+  // Check for active lesson
+  let activeLesson: { id: string; student_id: string } | null = null;
+  if (teacher) {
+    const { data: activeLessonData } = await admin
+      .from("lessons")
+      .select("id, student_id")
+      .eq("teacher_id", teacher.id)
+      .eq("status", "active")
+      .limit(1)
+      .maybeSingle();
+    activeLesson = activeLessonData;
+  }
+
+  // Resolve active lesson student name
+  let activeLessonStudentName = "Student";
+  if (activeLesson) {
+    const { data: sProfile } = await admin
+      .from("profiles")
+      .select("full_name")
+      .eq("id", activeLesson.student_id)
+      .single();
+    activeLessonStudentName = sProfile?.full_name ?? "Student";
+  }
+
   const name = profile?.full_name || user.email?.split("@")[0] || "Teacher";
   const initials = getInitials(name);
   const totalInquiries = inquiries?.length ?? 0;
@@ -196,6 +220,28 @@ export default async function TeacherDashboardPage({
               <Link href="/dashboard/teacher/profile" className="shrink-0">
                 <button className="inline-flex items-center gap-2 bg-white text-indigo-700 font-semibold text-sm px-4 py-2 rounded-xl hover:bg-indigo-50 transition-colors shadow-sm">
                   Set up profile <ArrowRight className="h-4 w-4" />
+                </button>
+              </Link>
+            </div>
+          </div>
+        )}
+
+        {/* ── Active lesson banner ── */}
+        {activeLesson && (
+          <div className="relative bg-gradient-to-r from-emerald-600 to-teal-600 rounded-2xl p-5 overflow-hidden shadow-lg shadow-emerald-200">
+            <div className="flex items-center justify-between gap-4 flex-wrap">
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-xl bg-white/20 flex items-center justify-center">
+                  <CalendarDays className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <p className="text-emerald-100 text-xs font-semibold uppercase tracking-widest">Live Now</p>
+                  <p className="text-white font-bold">Active lesson with {activeLessonStudentName}</p>
+                </div>
+              </div>
+              <Link href={`/classroom/${activeLesson.id}`}>
+                <button className="inline-flex items-center gap-2 bg-white text-emerald-700 font-semibold text-sm px-5 py-2.5 rounded-xl hover:bg-emerald-50 transition-colors shadow-sm">
+                  Join Classroom <ArrowRight className="h-4 w-4" />
                 </button>
               </Link>
             </div>

@@ -61,6 +61,8 @@ export interface Lesson {
   duration_seconds: number;
   rate_per_minute: number;
   total_charged: number;
+  daily_room_url?: string;
+  daily_room_name?: string;
   created_at: string;
 }
 

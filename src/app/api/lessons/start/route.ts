@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { createDailyRoom } from "@/lib/daily";
 
 const MIN_BALANCE = 0.50;
 
@@ -99,6 +100,19 @@ export async function POST(request: NextRequest) {
 
   if (error || !lesson) {
     return NextResponse.json({ error: "Failed to create lesson" }, { status: 500 });
+  }
+
+  // Create Daily.co video room
+  try {
+    const room = await createDailyRoom(lesson.id);
+    await admin
+      .from("lessons")
+      .update({ daily_room_url: room.url, daily_room_name: room.name })
+      .eq("id", lesson.id);
+    lesson.daily_room_url = room.url;
+    lesson.daily_room_name = room.name;
+  } catch (err) {
+    console.error("Daily room creation failed (lesson still created):", err);
   }
 
   return NextResponse.json({ lesson });

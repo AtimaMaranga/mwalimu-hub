@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect, useCallback, lazy, Suspense } from "react";
+import { useState, useCallback, lazy, Suspense } from "react";
 import { useRouter } from "next/navigation";
 import type { Lesson } from "@/types";
+import { useDaily } from "@/hooks/useDaily";
 import LessonTimer from "@/components/classroom/LessonTimer";
 import WalletHeartbeat from "@/components/classroom/WalletHeartbeat";
 import ControlBar from "@/components/classroom/ControlBar";
@@ -13,86 +14,47 @@ const NounClassSidebar = lazy(() => import("@/components/classroom/NounClassSide
 
 interface ClassroomClientProps {
   lesson: Lesson;
-  teacherName: string;
+  partnerName: string;
   walletBalance: number;
+  role: "student" | "teacher";
 }
 
 export default function ClassroomClient({
   lesson,
-  teacherName,
+  partnerName,
   walletBalance,
+  role,
 }: ClassroomClientProps) {
   const router = useRouter();
-  const [isMicOn, setIsMicOn] = useState(true);
-  const [isCameraOn, setIsCameraOn] = useState(true);
   const [isWhiteboardOpen, setIsWhiteboardOpen] = useState(false);
-  const [localStream, setLocalStream] = useState<MediaStream | null>(null);
   const [lessonEnded, setLessonEnded] = useState(false);
 
-  // Request media on mount
-  useEffect(() => {
-    let stream: MediaStream | null = null;
-
-    const initMedia = async () => {
-      try {
-        stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
-          audio: true,
-        });
-        setLocalStream(stream);
-      } catch {
-        // User denied camera/mic — continue without
-      }
-    };
-
-    initMedia();
-
-    return () => {
-      if (stream) {
-        stream.getTracks().forEach((t) => t.stop());
-      }
-    };
-  }, []);
-
-  const toggleMic = useCallback(() => {
-    if (localStream) {
-      localStream.getAudioTracks().forEach((t) => {
-        t.enabled = !t.enabled;
-      });
-    }
-    setIsMicOn((v) => !v);
-  }, [localStream]);
-
-  const toggleCamera = useCallback(() => {
-    if (localStream) {
-      localStream.getVideoTracks().forEach((t) => {
-        t.enabled = !t.enabled;
-      });
-    }
-    setIsCameraOn((v) => !v);
-  }, [localStream]);
+  const daily = useDaily({ lessonId: lesson.id });
 
   const endCall = useCallback(async () => {
+    try {
+      await daily.leave();
+    } catch {
+      // ignore
+    }
+
     try {
       await fetch(`/api/lessons/${lesson.id}/end`, { method: "PATCH" });
     } catch {
       // ignore
     }
 
-    // Stop media tracks
-    if (localStream) {
-      localStream.getTracks().forEach((t) => t.stop());
-    }
-
     setLessonEnded(true);
-  }, [lesson.id, localStream]);
+  }, [lesson.id, daily]);
 
-  const onLessonEnded = useCallback(() => {
-    if (localStream) {
-      localStream.getTracks().forEach((t) => t.stop());
+  const onLessonEnded = useCallback(async () => {
+    try {
+      await daily.leave();
+    } catch {
+      // ignore
     }
     setLessonEnded(true);
-  }, [localStream]);
+  }, [daily]);
 
   if (lessonEnded) {
     return (
@@ -105,7 +67,7 @@ export default function ClassroomClient({
           </div>
           <h2 className="text-xl font-bold text-slate-900 mb-2">Lesson Ended</h2>
           <p className="text-slate-500 text-sm mb-6">
-            Your lesson with {teacherName} has ended. Thank you for learning Swahili!
+            Your lesson with {partnerName} has ended. Thank you for learning Swahili!
           </p>
           <button
             onClick={() => router.push("/dashboard")}
@@ -120,6 +82,13 @@ export default function ClassroomClient({
 
   return (
     <div className="h-screen flex flex-col bg-slate-900">
+      {/* Error banner */}
+      {daily.error && (
+        <div className="bg-red-600 text-white text-sm text-center px-4 py-2">
+          {daily.error}
+        </div>
+      )}
+
       {/* Main area */}
       <div className="flex-1 flex overflow-hidden">
         {/* Left: Video + Whiteboard */}
@@ -128,9 +97,11 @@ export default function ClassroomClient({
           <div className={`${isWhiteboardOpen ? "h-1/2" : "flex-1"} flex p-2`}>
             <Suspense fallback={<div className="flex-1 bg-slate-800 rounded-xl animate-pulse" />}>
               <VideoPanel
-                lessonId={lesson.id}
-                localStream={localStream}
-                isCameraOn={isCameraOn}
+                localParticipant={daily.localParticipant}
+                remoteParticipant={daily.remoteParticipant}
+                isCameraOn={daily.isCameraOn}
+                isJoining={daily.isJoining}
+                partnerName={partnerName}
               />
             </Suspense>
           </div>
@@ -159,28 +130,30 @@ export default function ClassroomClient({
           {/* Timer & Wallet info */}
           <div className="flex items-center gap-4">
             <LessonTimer startedAt={lesson.started_at} />
-            <WalletHeartbeat
-              lessonId={lesson.id}
-              initialBalance={walletBalance}
-              ratePerMinute={lesson.rate_per_minute}
-              onLessonEnded={onLessonEnded}
-            />
+            {role === "student" && (
+              <WalletHeartbeat
+                lessonId={lesson.id}
+                initialBalance={walletBalance}
+                ratePerMinute={lesson.rate_per_minute}
+                onLessonEnded={onLessonEnded}
+              />
+            )}
           </div>
 
           {/* Controls */}
           <ControlBar
-            isMicOn={isMicOn}
-            isCameraOn={isCameraOn}
+            isMicOn={daily.isMicOn}
+            isCameraOn={daily.isCameraOn}
             isWhiteboardOpen={isWhiteboardOpen}
-            onToggleMic={toggleMic}
-            onToggleCamera={toggleCamera}
+            onToggleMic={daily.toggleMic}
+            onToggleCamera={daily.toggleCamera}
             onToggleWhiteboard={() => setIsWhiteboardOpen((v) => !v)}
             onEndCall={endCall}
           />
 
-          {/* Teacher info */}
+          {/* Partner info */}
           <div className="text-right">
-            <p className="text-white text-sm font-semibold">{teacherName}</p>
+            <p className="text-white text-sm font-semibold">{partnerName}</p>
             <p className="text-slate-400 text-xs">Swahili Lesson</p>
           </div>
         </div>

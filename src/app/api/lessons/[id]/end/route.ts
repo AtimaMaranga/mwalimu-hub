@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { deleteDailyRoom } from "@/lib/daily";
 
 export async function PATCH(
   request: NextRequest,
@@ -62,6 +63,11 @@ export async function PATCH(
 
   if (error) {
     return NextResponse.json({ error: "Failed to end lesson" }, { status: 500 });
+  }
+
+  // Best-effort cleanup of Daily.co room
+  if (lesson.daily_room_name) {
+    deleteDailyRoom(lesson.daily_room_name).catch(() => {});
   }
 
   return NextResponse.json({
