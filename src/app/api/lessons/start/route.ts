@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { createDailyRoom } from "@/lib/daily";
+import { createNotification, getTeacherUserId } from "@/lib/notifications";
 
 const MIN_BALANCE = 0; // First minute is free (grace period)
 
@@ -113,6 +114,23 @@ export async function POST(request: NextRequest) {
     lesson.daily_room_name = room.name;
   } catch (err) {
     console.error("Daily room creation failed (lesson still created):", err);
+  }
+
+  // Notify the teacher that the student started a lesson
+  try {
+    const teacherUserId = await getTeacherUserId(teacher.id);
+    if (teacherUserId) {
+      await createNotification({
+        userId: teacherUserId,
+        type: "lesson_started",
+        title: "Your student is ready!",
+        body: "A lesson has started — join the classroom now.",
+        link: `/classroom/${lesson.id}`,
+        metadata: { lesson_id: lesson.id },
+      });
+    }
+  } catch (err) {
+    console.error("Failed to send lesson_started notification:", err);
   }
 
   return NextResponse.json({ lesson });

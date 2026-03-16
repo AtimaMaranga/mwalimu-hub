@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import DeleteAccountButton from "./DeleteAccountButton";
 import NotificationDropdown from "./NotificationDropdown";
+import IncomingCallOverlay from "./IncomingCallOverlay";
 import { usePresence } from "@/hooks/usePresence";
 
 const NAV_ITEMS = {
@@ -135,6 +136,9 @@ export default function DashboardShell({
 
   return (
     <div className="flex h-screen bg-slate-50 overflow-hidden">
+
+      {/* Incoming call overlay */}
+      <IncomingCallOverlay />
 
       {/* ── Desktop sidebar ── */}
       <aside className="hidden md:flex w-60 bg-white flex-col border-r border-slate-100 shadow-sm shrink-0">

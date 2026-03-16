@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import {
   Bell, X, Check, CheckCheck, CalendarPlus, CalendarCheck,
-  CalendarX, MessageCircle, Clock,
+  CalendarX, MessageCircle, Clock, Video,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -27,6 +27,7 @@ const typeIcons: Record<string, { icon: typeof Bell; bg: string; color: string }
   booking_cancelled: { icon: CalendarX,     bg: "bg-amber-50",   color: "text-amber-600" },
   new_message:       { icon: MessageCircle, bg: "bg-blue-50",    color: "text-blue-600" },
   lesson_reminder:   { icon: Clock,         bg: "bg-violet-50",  color: "text-violet-600" },
+  lesson_started:    { icon: Video,         bg: "bg-emerald-50", color: "text-emerald-600" },
 };
 
 function timeAgo(dateStr: string): string {

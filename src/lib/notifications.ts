@@ -6,7 +6,8 @@ type NotificationType =
   | "booking_declined"
   | "booking_cancelled"
   | "new_message"
-  | "lesson_reminder";
+  | "lesson_reminder"
+  | "lesson_started";
 
 interface CreateNotificationParams {
   userId: string;
