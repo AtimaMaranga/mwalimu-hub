@@ -44,10 +44,18 @@ export async function POST(request: NextRequest) {
 
   // Date must be today or in the future
   const proposedDateObj = new Date(proposed_date + "T00:00:00");
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  if (isNaN(proposedDateObj.getTime()) || proposedDateObj < today) {
+  const now = new Date();
+  const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  if (isNaN(proposedDateObj.getTime()) || proposedDateObj < todayMidnight) {
     return NextResponse.json({ error: "Date must be today or in the future" }, { status: 400 });
+  }
+
+  // If booking for today, the time must not be in the past
+  if (proposedDateObj.getTime() === todayMidnight.getTime() && proposed_time) {
+    const [h, m] = proposed_time.split(":").map(Number);
+    if (h < now.getHours() || (h === now.getHours() && (m ?? 0) < now.getMinutes())) {
+      return NextResponse.json({ error: "Cannot book a time in the past" }, { status: 400 });
+    }
   }
 
   const admin = await createAdminClient();

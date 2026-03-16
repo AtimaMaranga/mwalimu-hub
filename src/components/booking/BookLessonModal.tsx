@@ -18,9 +18,8 @@ export default function BookLessonModal({
   onClose,
   onSuccess,
 }: BookLessonModalProps) {
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const minDate = tomorrow.toISOString().split("T")[0];
+  const today = new Date();
+  const minDate = today.toISOString().split("T")[0];
 
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
@@ -35,6 +34,17 @@ export default function BookLessonModal({
     if (!date || !time) {
       setError("Please select a date and time");
       return;
+    }
+
+    // If booking for today, ensure the time is not in the past
+    const todayStr = new Date().toISOString().split("T")[0];
+    if (date === todayStr) {
+      const now = new Date();
+      const [h, m] = time.split(":").map(Number);
+      if (h < now.getHours() || (h === now.getHours() && m < now.getMinutes())) {
+        setError("Cannot book a time in the past. Please select a later time.");
+        return;
+      }
     }
 
     setLoading(true);
