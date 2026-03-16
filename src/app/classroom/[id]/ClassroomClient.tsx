@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useCallback, lazy, Suspense } from "react";
+import { useState, useEffect, useCallback, lazy, Suspense } from "react";
 import { useRouter } from "next/navigation";
+import { Gift } from "lucide-react";
 import type { Lesson } from "@/types";
 import { useDaily } from "@/hooks/useDaily";
 import LessonTimer from "@/components/classroom/LessonTimer";
@@ -12,11 +13,20 @@ const VideoPanel = lazy(() => import("@/components/classroom/VideoPanel"));
 const Whiteboard = lazy(() => import("@/components/classroom/Whiteboard"));
 const NounClassSidebar = lazy(() => import("@/components/classroom/NounClassSidebar"));
 
+const FREE_TRIAL_SECONDS = 600;
+
 interface ClassroomClientProps {
   lesson: Lesson;
   partnerName: string;
   walletBalance: number;
   role: "student" | "teacher";
+  isFirstSession: boolean;
+}
+
+function formatCountdown(seconds: number): string {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
 export default function ClassroomClient({
@@ -24,10 +34,27 @@ export default function ClassroomClient({
   partnerName,
   walletBalance,
   role,
+  isFirstSession,
 }: ClassroomClientProps) {
   const router = useRouter();
   const [isWhiteboardOpen, setIsWhiteboardOpen] = useState(false);
   const [lessonEnded, setLessonEnded] = useState(false);
+
+  // Teacher-side free trial countdown
+  const [teacherTrialLeft, setTeacherTrialLeft] = useState(() => {
+    if (!isFirstSession || role !== "teacher") return 0;
+    const elapsed = Math.floor((Date.now() - new Date(lesson.started_at).getTime()) / 1000);
+    return Math.max(0, FREE_TRIAL_SECONDS - elapsed);
+  });
+
+  useEffect(() => {
+    if (role !== "teacher" || !isFirstSession || teacherTrialLeft <= 0) return;
+    const interval = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - new Date(lesson.started_at).getTime()) / 1000);
+      setTeacherTrialLeft(Math.max(0, FREE_TRIAL_SECONDS - elapsed));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [role, isFirstSession, lesson.started_at, teacherTrialLeft]);
 
   const daily = useDaily({ lessonId: lesson.id });
 
@@ -89,6 +116,19 @@ export default function ClassroomClient({
         </div>
       )}
 
+      {/* Teacher trial banner */}
+      {role === "teacher" && isFirstSession && teacherTrialLeft > 0 && (
+        <div className="bg-emerald-600 text-white text-sm text-center px-4 py-2 flex items-center justify-center gap-2">
+          <Gift className="h-4 w-4" />
+          Trial session — student&apos;s first 10 min are free ({formatCountdown(teacherTrialLeft)} remaining)
+        </div>
+      )}
+      {role === "teacher" && isFirstSession && teacherTrialLeft === 0 && (
+        <div className="bg-slate-700 text-slate-300 text-sm text-center px-4 py-1.5">
+          Trial period ended — normal billing active
+        </div>
+      )}
+
       {/* Main area */}
       <div className="flex-1 flex overflow-hidden">
         {/* Left: Video + Whiteboard */}
@@ -128,13 +168,15 @@ export default function ClassroomClient({
       <div className="bg-slate-800 border-t border-slate-700 px-4 py-3">
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
           {/* Timer & Wallet info */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 flex-wrap">
             <LessonTimer startedAt={lesson.started_at} />
             {role === "student" && daily.isJoined && (
               <WalletHeartbeat
                 lessonId={lesson.id}
                 initialBalance={walletBalance}
                 ratePerMinute={lesson.rate_per_minute}
+                isFirstSession={isFirstSession}
+                lessonStartedAt={lesson.started_at}
                 onLessonEnded={onLessonEnded}
               />
             )}

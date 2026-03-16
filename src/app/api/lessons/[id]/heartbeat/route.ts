@@ -1,6 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 
+const FREE_TRIAL_SECONDS = 600; // 10 minutes free for first session
+
 /**
  * Heartbeat endpoint — called every 60s from the classroom.
  * Uses admin client to perform an atomic read-deduct-update cycle.
@@ -50,7 +52,49 @@ export async function PATCH(
     });
   }
 
-  // Fetch wallet — use admin to bypass RLS for atomic operations
+  // Check if this is a first session (no previous completed lessons between this pair)
+  const { count: previousLessonCount } = await admin
+    .from("lessons")
+    .select("id", { count: "exact", head: true })
+    .eq("student_id", lesson.student_id)
+    .eq("teacher_id", lesson.teacher_id)
+    .eq("status", "completed")
+    .neq("id", id);
+
+  const isFirstSession = (previousLessonCount ?? 0) === 0;
+  const newDuration = lesson.duration_seconds + 60;
+
+  // Free period: first session gets 10 minutes free, others get 1 minute grace
+  const freeSeconds = isFirstSession ? FREE_TRIAL_SECONDS : 60;
+  const inFreePeriod = lesson.duration_seconds < freeSeconds;
+
+  if (inFreePeriod) {
+    await admin
+      .from("lessons")
+      .update({ duration_seconds: newDuration })
+      .eq("id", id);
+
+    // Fetch current balance to return it
+    const { data: wallet } = await admin
+      .from("wallets")
+      .select("balance")
+      .eq("user_id", user.id)
+      .single();
+
+    return NextResponse.json({
+      ended: false,
+      balance: Number(wallet?.balance ?? 0),
+      duration_seconds: newDuration,
+      total_charged: Number(lesson.total_charged),
+      charge: 0,
+      is_first_session: isFirstSession,
+      free_seconds_remaining: Math.max(0, freeSeconds - newDuration),
+    });
+  }
+
+  // ── Normal billing from here ──
+
+  // Fetch wallet
   const { data: wallet } = await admin
     .from("wallets")
     .select("*")
@@ -63,24 +107,6 @@ export async function PATCH(
 
   const chargeAmount = Number(lesson.rate_per_minute);
   const currentBalance = Number(wallet.balance);
-
-  // Grace period: first minute is free so student and teacher can see each other
-  if (lesson.duration_seconds === 0) {
-    const newDuration = 60;
-    await admin
-      .from("lessons")
-      .update({ duration_seconds: newDuration })
-      .eq("id", id);
-
-    return NextResponse.json({
-      ended: false,
-      balance: currentBalance,
-      duration_seconds: newDuration,
-      total_charged: Number(lesson.total_charged),
-      charge: 0,
-      grace: true,
-    });
-  }
 
   // If balance is zero or negative, auto-end the lesson
   if (currentBalance <= 0) {
@@ -95,11 +121,12 @@ export async function PATCH(
       balance: 0,
       duration_seconds: lesson.duration_seconds,
       total_charged: Number(lesson.total_charged),
+      is_first_session: isFirstSession,
+      free_seconds_remaining: 0,
     });
   }
 
   // Atomic deduction: use conditional update to prevent race conditions.
-  // Only deduct if the balance hasn't changed since we read it (optimistic lock).
   const actualCharge = Math.min(chargeAmount, currentBalance);
   const newBalance = Number((currentBalance - actualCharge).toFixed(2));
 
@@ -107,13 +134,11 @@ export async function PATCH(
     .from("wallets")
     .update({ balance: newBalance, updated_at: new Date().toISOString() })
     .eq("id", wallet.id)
-    .eq("balance", wallet.balance) // optimistic lock: only update if balance unchanged
+    .eq("balance", wallet.balance) // optimistic lock
     .select("balance")
     .single();
 
   if (walletUpdateError || !updatedWallet) {
-    // Balance was modified by another operation (concurrent heartbeat or top-up).
-    // Re-read and return current state without charging — next heartbeat will retry.
     const { data: freshWallet } = await admin
       .from("wallets")
       .select("balance")
@@ -127,10 +152,11 @@ export async function PATCH(
       total_charged: Number(lesson.total_charged),
       charge: 0,
       retried: true,
+      is_first_session: isFirstSession,
+      free_seconds_remaining: 0,
     });
   }
 
-  const newDuration = lesson.duration_seconds + 60;
   const newTotal = Number((Number(lesson.total_charged) + actualCharge).toFixed(2));
 
   // Record transaction
@@ -163,5 +189,7 @@ export async function PATCH(
     duration_seconds: newDuration,
     total_charged: newTotal,
     charge: actualCharge,
+    is_first_session: isFirstSession,
+    free_seconds_remaining: 0,
   });
 }

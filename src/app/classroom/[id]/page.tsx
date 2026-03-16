@@ -67,6 +67,17 @@ export default async function ClassroomPage({
     .eq("user_id", lesson.student_id)
     .single();
 
+  // Check if this is the first session between this student and teacher
+  const { count: previousLessonCount } = await admin
+    .from("lessons")
+    .select("id", { count: "exact", head: true })
+    .eq("student_id", lesson.student_id)
+    .eq("teacher_id", lesson.teacher_id)
+    .eq("status", "completed")
+    .neq("id", lesson.id);
+
+  const isFirstSession = (previousLessonCount ?? 0) === 0;
+
   const partnerName = isStudent
     ? (teacher?.name ?? "Teacher")
     : (studentProfile?.full_name ?? "Student");
@@ -90,6 +101,7 @@ export default async function ClassroomPage({
       partnerName={partnerName}
       walletBalance={Number(wallet?.balance ?? 0)}
       role={isStudent ? "student" : "teacher"}
+      isFirstSession={isFirstSession}
     />
   );
 }
