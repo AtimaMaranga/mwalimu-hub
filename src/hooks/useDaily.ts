@@ -91,8 +91,9 @@ export function useDaily({ lessonId }: UseDailyOptions): DailyState {
         await call.join({ url: roomUrl, token });
       } catch (err: any) {
         if (!cancelled) {
-          console.error("Daily join failed:", err);
-          setError(err.message || "Failed to join video call");
+          const msg = err.message || "Failed to join video call";
+          console.error("Daily join failed:", msg, err);
+          setError(msg);
           setIsJoining(false);
         }
       }

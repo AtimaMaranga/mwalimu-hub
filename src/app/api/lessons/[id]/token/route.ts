@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
-import { createDailyToken } from "@/lib/daily";
+import { createDailyToken, createDailyRoom } from "@/lib/daily";
 
 export const dynamic = "force-dynamic";
 
@@ -33,8 +33,23 @@ export async function GET(
     return NextResponse.json({ error: "Lesson is not active" }, { status: 400 });
   }
 
+  // Auto-create room if it doesn't exist yet (self-healing fallback)
   if (!lesson.daily_room_name || !lesson.daily_room_url) {
-    return NextResponse.json({ error: "No video room for this lesson" }, { status: 400 });
+    try {
+      const room = await createDailyRoom(lesson.id);
+      await admin
+        .from("lessons")
+        .update({ daily_room_url: room.url, daily_room_name: room.name })
+        .eq("id", lesson.id);
+      lesson.daily_room_url = room.url;
+      lesson.daily_room_name = room.name;
+    } catch (err) {
+      console.error("Failed to create Daily room on token request:", err);
+      return NextResponse.json(
+        { error: "Video room could not be created. Check that DAILY_API_KEY is configured." },
+        { status: 500 }
+      );
+    }
   }
 
   // Check if user is student or teacher
