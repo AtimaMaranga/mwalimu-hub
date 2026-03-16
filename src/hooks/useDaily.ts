@@ -4,8 +4,6 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import DailyIframe, {
   type DailyCall,
   type DailyParticipant,
-  type DailyEventObjectParticipant,
-  type DailyEventObjectParticipantLeft,
 } from "@daily-co/daily-js";
 
 export interface UseDailyOptions {
@@ -41,16 +39,24 @@ export function useDaily({ lessonId }: UseDailyOptions): DailyState {
 
     async function join() {
       try {
-        // Fetch token from our API
+        // Step 1: Fetch token from our API
         const res = await fetch(`/api/lessons/${lessonId}/token`);
-        if (!res.ok) {
-          const data = await res.json().catch(() => ({}));
-          throw new Error(data.error || "Failed to get video token");
+        const data = await res.json().catch(() => null);
+
+        if (!res.ok || !data) {
+          const errMsg = data?.error || `Token request failed (${res.status})`;
+          throw new Error(errMsg);
         }
-        const { token, roomUrl } = await res.json();
+
+        const { token, roomUrl } = data;
+
+        if (!token || !roomUrl) {
+          throw new Error("Server returned empty token or room URL");
+        }
 
         if (cancelled) return;
 
+        // Step 2: Create Daily call object
         const call = DailyIframe.createCallObject({
           audioSource: true,
           videoSource: true,
@@ -80,7 +86,7 @@ export function useDaily({ lessonId }: UseDailyOptions): DailyState {
         call.on("participant-left", () => updateParticipants());
 
         call.on("error", (ev) => {
-          console.error("Daily error:", ev);
+          console.error("Daily call error event:", ev);
           setError("Video call error. Please refresh the page.");
         });
 
@@ -88,6 +94,7 @@ export function useDaily({ lessonId }: UseDailyOptions): DailyState {
           setIsJoined(false);
         });
 
+        // Step 3: Join the room
         await call.join({ url: roomUrl, token });
       } catch (err: any) {
         if (!cancelled) {

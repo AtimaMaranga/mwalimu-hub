@@ -130,7 +130,7 @@ export default function ClassroomClient({
           {/* Timer & Wallet info */}
           <div className="flex items-center gap-4">
             <LessonTimer startedAt={lesson.started_at} />
-            {role === "student" && (
+            {role === "student" && daily.isJoined && (
               <WalletHeartbeat
                 lessonId={lesson.id}
                 initialBalance={walletBalance}
