@@ -1,10 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import DailyIframe, {
-  type DailyCall,
-  type DailyParticipant,
-} from "@daily-co/daily-js";
+import type { DailyCall, DailyParticipant } from "@daily-co/daily-js";
 
 export interface UseDailyOptions {
   lessonId: string;
@@ -44,8 +41,7 @@ export function useDaily({ lessonId }: UseDailyOptions): DailyState {
         const data = await res.json().catch(() => null);
 
         if (!res.ok || !data) {
-          const errMsg = data?.error || `Token request failed (${res.status})`;
-          throw new Error(errMsg);
+          throw new Error(data?.error || `Token request failed (${res.status})`);
         }
 
         const { token, roomUrl } = data;
@@ -56,7 +52,12 @@ export function useDaily({ lessonId }: UseDailyOptions): DailyState {
 
         if (cancelled) return;
 
-        // Step 2: Create Daily call object
+        // Step 2: Dynamically import Daily SDK (avoids SSR issues)
+        const DailyIframe = (await import("@daily-co/daily-js")).default;
+
+        if (cancelled) return;
+
+        // Step 3: Create Daily call object
         const call = DailyIframe.createCallObject({
           audioSource: true,
           videoSource: true,
@@ -94,11 +95,11 @@ export function useDaily({ lessonId }: UseDailyOptions): DailyState {
           setIsJoined(false);
         });
 
-        // Step 3: Join the room
+        // Step 4: Join the room
         await call.join({ url: roomUrl, token });
       } catch (err: any) {
         if (!cancelled) {
-          const msg = err.message || "Failed to join video call";
+          const msg = err?.message || "Failed to join video call";
           console.error("Daily join failed:", msg, err);
           setError(msg);
           setIsJoining(false);
