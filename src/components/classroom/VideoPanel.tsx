@@ -4,22 +4,30 @@ import { useRef, useEffect } from "react";
 import { VideoOff, User, Loader2 } from "lucide-react";
 import type { DailyParticipant } from "@daily-co/daily-js";
 
+export type ViewMode = "gallery" | "speaker";
+
 interface VideoPanelProps {
   localParticipant: DailyParticipant | null;
   remoteParticipant: DailyParticipant | null;
   isCameraOn: boolean;
   isJoining: boolean;
   partnerName: string;
+  viewMode: ViewMode;
+  activeSpeaker: string | null;
 }
 
 function ParticipantVideo({
   participant,
   muted,
   label,
+  isActiveSpeaker,
+  className,
 }: {
   participant: DailyParticipant | null;
   muted?: boolean;
   label: string;
+  isActiveSpeaker?: boolean;
+  className?: string;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -67,7 +75,11 @@ function ParticipantVideo({
     participant?.tracks?.video?.state === "playable" && participant.video;
 
   return (
-    <div className="relative w-full h-full bg-slate-800 rounded-lg overflow-hidden flex items-center justify-center">
+    <div
+      className={`relative bg-slate-800 rounded-xl overflow-hidden flex items-center justify-center ${
+        isActiveSpeaker ? "ring-2 ring-indigo-500" : ""
+      } ${className || "w-full h-full"}`}
+    >
       {hasVideo ? (
         <video
           ref={videoRef}
@@ -85,11 +97,13 @@ function ParticipantVideo({
         </div>
       )}
 
-      {/* Play remote audio */}
       {!muted && <audio ref={audioRef} autoPlay playsInline />}
 
-      {/* Name label */}
-      <div className="absolute bottom-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded-lg">
+      {/* Name badge */}
+      <div className="absolute bottom-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded-lg flex items-center gap-1.5">
+        {isActiveSpeaker && (
+          <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
+        )}
         {participant?.user_name || label}
       </div>
     </div>
@@ -102,6 +116,8 @@ export default function VideoPanel({
   isCameraOn,
   isJoining,
   partnerName,
+  viewMode,
+  activeSpeaker,
 }: VideoPanelProps) {
   if (isJoining) {
     return (
@@ -114,17 +130,66 @@ export default function VideoPanel({
     );
   }
 
+  const localIsActive = activeSpeaker === localParticipant?.session_id;
+  const remoteIsActive = activeSpeaker === remoteParticipant?.session_id;
+
+  // Speaker view: large + PIP
+  if (viewMode === "speaker") {
+    const speakerIsRemote = !localIsActive || remoteIsActive;
+    const mainParticipant = speakerIsRemote ? remoteParticipant : localParticipant;
+    const pipParticipant = speakerIsRemote ? localParticipant : remoteParticipant;
+    const mainLabel = speakerIsRemote ? partnerName : "You";
+    const pipLabel = speakerIsRemote ? "You" : partnerName;
+    const mainMuted = !speakerIsRemote ? true : false;
+    const pipMuted = speakerIsRemote ? true : false;
+
+    return (
+      <div className="flex-1 relative bg-slate-900 rounded-xl overflow-hidden">
+        {/* Main speaker */}
+        {mainParticipant ? (
+          <ParticipantVideo
+            participant={mainParticipant}
+            muted={mainMuted}
+            label={mainLabel}
+            isActiveSpeaker={speakerIsRemote ? remoteIsActive : localIsActive}
+          />
+        ) : (
+          <div className="w-full h-full bg-slate-800 rounded-xl flex items-center justify-center">
+            <div className="text-center">
+              <div className="h-24 w-24 rounded-full bg-slate-700 flex items-center justify-center mx-auto mb-3">
+                <User className="h-12 w-12 text-slate-500" />
+              </div>
+              <p className="text-slate-400">Waiting for {partnerName}...</p>
+            </div>
+          </div>
+        )}
+
+        {/* PIP */}
+        <div className="absolute bottom-4 right-4 w-44 h-32 rounded-xl overflow-hidden shadow-2xl border border-slate-600">
+          <ParticipantVideo
+            participant={pipParticipant}
+            muted={pipMuted}
+            label={pipLabel}
+            isActiveSpeaker={speakerIsRemote ? localIsActive : remoteIsActive}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // Gallery view: 50/50 split
   return (
-    <div className="flex-1 flex gap-2 p-2 bg-slate-900 rounded-xl overflow-hidden">
-      {/* Remote video (large) */}
+    <div className="flex-1 flex gap-2 bg-slate-900 rounded-xl overflow-hidden p-2">
+      {/* Remote */}
       <div className="flex-1">
         {remoteParticipant ? (
           <ParticipantVideo
             participant={remoteParticipant}
             label={partnerName}
+            isActiveSpeaker={remoteIsActive}
           />
         ) : (
-          <div className="w-full h-full bg-slate-800 rounded-lg flex items-center justify-center">
+          <div className="w-full h-full bg-slate-800 rounded-xl flex items-center justify-center">
             <div className="text-center">
               <div className="h-20 w-20 rounded-full bg-slate-700 flex items-center justify-center mx-auto mb-3">
                 <User className="h-10 w-10 text-slate-500" />
@@ -132,20 +197,18 @@ export default function VideoPanel({
               <p className="text-slate-400 text-sm">
                 Waiting for {partnerName} to join...
               </p>
-              <p className="text-slate-500 text-xs mt-1">
-                They&apos;ll appear here automatically
-              </p>
             </div>
           </div>
         )}
       </div>
 
-      {/* Local video (small) */}
-      <div className="w-48 shrink-0">
+      {/* Local */}
+      <div className="flex-1">
         <ParticipantVideo
           participant={localParticipant}
           muted
           label="You"
+          isActiveSpeaker={localIsActive}
         />
       </div>
     </div>

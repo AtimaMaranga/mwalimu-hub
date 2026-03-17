@@ -54,13 +54,18 @@ function LoginForm() {
 
   const handleGoogleLogin = async () => {
     setGoogleLoading(true);
+    setError("");
     const supabase = createClient();
-    await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=${next}`,
+        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
       },
     });
+    if (error) {
+      setError(error.message);
+      setGoogleLoading(false);
+    }
   };
 
   return (
@@ -158,9 +163,7 @@ export default function LoginPage() {
           {/* Logo */}
           <div className="text-center mb-8">
             <Link href="/" className="inline-flex items-center gap-2.5 justify-center mb-6">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-violet-700 shadow-sm">
-                <span className="text-white font-bold text-sm font-heading italic">ST</span>
-              </span>
+              <img src="/logo.png" alt="Swahili Tutors" className="h-10 w-10 rounded-xl object-cover" />
               <span className="font-heading font-bold text-slate-900 text-lg">Swahili Tutors</span>
             </Link>
             <h1 className="text-3xl font-bold font-heading text-slate-900 mb-2">Welcome back</h1>

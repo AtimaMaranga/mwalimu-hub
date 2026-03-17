@@ -15,13 +15,7 @@ function ImagePlaceholder() {
   return (
     <div className="h-full w-full bg-gradient-to-br from-indigo-700 via-indigo-600 to-violet-700 flex items-center justify-center">
       <div className="text-center px-6 select-none">
-        <p
-          className="text-7xl font-bold text-white/15 leading-none italic"
-          style={{ fontFamily: "var(--font-heading, Georgia), serif" }}
-          aria-hidden="true"
-        >
-          ST
-        </p>
+        <img src="/logo.png" alt="Swahili Tutors" className="h-16 w-16 rounded-xl object-cover mx-auto opacity-40" />
         <p className="text-white/25 text-xs font-medium uppercase tracking-[0.2em] mt-3">
           Swahili Tutors
         </p>

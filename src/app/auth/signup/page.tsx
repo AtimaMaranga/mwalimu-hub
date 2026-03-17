@@ -208,9 +208,7 @@ function DecorativePanel() {
       <div className="relative z-10 px-12 py-16 text-center max-w-sm">
         {/* Logo */}
         <div className="flex items-center justify-center gap-2.5 mb-12">
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 text-white font-bold text-sm font-heading italic shadow-lg">
-            ST
-          </span>
+          <img src="/logo.png" alt="Swahili Tutors" className="h-10 w-10 rounded-xl object-cover shadow-lg" />
           <span className="text-white font-bold text-lg tracking-tight">Swahili Tutors</span>
         </div>
 
@@ -786,12 +784,16 @@ export default function SignupPage() {
   const handleGoogleSignup = async () => {
     setGoogleLoading(true);
     const supabase = createClient();
-    await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?role=${role}&next=/dashboard/${role}&welcome=1`,
+        redirectTo: `${window.location.origin}/auth/callback?role=${role}&next=${encodeURIComponent(`/dashboard/${role}`)}&welcome=1`,
       },
     });
+    if (error) {
+      setGoogleLoading(false);
+      alert(error.message);
+    }
   };
 
   if (successEmail) {
@@ -808,9 +810,7 @@ export default function SignupPage() {
 
             {/* Logo (mobile shows on left panel) */}
             <Link href="/" className="flex items-center gap-2.5 mb-8 group w-fit">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-violet-700 shadow-md shadow-indigo-200 text-white font-bold text-sm font-heading italic">
-                ST
-              </span>
+              <img src="/logo.png" alt="Swahili Tutors" className="h-9 w-9 rounded-xl object-cover shadow-md shadow-indigo-200" />
               <span className="font-heading font-bold text-slate-900 text-base tracking-tight">Swahili Tutors</span>
             </Link>
 

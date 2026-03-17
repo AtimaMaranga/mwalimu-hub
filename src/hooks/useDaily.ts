@@ -16,6 +16,7 @@ export interface DailyState {
   error: string | null;
   isCameraOn: boolean;
   isMicOn: boolean;
+  activeSpeaker: string | null;
   toggleCamera: () => void;
   toggleMic: () => void;
   leave: () => Promise<void>;
@@ -30,6 +31,7 @@ export function useDaily({ lessonId }: UseDailyOptions): DailyState {
   const [error, setError] = useState<string | null>(null);
   const [isCameraOn, setIsCameraOn] = useState(true);
   const [isMicOn, setIsMicOn] = useState(true);
+  const [activeSpeaker, setActiveSpeaker] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -85,6 +87,13 @@ export function useDaily({ lessonId }: UseDailyOptions): DailyState {
         call.on("participant-joined", () => updateParticipants());
         call.on("participant-updated", () => updateParticipants());
         call.on("participant-left", () => updateParticipants());
+
+        // Active speaker detection
+        call.on("active-speaker-change", (ev) => {
+          if (ev?.activeSpeaker?.peerId) {
+            setActiveSpeaker(ev.activeSpeaker.peerId);
+          }
+        });
 
         call.on("error", (ev) => {
           console.error("Daily call error event:", ev);
@@ -153,6 +162,7 @@ export function useDaily({ lessonId }: UseDailyOptions): DailyState {
     error,
     isCameraOn,
     isMicOn,
+    activeSpeaker,
     toggleCamera,
     toggleMic,
     leave,

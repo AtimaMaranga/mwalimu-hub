@@ -56,9 +56,7 @@ export default function DashboardShell({
       {/* Logo */}
       <div className="px-5 py-5 border-b border-slate-100">
         <Link href="/" className="flex items-center gap-2.5 group" onClick={() => setSidebarOpen(false)}>
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-violet-700 shadow-md shadow-indigo-200 text-white font-bold text-sm italic shrink-0">
-            ST
-          </span>
+          <img src="/logo.png" alt="Swahili Tutors" className="h-9 w-9 rounded-xl object-cover shrink-0" />
           <div>
             <span className="text-slate-900 font-bold text-sm tracking-tight block leading-none">Swahili Tutors</span>
             <span className="text-slate-400 text-[10px] font-medium capitalize">{role} portal</span>

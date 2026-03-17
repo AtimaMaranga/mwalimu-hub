@@ -46,9 +46,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="sm:col-span-2">
             <Link href="/" className="flex items-center gap-2.5 mb-5" aria-label="Swahili Tutors — Home">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-violet-700 shadow-sm">
-                <span className="text-white font-bold text-sm font-heading italic tracking-tight select-none">ST</span>
-              </span>
+              <img src="/logo.png" alt="Swahili Tutors" className="h-9 w-9 rounded-xl object-cover" />
               <span className="font-heading font-bold text-slate-900 text-lg tracking-tight">Swahili Tutors</span>
             </Link>
             <p className="text-sm text-slate-600 leading-relaxed max-w-xs mb-6">

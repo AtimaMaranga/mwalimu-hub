@@ -102,6 +102,7 @@ export default async function ClassroomPage({
       walletBalance={Number(wallet?.balance ?? 0)}
       role={isStudent ? "student" : "teacher"}
       isFirstSession={isFirstSession}
+      userId={user.id}
     />
   );
 }
