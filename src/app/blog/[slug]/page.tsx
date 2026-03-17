@@ -24,6 +24,8 @@ import JsonLd from "@/components/seo/JsonLd";
 import BlogCTA from "@/components/seo/BlogCTA";
 import Breadcrumbs from "@/components/seo/Breadcrumbs";
 
+export const dynamic = "force-dynamic";
+
 const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://swahili-tutors.com";
 
 export async function generateStaticParams() {

@@ -5,6 +5,8 @@ import JsonLd from "@/components/seo/JsonLd";
 import { getBlogPosts } from "@/lib/supabase/queries";
 import { BookOpen } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://swahili-tutors.com";
 
 export const metadata: Metadata = {
