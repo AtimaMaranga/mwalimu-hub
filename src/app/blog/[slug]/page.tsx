@@ -68,6 +68,7 @@ function renderContent(raw: string): string {
     .replace(/^### (.+)$/gm, "<h3>$1</h3>")
     .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
     .replace(/\*(.+?)\*/g, "<em>$1</em>")
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
     .replace(/^---$/gm, "<hr/>")
     .replace(/\n\n/g, "</p><p>")
     .replace(/^/, "<p>")
