@@ -11,6 +11,7 @@ import {
   Video, CalendarDays,
 } from "@/components/ui/icons";
 import WalletCard from "@/components/wallet/WalletCard";
+import TransactionHistory from "@/components/wallet/TransactionHistory";
 import { getInitials } from "@/lib/utils";
 
 const levelColors: Record<string, { bg: string; text: string; dot: string; border: string }> = {
@@ -164,11 +165,11 @@ export default async function StudentDashboardPage({
         {/* ── Scheduled Sessions ── */}
         <ScheduledSessions bookings={bookings ?? []} role="student" />
 
-        {/* ── Wallet ── */}
+        {/* ── Wallet & Transactions ── */}
         <div className="grid lg:grid-cols-4 gap-4">
           <WalletCard />
           <div className="lg:col-span-3">
-            {/* Recent lessons placeholder — will be populated as lessons are taken */}
+            <TransactionHistory />
           </div>
         </div>
 

@@ -44,9 +44,60 @@ export interface WalletTransaction {
   id: string;
   wallet_id: string;
   amount: number;
-  type: 'top_up' | 'lesson_charge' | 'refund';
+  type: 'top_up' | 'lesson_charge' | 'refund' | 'payout' | 'commission';
   description?: string;
   lesson_id?: string;
+  reference?: string;
+  payment_provider?: string;
+  provider_reference?: string;
+  status: 'pending' | 'completed' | 'failed' | 'reversed';
+  metadata?: Record<string, unknown>;
+  created_at: string;
+}
+
+/** Teacher earnings from a completed lesson */
+export interface TeacherEarning {
+  id: string;
+  teacher_id: string;
+  lesson_id: string;
+  student_id: string;
+  gross_amount: number;
+  commission_rate: number;
+  commission_amount: number;
+  net_amount: number;
+  status: 'unpaid' | 'processing' | 'paid' | 'reversed';
+  payout_id?: string;
+  created_at: string;
+}
+
+/** Teacher payout record */
+export interface TeacherPayout {
+  id: string;
+  teacher_id: string;
+  amount: number;
+  currency: string;
+  status: 'pending' | 'processing' | 'completed' | 'failed';
+  payment_method?: string;
+  provider_reference?: string;
+  payout_period_start: string;
+  payout_period_end: string;
+  processed_at?: string;
+  failure_reason?: string;
+  created_at: string;
+}
+
+/** Receipt for financial transactions */
+export interface Receipt {
+  id: string;
+  user_id: string;
+  transaction_id?: string;
+  teacher_earning_id?: string;
+  receipt_number: string;
+  type: 'top_up' | 'lesson_charge' | 'refund' | 'payout';
+  amount: number;
+  currency: string;
+  description?: string;
+  pdf_url?: string;
   created_at: string;
 }
 

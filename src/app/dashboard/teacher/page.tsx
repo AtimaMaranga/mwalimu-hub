@@ -11,6 +11,7 @@ import {
   ArrowRight, Clock, CheckCircle, DollarSign,
   TrendingUp, Pencil, ChevronRight, GraduationCap, CalendarDays,
 } from "@/components/ui/icons";
+import TeacherEarnings from "@/components/wallet/TeacherEarnings";
 import { getInitials } from "@/lib/utils";
 
 const levelColors: Record<string, { bg: string; text: string; dot: string; border: string }> = {
@@ -383,6 +384,9 @@ export default async function TeacherDashboardPage({
             )}
           </div>
         </div>
+
+        {/* ── Earnings ── */}
+        {teacher && <TeacherEarnings />}
 
         {/* ── Inquiries ── */}
         <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
