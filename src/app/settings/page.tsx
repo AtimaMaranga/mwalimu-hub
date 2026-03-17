@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
 import DashboardShell from "@/components/dashboard/DashboardShell";
 import { getInitials } from "@/lib/utils";
 import SettingsClient from "./SettingsClient";
@@ -9,14 +9,31 @@ export default async function SettingsPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth/login");
 
-  const { data: profile } = await supabase
+  const admin = await createAdminClient();
+
+  const { data: profile } = await admin
     .from("profiles")
-    .select("full_name, role, avatar_url")
+    .select("*")
     .eq("id", user.id)
     .single();
 
-  const name = profile?.full_name || user.email?.split("@")[0] || "User";
   const role = (profile?.role as "student" | "teacher") ?? "student";
+  const name = profile?.full_name || user.email?.split("@")[0] || "User";
+
+  let teacher = null;
+  if (role === "teacher" && profile?.teacher_id) {
+    const { data: t } = await admin
+      .from("teachers")
+      .select("*")
+      .eq("id", profile.teacher_id)
+      .single();
+    teacher = t;
+  }
+
+  // Check auth provider
+  const { data: { user: authUser } } = await admin.auth.admin.getUserById(user.id);
+  const hasPassword = authUser?.app_metadata?.providers?.includes("email") ?? false;
+  const authProvider = authUser?.app_metadata?.provider || "email";
 
   return (
     <DashboardShell
@@ -28,8 +45,11 @@ export default async function SettingsPage() {
       <SettingsClient
         userId={user.id}
         userEmail={user.email!}
-        fullName={profile?.full_name ?? ""}
         role={role}
+        profile={profile}
+        teacher={teacher}
+        hasPassword={hasPassword}
+        authProvider={authProvider}
       />
     </DashboardShell>
   );
