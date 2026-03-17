@@ -3,7 +3,7 @@ import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { deleteDailyRoom } from "@/lib/daily";
 import { generateReceiptNumber } from "@/lib/paystack";
 
-const COMMISSION_RATE = 0.3; // 30% platform commission
+const COMMISSION_RATE = 0.4; // 40% platform commission
 
 export async function PATCH(
   request: NextRequest,
@@ -138,7 +138,7 @@ export async function PATCH(
       await admin.from("platform_revenue").insert({
         lesson_id: id,
         amount: commissionAmount,
-        description: `30% commission on lesson ${id}`,
+        description: `Platform commission on lesson ${id}`,
       });
 
       // Create receipt for the student

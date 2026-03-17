@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS teacher_earnings (
   lesson_id uuid NOT NULL REFERENCES lessons(id) ON DELETE CASCADE,
   student_id uuid NOT NULL REFERENCES auth.users(id),
   gross_amount decimal(10,2) NOT NULL,          -- full lesson charge
-  commission_rate decimal(5,4) NOT NULL DEFAULT 0.3000,  -- 30%
+  commission_rate decimal(5,4) NOT NULL DEFAULT 0.4000,  -- 40%
   commission_amount decimal(10,2) NOT NULL,     -- platform's cut
   net_amount decimal(10,2) NOT NULL,            -- teacher receives
   status text NOT NULL DEFAULT 'unpaid'

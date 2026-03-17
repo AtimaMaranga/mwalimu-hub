@@ -27,12 +27,12 @@ export async function GET() {
   // Get all earnings
   const { data: earnings } = await admin
     .from("teacher_earnings")
-    .select("*")
+    .select("id, lesson_id, student_id, net_amount, status, created_at")
     .eq("teacher_id", teacherId)
     .order("created_at", { ascending: false })
     .limit(50);
 
-  // Calculate summary
+  // Calculate summary — only net amounts
   const allEarnings = earnings ?? [];
   const totalEarned = allEarnings.reduce((sum, e) => sum + Number(e.net_amount), 0);
   const unpaidAmount = allEarnings
@@ -46,10 +46,21 @@ export async function GET() {
   // Get recent payouts
   const { data: payouts } = await admin
     .from("teacher_payouts")
-    .select("*")
+    .select("id, amount, currency, status, payout_period_start, payout_period_end, processed_at, created_at")
     .eq("teacher_id", teacherId)
     .order("created_at", { ascending: false })
     .limit(10);
+
+  // Map earnings to hide internal fields — rename net_amount to "amount"
+  const safeEarnings = allEarnings.map((e) => ({
+    id: e.id,
+    lesson_id: e.lesson_id,
+    student_id: e.student_id,
+    amount: Number(e.net_amount),
+    currency: "KES",
+    status: e.status,
+    created_at: e.created_at,
+  }));
 
   return NextResponse.json({
     summary: {
@@ -58,7 +69,7 @@ export async function GET() {
       paid_amount: paidAmount,
       total_lessons: totalLessons,
     },
-    earnings: allEarnings,
+    earnings: safeEarnings,
     payouts: payouts ?? [],
   });
 }

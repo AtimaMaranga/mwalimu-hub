@@ -19,9 +19,7 @@ interface EarningSummary {
 
 interface Earning {
   id: string;
-  gross_amount: number;
-  commission_amount: number;
-  net_amount: number;
+  amount: number;
   status: string;
   created_at: string;
 }
@@ -158,15 +156,21 @@ export default function TeacherEarnings() {
                       Lesson earning
                     </p>
                     <p className="text-xs text-slate-400">
-                      Gross: KES {Number(e.gross_amount).toFixed(2)} · Commission: KES {Number(e.commission_amount).toFixed(2)}
+                      {new Date(e.created_at).toLocaleDateString("en-GB", {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                      })}
                     </p>
                   </div>
                   <div className="text-right">
                     <p className="text-sm font-bold text-emerald-600">
-                      +KES {Number(e.net_amount).toLocaleString("en-KE", { minimumFractionDigits: 2 })}
+                      +KES {Number(e.amount).toLocaleString("en-KE", { minimumFractionDigits: 2 })}
                     </p>
-                    <p className="text-xs text-slate-400">
-                      {new Date(e.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
+                    <p className={`text-xs font-medium ${
+                      e.status === "paid" ? "text-emerald-500" : "text-amber-500"
+                    }`}>
+                      {e.status === "paid" ? "Paid" : "Pending"}
                     </p>
                   </div>
                 </div>
@@ -194,15 +198,22 @@ export default function TeacherEarnings() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-slate-800">
-                    Payout — {p.status}
+                    Payout
                   </p>
                   <p className="text-xs text-slate-400">
-                    Period: {p.payout_period_start} to {p.payout_period_end}
+                    {p.payout_period_start} to {p.payout_period_end}
                   </p>
                 </div>
-                <p className="text-sm font-bold text-slate-800">
-                  KES {Number(p.amount).toLocaleString("en-KE", { minimumFractionDigits: 2 })}
-                </p>
+                <div className="text-right">
+                  <p className="text-sm font-bold text-slate-800">
+                    KES {Number(p.amount).toLocaleString("en-KE", { minimumFractionDigits: 2 })}
+                  </p>
+                  <p className={`text-xs font-medium ${
+                    p.status === "completed" ? "text-emerald-500" : p.status === "failed" ? "text-red-500" : "text-amber-500"
+                  }`}>
+                    {p.status.charAt(0).toUpperCase() + p.status.slice(1)}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
