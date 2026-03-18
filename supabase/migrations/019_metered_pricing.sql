@@ -13,13 +13,16 @@ ALTER TABLE teachers
 ALTER TABLE teachers
   ALTER COLUMN hourly_rate SET DEFAULT 7;
 
--- Update any teachers that don't have a rate set to $7
-UPDATE teachers SET hourly_rate = 7 WHERE hourly_rate IS NULL OR hourly_rate = 0;
+-- Normalize all existing rates into the $7–$25 range
+UPDATE teachers SET hourly_rate = 7 WHERE hourly_rate IS NULL OR hourly_rate < 7;
+UPDATE teachers SET hourly_rate = 25 WHERE hourly_rate > 25;
 
--- Add a constraint for max rate
+-- Sync rate_per_minute for all teachers
+UPDATE teachers SET rate_per_minute = ROUND(hourly_rate / 60, 4);
+
+-- Add constraints for rate boundaries
 ALTER TABLE teachers
   ADD CONSTRAINT teachers_hourly_rate_max CHECK (hourly_rate <= 25);
 
--- Add a constraint for min rate
 ALTER TABLE teachers
   ADD CONSTRAINT teachers_hourly_rate_min CHECK (hourly_rate >= 7);
