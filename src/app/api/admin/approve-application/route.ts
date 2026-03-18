@@ -3,6 +3,7 @@ import { createClient, createAdminClient, createPureAdminClient } from "@/lib/su
 import { sendTeacherApprovedEmail, sendTeacherRejectedEmail } from "@/lib/email";
 import { isAdminEmail } from "@/lib/env";
 import { slugify } from "@/lib/utils";
+import { DEFAULT_HOURLY_RATE } from "@/lib/pricing";
 
 export async function POST(request: NextRequest) {
   const supabase = await createClient();
@@ -42,7 +43,8 @@ export async function POST(request: NextRequest) {
         slug,
         bio: application.teaching_philosophy || null,
         qualifications: application.qualifications || null,
-        hourly_rate: application.rate_expectation || null,
+        hourly_rate: DEFAULT_HOURLY_RATE,
+        rate_per_minute: Number((DEFAULT_HOURLY_RATE / 60).toFixed(4)),
         availability_description: application.available_hours
           ? `Available ${application.available_hours} hours per week`
           : null,

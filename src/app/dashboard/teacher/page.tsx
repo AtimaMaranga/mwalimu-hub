@@ -171,7 +171,7 @@ export default async function TeacherDashboardPage({
   const completenessItems = teacher ? [
     { label: "Name & tagline",      done: !!teacher.tagline },
     { label: "Bio written",         done: !!teacher.bio },
-    { label: "Hourly rate set",     done: !!teacher.hourly_rate },
+    { label: "Hourly rate set",     done: true },
     { label: "Specialisations",     done: teacher.specializations?.length > 0 },
     { label: "Availability added",  done: !!teacher.availability_description },
     { label: "Profile photo",       done: !!teacher.profile_image_url },

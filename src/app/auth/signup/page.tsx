@@ -5,7 +5,7 @@ import Link from "next/link";
 import {
   Eye, EyeOff, Mail, Check, ArrowRight, ArrowLeft,
   GraduationCap, BookOpen, User, MapPin, Briefcase,
-  Clock, DollarSign, FileText,
+  Clock, FileText,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
@@ -472,7 +472,6 @@ function TeacherSignupForm({ onSuccess }: { onSuccess: (email: string) => void }
   const [experience, setExperience] = useState("");
   const [qualifications, setQualifications] = useState("");
   const [availableHours, setAvailableHours] = useState("");
-  const [rateExpectation, setRateExpectation] = useState("");
   const [teachingPhilosophy, setTeachingPhilosophy] = useState("");
   const [agreeTerms, setAgreeTerms] = useState(false);
 
@@ -526,7 +525,6 @@ function TeacherSignupForm({ onSuccess }: { onSuccess: (email: string) => void }
           experience,
           qualifications,
           available_hours: Number(availableHours),
-          rate_expectation: Number(rateExpectation),
           teaching_philosophy: teachingPhilosophy,
           agree_terms: true,
         }),
@@ -692,20 +690,6 @@ function TeacherSignupForm({ onSuccess }: { onSuccess: (email: string) => void }
                 min={1}
                 max={80}
                 placeholder="e.g. 10"
-              />
-            </div>
-            <div>
-              <FieldLabel required>
-                <span className="flex items-center gap-1.5"><DollarSign className="h-3.5 w-3.5 text-slate-400" />Rate (USD/hr)</span>
-              </FieldLabel>
-              <Input
-                type="number"
-                value={rateExpectation}
-                onChange={(e) => setRateExpectation(e.target.value)}
-                required
-                min={5}
-                max={200}
-                placeholder="e.g. 25"
               />
             </div>
           </div>

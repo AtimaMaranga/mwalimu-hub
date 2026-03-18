@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { SPECIALIZATIONS } from "@/types";
 import { getInitials } from "@/lib/utils";
+import { DEFAULT_HOURLY_RATE } from "@/lib/pricing";
 import ImageUpload from "@/components/ui/ImageUpload";
 import Button from "@/components/ui/Button";
 import { CheckCircle } from "lucide-react";
@@ -17,7 +18,6 @@ interface Teacher {
   teaching_approach?: string;
   experience_years?: number;
   qualifications?: string;
-  hourly_rate?: number;
   timezone?: string;
   availability_description?: string;
   specializations?: string[];
@@ -46,7 +46,6 @@ export default function TeacherProfileForm({ userId, userEmail, avatarUrl, teach
     teaching_approach: teacher?.teaching_approach ?? "",
     experience_years: teacher?.experience_years?.toString() ?? "",
     qualifications: teacher?.qualifications ?? "",
-    hourly_rate: teacher?.hourly_rate?.toString() ?? "",
     timezone: teacher?.timezone ?? "UTC",
     availability_description: teacher?.availability_description ?? "",
     specializations: teacher?.specializations ?? [] as string[],
@@ -80,7 +79,6 @@ export default function TeacherProfileForm({ userId, userEmail, avatarUrl, teach
       teaching_approach: form.teaching_approach,
       experience_years: parseInt(form.experience_years) || 0,
       qualifications: form.qualifications,
-      hourly_rate: parseFloat(form.hourly_rate) || 0,
       timezone: form.timezone,
       availability_description: form.availability_description,
       specializations: form.specializations,
@@ -96,7 +94,7 @@ export default function TeacherProfileForm({ userId, userEmail, avatarUrl, teach
     } else {
       const { data: newTeacher, error: insertErr } = await supabase
         .from("teachers")
-        .insert({ ...teacherData, is_native_speaker: true, is_published: false, rating: 0, total_students: 0 })
+        .insert({ ...teacherData, hourly_rate: DEFAULT_HOURLY_RATE, rate_per_minute: Number((DEFAULT_HOURLY_RATE / 60).toFixed(4)), is_native_speaker: true, is_published: false, rating: 0, total_students: 0 })
         .select("id")
         .single();
       if (insertErr) { setError(insertErr.message); setSaving(false); return; }
@@ -195,28 +193,22 @@ export default function TeacherProfileForm({ userId, userEmail, avatarUrl, teach
           </div>
         </div>
 
-        {/* Rates & Experience */}
+        {/* Experience */}
         <div className="bg-[#1a1b2e] border border-white/5 rounded-2xl p-6 space-y-4">
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Rates & Experience</p>
-          <div className="grid sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">Hourly rate (USD) *</label>
-              <input
-                type="number" min="5" max="200" value={form.hourly_rate}
-                onChange={(e) => set("hourly_rate", e.target.value)} required
-                className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-cyan-500/50 transition-all"
-                placeholder="25"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">Years of experience</label>
-              <input
-                type="number" min="0" max="50" value={form.experience_years}
-                onChange={(e) => set("experience_years", e.target.value)}
-                className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-cyan-500/50 transition-all"
-                placeholder="5"
-              />
-            </div>
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Experience</p>
+          <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-xl px-4 py-3">
+            <p className="text-indigo-300 text-sm">
+              All teachers start at <span className="font-bold text-white">${DEFAULT_HOURLY_RATE}/hr</span>. You can adjust your rate (up to $25/hr) after completing 50 hours of sessions with an average rating of 4.0+.
+            </p>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-1.5">Years of experience</label>
+            <input
+              type="number" min="0" max="50" value={form.experience_years}
+              onChange={(e) => set("experience_years", e.target.value)}
+              className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-cyan-500/50 transition-all"
+              placeholder="5"
+            />
           </div>
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-1.5">Qualifications</label>

@@ -8,6 +8,7 @@ import { z } from "zod";
 import { createClient } from "@/lib/supabase/client";
 import { slugify } from "@/lib/utils";
 import { SPECIALIZATIONS } from "@/types";
+import { DEFAULT_HOURLY_RATE } from "@/lib/pricing";
 import Button from "@/components/ui/Button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -21,7 +22,6 @@ const schema = z.object({
   teaching_approach: z.string().optional(),
   experience_years: z.number().min(0).optional(),
   qualifications: z.string().optional(),
-  hourly_rate: z.number().min(0).optional(),
   timezone: z.string().optional(),
   availability_description: z.string().optional(),
   video_intro_url: z.string().url("Must be a valid URL").optional().or(z.literal("")),
@@ -78,7 +78,8 @@ export default function NewTeacherPage() {
         teaching_approach: data.teaching_approach || null,
         experience_years: data.experience_years ?? 0,
         qualifications: data.qualifications || null,
-        hourly_rate: data.hourly_rate ?? null,
+        hourly_rate: DEFAULT_HOURLY_RATE,
+        rate_per_minute: Number((DEFAULT_HOURLY_RATE / 60).toFixed(4)),
         timezone: data.timezone || "UTC",
         availability_description: data.availability_description || null,
         video_intro_url: data.video_intro_url || null,
@@ -133,11 +134,10 @@ export default function NewTeacherPage() {
               <input id="phone" type="tel" {...register("phone")} className={inputClass} placeholder="+254 712 345 678" />
             </div>
             <div>
-              <label htmlFor="hourly_rate" className={labelClass}>Hourly Rate (USD)</label>
-              <input id="hourly_rate" type="number" min={0} step={0.5}
-                {...register("hourly_rate", { valueAsNumber: true })}
-                className={inputClass} placeholder="25" />
-              {errors.hourly_rate && <p className="text-xs text-red-500 mt-1">{errors.hourly_rate.message}</p>}
+              <label className={labelClass}>Hourly Rate (USD)</label>
+              <p className="text-sm text-slate-500 px-4 py-3 bg-slate-50 rounded-xl border border-slate-200">
+                Auto-set to ${DEFAULT_HOURLY_RATE}/hr (platform default)
+              </p>
             </div>
             <div>
               <label htmlFor="experience_years" className={labelClass}>Years of Experience</label>

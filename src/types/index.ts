@@ -25,6 +25,7 @@ export interface Teacher {
   total_students: number;
   dialect?: string;
   rate_per_minute?: number;
+  total_hours_taught?: number;
   created_at: string;
   updated_at: string;
 }

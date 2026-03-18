@@ -90,7 +90,7 @@ export async function PUT(request: NextRequest) {
   if (profile.role === "teacher" && profile.teacher_id) {
     const teacherFields: Record<string, unknown> = {};
     const allowedTeacherFields = [
-      "tagline", "bio", "experience_years", "hourly_rate",
+      "tagline", "bio", "experience_years",
       "specializations", "languages_spoken", "gender", "date_of_birth",
       "country", "timezone", "phone", "profile_image_url",
     ];

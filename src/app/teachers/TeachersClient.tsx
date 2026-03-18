@@ -23,6 +23,7 @@ import Image from "next/image";
 import type { Teacher } from "@/types";
 import { SPECIALIZATIONS, DIALECTS } from "@/types";
 import { formatCurrency, getInitials, getTutorDisplayName } from "@/lib/utils";
+import { DEFAULT_HOURLY_RATE, MAX_HOURLY_RATE } from "@/lib/pricing";
 import BookLessonButton from "@/components/booking/BookLessonButton";
 import Button from "@/components/ui/Button";
 
@@ -323,7 +324,7 @@ function TutorCard({
             <div className="flex items-start justify-between sm:justify-end gap-3">
               <div className="sm:text-right">
                 <span className="text-2xl font-bold text-slate-900">
-                  {teacher.hourly_rate ? formatCurrency(teacher.hourly_rate) : "Free"}
+                  {formatCurrency(teacher.hourly_rate || DEFAULT_HOURLY_RATE)}
                 </span>
                 <p className="text-xs text-slate-500 mt-0.5">50-min lesson</p>
               </div>
@@ -412,8 +413,8 @@ export default function TeachersClient({ initialTeachers }: TeachersClientProps)
   const [search, setSearch] = useState("");
   const [selectedSpecs, setSelectedSpecs] = useState<string[]>([]);
   const [nativeFilter, setNativeFilter] = useState<"all" | "native" | "non-native">("all");
-  const [minPrice, setMinPrice] = useState(3);
-  const [maxPrice, setMaxPrice] = useState(60);
+  const [minPrice, setMinPrice] = useState(DEFAULT_HOURLY_RATE);
+  const [maxPrice, setMaxPrice] = useState(MAX_HOURLY_RATE);
   const [selectedDialects, setSelectedDialects] = useState<string[]>([]);
   const [tutorCategory, setTutorCategory] = useState<"all" | "professional" | "super">("all");
   const [sortBy, setSortBy] = useState<"top" | "price_asc" | "price_desc" | "most_students" | "newest">("top");
@@ -450,7 +451,7 @@ export default function TeachersClient({ initialTeachers }: TeachersClientProps)
 
     result = result.filter((t) => {
       const rate = t.hourly_rate ?? 0;
-      return rate >= minPrice && (maxPrice >= 60 || rate <= maxPrice);
+      return rate >= minPrice && (maxPrice >= MAX_HOURLY_RATE || rate <= maxPrice);
     });
 
     if (tutorCategory === "professional") {
@@ -505,8 +506,8 @@ export default function TeachersClient({ initialTeachers }: TeachersClientProps)
     setSelectedSpecs([]);
     setSelectedDialects([]);
     setNativeFilter("all");
-    setMinPrice(3);
-    setMaxPrice(60);
+    setMinPrice(DEFAULT_HOURLY_RATE);
+    setMaxPrice(MAX_HOURLY_RATE);
     setTutorCategory("all");
     setSortBy("top");
     setPage(1);
@@ -517,12 +518,12 @@ export default function TeachersClient({ initialTeachers }: TeachersClientProps)
     selectedSpecs.length > 0 ||
     selectedDialects.length > 0 ||
     nativeFilter !== "all" ||
-    minPrice > 3 ||
-    maxPrice < 60 ||
+    minPrice > DEFAULT_HOURLY_RATE ||
+    maxPrice < MAX_HOURLY_RATE ||
     tutorCategory !== "all" ||
     sortBy !== "top";
 
-  const priceLabel = minPrice > 3 || maxPrice < 60 ? `$${minPrice} – $${maxPrice}${maxPrice >= 60 ? "+" : ""}` : undefined;
+  const priceLabel = minPrice > DEFAULT_HOURLY_RATE || maxPrice < MAX_HOURLY_RATE ? `$${minPrice} – $${maxPrice}${maxPrice >= MAX_HOURLY_RATE ? "+" : ""}` : undefined;
   const specLabel =
     selectedSpecs.length > 0
       ? selectedSpecs.length === 1
@@ -557,8 +558,8 @@ export default function TeachersClient({ initialTeachers }: TeachersClientProps)
                     <label className="text-xs text-slate-500">Min: ${minPrice}</label>
                     <input
                       type="range"
-                      min={3}
-                      max={55}
+                      min={DEFAULT_HOURLY_RATE}
+                      max={MAX_HOURLY_RATE - 2}
                       step={1}
                       value={minPrice}
                       onChange={(e) => { setMinPrice(Number(e.target.value)); resetPage(); }}
@@ -566,11 +567,11 @@ export default function TeachersClient({ initialTeachers }: TeachersClientProps)
                     />
                   </div>
                   <div>
-                    <label className="text-xs text-slate-500">Max: ${maxPrice}{maxPrice >= 60 ? "+" : ""}</label>
+                    <label className="text-xs text-slate-500">Max: ${maxPrice}{maxPrice >= MAX_HOURLY_RATE ? "+" : ""}</label>
                     <input
                       type="range"
-                      min={5}
-                      max={60}
+                      min={DEFAULT_HOURLY_RATE + 1}
+                      max={MAX_HOURLY_RATE}
                       step={1}
                       value={maxPrice}
                       onChange={(e) => { setMaxPrice(Number(e.target.value)); resetPage(); }}
@@ -579,7 +580,7 @@ export default function TeachersClient({ initialTeachers }: TeachersClientProps)
                   </div>
                 </div>
                 <p className="text-center text-sm font-semibold text-indigo-700 mt-2">
-                  ${minPrice} – ${maxPrice}{maxPrice >= 60 ? "+" : ""} / hr
+                  ${minPrice} – ${maxPrice}{maxPrice >= MAX_HOURLY_RATE ? "+" : ""} / hr
                 </p>
               </div>
             </FilterDropdown>
@@ -752,7 +753,7 @@ export default function TeachersClient({ initialTeachers }: TeachersClientProps)
                   {nativeLabel} <X className="h-3 w-3" />
                 </button>
               )}
-              {(minPrice > 3 || maxPrice < 60) && (
+              {(minPrice > DEFAULT_HOURLY_RATE || maxPrice < MAX_HOURLY_RATE) && (
                 <button
                   onClick={() => { setMinPrice(3); setMaxPrice(60); resetPage(); }}
                   className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-medium hover:bg-indigo-100 transition-colors"
@@ -799,11 +800,11 @@ export default function TeachersClient({ initialTeachers }: TeachersClientProps)
           <div className="space-y-2">
             <div>
               <label className="text-xs text-slate-500">Min: ${minPrice}</label>
-              <input type="range" min={3} max={55} step={1} value={minPrice} onChange={(e) => { setMinPrice(Number(e.target.value)); resetPage(); }} className="w-full accent-indigo-600" />
+              <input type="range" min={DEFAULT_HOURLY_RATE} max={MAX_HOURLY_RATE - 2} step={1} value={minPrice} onChange={(e) => { setMinPrice(Number(e.target.value)); resetPage(); }} className="w-full accent-indigo-600" />
             </div>
             <div>
-              <label className="text-xs text-slate-500">Max: ${maxPrice}{maxPrice >= 60 ? "+" : ""}</label>
-              <input type="range" min={5} max={60} step={1} value={maxPrice} onChange={(e) => { setMaxPrice(Number(e.target.value)); resetPage(); }} className="w-full accent-indigo-600" />
+              <label className="text-xs text-slate-500">Max: ${maxPrice}{maxPrice >= MAX_HOURLY_RATE ? "+" : ""}</label>
+              <input type="range" min={DEFAULT_HOURLY_RATE + 1} max={MAX_HOURLY_RATE} step={1} value={maxPrice} onChange={(e) => { setMaxPrice(Number(e.target.value)); resetPage(); }} className="w-full accent-indigo-600" />
             </div>
           </div>
         </div>

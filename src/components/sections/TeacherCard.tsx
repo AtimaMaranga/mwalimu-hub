@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Star, Users, BookOpen, CheckCircle, MessageCircle } from "lucide-react";
 import type { Teacher } from "@/types";
 import { formatCurrency, getInitials } from "@/lib/utils";
+import { DEFAULT_HOURLY_RATE } from "@/lib/pricing";
 import BookLessonButton from "@/components/booking/BookLessonButton";
 
 interface TeacherCardProps {
@@ -79,7 +80,7 @@ function GridCard({ teacher }: { teacher: Teacher }) {
           </div>
           <div className="flex items-center justify-between">
             <span className="font-bold text-slate-900">
-              {teacher.hourly_rate ? formatCurrency(teacher.hourly_rate) : "Free"}
+              {formatCurrency(teacher.hourly_rate || DEFAULT_HOURLY_RATE)}
               <span className="text-xs font-normal text-slate-400"> /hr</span>
             </span>
             <span className="text-xs font-medium text-indigo-600 group-hover:underline">
@@ -198,7 +199,7 @@ function ListCard({ teacher }: { teacher: Teacher }) {
           {/* Price */}
           <div className="sm:text-right">
             <p className="text-2xl font-bold text-slate-900">
-              {teacher.hourly_rate ? formatCurrency(teacher.hourly_rate) : "Free"}
+              {formatCurrency(teacher.hourly_rate || DEFAULT_HOURLY_RATE)}
             </p>
             <p className="text-xs text-slate-400">per hour</p>
           </div>

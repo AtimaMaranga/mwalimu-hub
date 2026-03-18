@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { createDailyRoom } from "@/lib/daily";
 import { createNotification, getTeacherUserId } from "@/lib/notifications";
+import { DEFAULT_HOURLY_RATE } from "@/lib/pricing";
 
 const MIN_BALANCE = 0; // First minute is free (grace period)
 
@@ -43,10 +44,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Teacher is not available" }, { status: 404 });
   }
 
-  // Determine per-minute rate — fall back to hourly_rate / 60
+  // Determine per-minute rate — fall back to hourly_rate / 60, then default
+  const effectiveHourlyRate = teacher.hourly_rate || DEFAULT_HOURLY_RATE;
   const ratePerMinute = (teacher.rate_per_minute && teacher.rate_per_minute > 0)
     ? Number(teacher.rate_per_minute)
-    : (teacher.hourly_rate ? Number((teacher.hourly_rate / 60).toFixed(4)) : 0.20);
+    : Number((effectiveHourlyRate / 60).toFixed(4));
 
   // Check if this is the student's first session with this teacher
   const { count: previousLessonCount } = await admin

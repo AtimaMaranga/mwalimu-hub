@@ -17,7 +17,7 @@ const schema = z.object({
   experience: z.string().min(10).max(5000),
   qualifications: z.string().min(5).max(3000),
   available_hours: z.number().min(1).max(168),
-  rate_expectation: z.number().min(5).max(200),
+  rate_expectation: z.number().min(5).max(200).optional(),
   teaching_philosophy: z.string().min(50).max(5000),
   agree_terms: z.boolean(),
 });
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
         experience: data.experience,
         qualifications: data.qualifications,
         available_hours: data.available_hours,
-        rate_expectation: data.rate_expectation,
+        rate_expectation: data.rate_expectation || null,
         teaching_philosophy: data.teaching_philosophy,
         status: "pending",
       });

@@ -8,6 +8,7 @@ import {
   Users, UserCheck, ChevronDown, ChevronUp,
 } from "lucide-react";
 import { getInitials } from "@/lib/utils";
+import { DEFAULT_HOURLY_RATE } from "@/lib/pricing";
 
 interface Teacher {
   id: string;
@@ -52,11 +53,9 @@ function TeacherRow({
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             <p className="text-white font-semibold">{teacher.name}</p>
-            {teacher.hourly_rate && (
-              <span className="text-xs text-cyan-400 font-semibold bg-cyan-500/15 px-2 py-0.5 rounded-full">
-                ${teacher.hourly_rate}/hr
-              </span>
-            )}
+            <span className="text-xs text-cyan-400 font-semibold bg-cyan-500/15 px-2 py-0.5 rounded-full">
+              ${teacher.hourly_rate || DEFAULT_HOURLY_RATE}/hr
+            </span>
           </div>
           <p className="text-slate-500 text-sm truncate">{teacher.email}</p>
           {teacher.tagline && (
@@ -150,9 +149,7 @@ function PublishedRow({ teacher, onUnpublish }: { teacher: Teacher; onUnpublish:
         <p className="text-white text-sm font-semibold truncate">{teacher.name}</p>
         <p className="text-slate-500 text-xs">{teacher.email}</p>
       </div>
-      {teacher.hourly_rate && (
-        <p className="text-cyan-400 text-sm font-semibold shrink-0 hidden sm:block">${teacher.hourly_rate}/hr</p>
-      )}
+      <p className="text-cyan-400 text-sm font-semibold shrink-0 hidden sm:block">${teacher.hourly_rate || DEFAULT_HOURLY_RATE}/hr</p>
       <div className="flex items-center gap-2 shrink-0">
         <Link
           href={`/teachers/${teacher.slug}`}

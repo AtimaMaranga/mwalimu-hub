@@ -21,10 +21,6 @@ const schema = z.object({
     .number()
     .min(1, "Minimum 1 hour")
     .max(168, "Maximum 168 hours"),
-  rate_expectation: z
-    .number()
-    .min(5, "Minimum $5/hr")
-    .max(200, "Maximum $200/hr"),
   teaching_philosophy: z
     .string()
     .min(100, "Please write at least 100 characters")
@@ -202,52 +198,27 @@ export default function BecomeTeacherForm() {
               )}
             </div>
 
-            <div className="grid sm:grid-cols-2 gap-5">
-              <div>
-                <label
-                  htmlFor="available_hours"
-                  className="block text-sm font-medium text-slate-700 mb-1"
-                >
-                  Available Hours Per Week *
-                </label>
-                <input
-                  id="available_hours"
-                  type="number"
-                  min={1}
-                  max={60}
-                  {...register("available_hours", { valueAsNumber: true })}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-300 text-sm"
-                  placeholder="10"
-                />
-                {errors.available_hours && (
-                  <p className="text-xs text-red-500 mt-1" role="alert">
-                    {errors.available_hours.message}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label
-                  htmlFor="rate_expectation"
-                  className="block text-sm font-medium text-slate-700 mb-1"
-                >
-                  Expected Hourly Rate (USD) *
-                </label>
-                <input
-                  id="rate_expectation"
-                  type="number"
-                  min={5}
-                  max={200}
-                  {...register("rate_expectation", { valueAsNumber: true })}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-300 text-sm"
-                  placeholder="25"
-                />
-                {errors.rate_expectation && (
-                  <p className="text-xs text-red-500 mt-1" role="alert">
-                    {errors.rate_expectation.message}
-                  </p>
-                )}
-              </div>
+            <div>
+              <label
+                htmlFor="available_hours"
+                className="block text-sm font-medium text-slate-700 mb-1"
+              >
+                Available Hours Per Week *
+              </label>
+              <input
+                id="available_hours"
+                type="number"
+                min={1}
+                max={60}
+                {...register("available_hours", { valueAsNumber: true })}
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-300 text-sm"
+                placeholder="10"
+              />
+              {errors.available_hours && (
+                <p className="text-xs text-red-500 mt-1" role="alert">
+                  {errors.available_hours.message}
+                </p>
+              )}
             </div>
 
             <div>

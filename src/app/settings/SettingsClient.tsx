@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useMemo } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { DEFAULT_HOURLY_RATE } from "@/lib/pricing";
 import {
   User, Lock, Bell, Shield, Banknote, Camera,
   Eye, EyeOff, Loader2, CheckCircle, X, Upload,
@@ -189,7 +190,7 @@ function ProfileTab({
     // Teacher-only
     tagline: (teacher?.tagline as string) || "",
     experience_years: (teacher?.experience_years as number) || 0,
-    hourly_rate: (teacher?.hourly_rate as number) || 0,
+    hourly_rate: (teacher?.hourly_rate as number) || DEFAULT_HOURLY_RATE,
     specializations: (teacher?.specializations as string[]) || [],
     languages_spoken: (teacher?.languages_spoken as { language: string; level: string }[]) || [],
   }), [profile, teacher]);
@@ -487,16 +488,10 @@ function ProfileTab({
                 placeholder="5"
               />
             </Field>
-            <Field label="Hourly Rate (USD)" required>
-              <input
-                type="number"
-                min={0}
-                step={0.01}
-                value={form.hourly_rate || ""}
-                onChange={e => set("hourly_rate", Number(e.target.value))}
-                className="input-field"
-                placeholder="25.00"
-              />
+            <Field label="Hourly Rate (USD)">
+              <p className="text-sm text-slate-600 py-2.5 px-4 bg-slate-50 rounded-xl border border-slate-200">
+                ${form.hourly_rate}/hr — Manage your rate from the <a href="/dashboard/teacher" className="text-indigo-600 underline">teacher dashboard</a>
+              </p>
             </Field>
           </div>
 

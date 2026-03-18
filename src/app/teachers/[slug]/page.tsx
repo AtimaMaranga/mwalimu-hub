@@ -26,6 +26,7 @@ import EnterClassroomButton from "@/components/classroom/EnterClassroomButton";
 import BookLessonButton from "@/components/booking/BookLessonButton";
 import { getTeacherBySlug, getTeacherSlugs, getTeacherReviews } from "@/lib/supabase/queries";
 import { formatCurrency, getInitials } from "@/lib/utils";
+import { DEFAULT_HOURLY_RATE } from "@/lib/pricing";
 import { createClient } from "@/lib/supabase/server";
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://swahili-tutors.com";
@@ -114,7 +115,7 @@ export default async function TeacherProfilePage({
         worstRating: "1",
       },
     }),
-    makesOffer: teacher.hourly_rate ? {
+    makesOffer: {
       "@type": "Offer",
       itemOffered: {
         "@type": "Course",
@@ -124,10 +125,10 @@ export default async function TeacherProfilePage({
         inLanguage: "sw",
         courseMode: "online",
       },
-      price: teacher.hourly_rate.toString(),
+      price: (teacher.hourly_rate || DEFAULT_HOURLY_RATE).toString(),
       priceCurrency: "USD",
       availability: "https://schema.org/InStock",
-    } : undefined,
+    },
   };
 
   return (
@@ -346,7 +347,7 @@ export default async function TeacherProfilePage({
               <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
                 <div className="text-center mb-6">
                   <p className="text-3xl font-bold text-indigo-700">
-                    {teacher.hourly_rate ? formatCurrency(teacher.hourly_rate) : "Free"}
+                    {formatCurrency(teacher.hourly_rate || DEFAULT_HOURLY_RATE)}
                   </p>
                   <p className="text-slate-400 text-sm">per hour</p>
                 </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle, XCircle, ChevronDown, ChevronUp, Mail, Phone, Clock, DollarSign } from "lucide-react";
+import { CheckCircle, XCircle, ChevronDown, ChevronUp, Mail, Phone, Clock } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 
 interface Application {
@@ -53,11 +53,6 @@ function ApplicationCard({
             {a.phone && (
               <span className="flex items-center gap-1">
                 <Phone className="h-3.5 w-3.5" />{a.phone}
-              </span>
-            )}
-            {a.rate_expectation && (
-              <span className="flex items-center gap-1">
-                <DollarSign className="h-3.5 w-3.5" />${a.rate_expectation}/hr
               </span>
             )}
             {a.available_hours && (

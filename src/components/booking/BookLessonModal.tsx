@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { X, CalendarPlus } from "lucide-react";
+import { DEFAULT_HOURLY_RATE } from "@/lib/pricing";
 
 interface BookLessonModalProps {
   teacherId: string;
@@ -82,9 +83,8 @@ export default function BookLessonModal({
     }
   };
 
-  const estimatedCost = hourlyRate
-    ? ((hourlyRate / 60) * duration).toFixed(2)
-    : null;
+  const effectiveRate = hourlyRate || DEFAULT_HOURLY_RATE;
+  const estimatedCost = ((effectiveRate / 60) * duration).toFixed(2);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -183,12 +183,10 @@ export default function BookLessonModal({
             </div>
 
             {/* Cost estimate */}
-            {estimatedCost && (
-              <div className="bg-slate-50 rounded-xl px-4 py-3 flex items-center justify-between">
-                <span className="text-sm text-slate-500">Estimated cost</span>
-                <span className="font-bold text-slate-900">${estimatedCost}</span>
-              </div>
-            )}
+            <div className="bg-slate-50 rounded-xl px-4 py-3 flex items-center justify-between">
+              <span className="text-sm text-slate-500">Estimated cost</span>
+              <span className="font-bold text-slate-900">${estimatedCost}</span>
+            </div>
 
             {error && (
               <p className="text-red-600 text-sm">{error}</p>

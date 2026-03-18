@@ -2,8 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { deleteDailyRoom } from "@/lib/daily";
 import { generateReceiptNumber } from "@/lib/paystack";
-
-const COMMISSION_RATE = 0.4; // 40% platform commission
+import { COMMISSION_RATE } from "@/lib/pricing";
 
 export async function PATCH(
   request: NextRequest,
@@ -151,6 +150,25 @@ export async function PATCH(
         description: `Lesson charge — ${Math.ceil(actualDurationSeconds / 60)} minutes`,
       });
     }
+  }
+
+  // Update teacher's total_hours_taught
+  const lessonHours = Math.max(lesson.duration_seconds, actualDurationSeconds) / 3600;
+  try {
+    const { data: t } = await admin
+      .from("teachers")
+      .select("total_hours_taught")
+      .eq("id", lesson.teacher_id)
+      .single();
+    if (t) {
+      const current = Number(t.total_hours_taught) || 0;
+      await admin
+        .from("teachers")
+        .update({ total_hours_taught: Number((current + lessonHours).toFixed(2)) })
+        .eq("id", lesson.teacher_id);
+    }
+  } catch (err) {
+    console.error("Failed to update total_hours_taught:", err);
   }
 
   // Best-effort cleanup of Daily.co room

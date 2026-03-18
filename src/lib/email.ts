@@ -68,7 +68,6 @@ export async function sendContactConfirmation(data: {
 export async function sendApplicationNotification(data: {
   name: string;
   email: string;
-  rate_expectation?: number;
   available_hours?: number;
 }) {
   const name = escapeHtml(data.name);
@@ -82,8 +81,8 @@ export async function sendApplicationNotification(data: {
       <h2>New Teacher Application</h2>
       <p><strong>Name:</strong> ${name}</p>
       <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Expected Rate:</strong> $${data.rate_expectation ?? 0}/hr</p>
       <p><strong>Available Hours:</strong> ${data.available_hours ?? 0} hrs/week</p>
+      <p>All new teachers start at <strong>$7/hr</strong> (platform standard rate).</p>
       <p>Review the full application in the <a href="${SITE()}/admin/submissions">admin dashboard</a>.</p>
     `,
   });
