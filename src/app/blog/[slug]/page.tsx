@@ -63,14 +63,31 @@ export async function generateMetadata({
   };
 }
 
+/** Escape HTML entities to prevent XSS */
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 /** Simple markdown-to-HTML renderer (no external dep needed for MVP) */
 function renderContent(raw: string): string {
-  return raw
+  // Escape HTML first, then apply markdown transforms
+  return escapeHtml(raw)
     .replace(/^## (.+)$/gm, "<h2>$1</h2>")
     .replace(/^### (.+)$/gm, "<h3>$1</h3>")
     .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
     .replace(/\*(.+?)\*/g, "<em>$1</em>")
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, text, url) => {
+      // Only allow http(s) and relative URLs to prevent javascript: injection
+      if (/^(https?:\/\/|\/[^/])/.test(url)) {
+        return `<a href="${url}">${text}</a>`;
+      }
+      return text;
+    })
     .replace(/^---$/gm, "<hr/>")
     .replace(/\n\n/g, "</p><p>")
     .replace(/^/, "<p>")

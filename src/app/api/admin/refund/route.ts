@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { generateReference, generateReceiptNumber } from "@/lib/paystack";
+import { isAdminEmail } from "@/lib/env";
 
 /**
  * Admin-only refund endpoint.
@@ -11,23 +12,11 @@ export async function POST(request: NextRequest) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  // Check if user is admin (you can add an admin check via profile role or email)
-  const admin = await createAdminClient();
-  const { data: profile } = await admin
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single();
-
-  // For now, only teachers or explicit admins can issue refunds
-  // In production, add a proper admin role check
-  if (profile?.role !== "teacher") {
+  if (!user || !isAdminEmail(user.email)) {
     return NextResponse.json({ error: "Admin access required" }, { status: 403 });
   }
+
+  const admin = await createAdminClient();
 
   let body: { lesson_id?: string; reason?: string };
   try {
