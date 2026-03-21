@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
 
 export async function PATCH(req: NextRequest) {
   try {
@@ -12,17 +12,19 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ error: "is_online must be boolean" }, { status: 400 });
     }
 
+    const admin = await createAdminClient();
+
     // Get the teacher record linked to this user
-    const { data: profile } = await supabase
+    const { data: profile } = await admin
       .from("profiles")
-      .select("teachers(id)")
+      .select("teacher_id")
       .eq("id", user.id)
       .single();
 
-    const teacherId = (profile as any)?.teachers?.id;
+    const teacherId = profile?.teacher_id;
     if (!teacherId) return NextResponse.json({ error: "Teacher profile not found" }, { status: 404 });
 
-    const { error } = await supabase
+    const { error } = await admin
       .from("teachers")
       .update({ is_online })
       .eq("id", teacherId);

@@ -3,6 +3,7 @@ import Script from "next/script";
 import { Outfit, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import AuthHashHandler from "@/components/auth/AuthHashHandler";
+import ThemeProvider from "@/components/ThemeProvider";
 
 // Outfit — geometric, modern headings
 const outfit = Outfit({
@@ -101,7 +102,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${outfit.variable} ${plusJakarta.variable}`}>
+    <html lang="en" className={`${outfit.variable} ${plusJakarta.variable}`} suppressHydrationWarning>
       <head>
         {/* Resource hints for Supabase */}
         {SUPABASE_URL && (
@@ -112,6 +113,7 @@ export default function RootLayout({
         )}
       </head>
       <body className="antialiased">
+        <ThemeProvider>
         <AuthHashHandler />
         {children}
 
@@ -127,6 +129,7 @@ export default function RootLayout({
             </Script>
           </>
         )}
+        </ThemeProvider>
       </body>
     </html>
   );

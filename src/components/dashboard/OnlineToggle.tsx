@@ -29,12 +29,12 @@ export default function OnlineToggle({ initialValue }: OnlineToggleProps) {
   }
 
   return (
-    <div className="flex items-center justify-between px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl">
+    <div className="flex items-center justify-between px-3 py-2.5 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl">
       <div className="flex items-center gap-2">
         <span
           className={`h-2 w-2 rounded-full ${isOnline ? "bg-emerald-500 shadow-[0_0_6px_#22c55e]" : "bg-slate-300"}`}
         />
-        <span className={`text-sm font-medium ${isOnline ? "text-emerald-700" : "text-slate-500"}`}>
+        <span className={`text-sm font-medium ${isOnline ? "text-emerald-700 dark:text-emerald-300" : "text-slate-500 dark:text-slate-400"}`}>
           {isOnline ? "Online" : "Offline"}
         </span>
       </div>
@@ -42,7 +42,7 @@ export default function OnlineToggle({ initialValue }: OnlineToggleProps) {
         onClick={toggle}
         disabled={isPending}
         className={`relative inline-flex h-5 w-10 items-center rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
-          isOnline ? "bg-emerald-500" : "bg-slate-200"
+          isOnline ? "bg-emerald-500" : "bg-slate-200 dark:bg-slate-600"
         } ${isPending ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
         role="switch"
         aria-checked={isOnline}

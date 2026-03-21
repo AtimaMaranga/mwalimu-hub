@@ -56,17 +56,17 @@ export default function TransactionHistory() {
   const totalPages = Math.ceil(total / limit);
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-      <div className="flex items-center justify-between px-5 py-4 border-b border-slate-50">
+    <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm overflow-hidden">
+      <div className="flex items-center justify-between px-5 py-4 border-b border-slate-50 dark:border-slate-700">
         <div>
-          <p className="text-sm font-bold text-slate-900">Transaction History</p>
-          <p className="text-xs text-slate-400">{total} transactions</p>
+          <p className="text-sm font-bold text-slate-900 dark:text-white">Transaction History</p>
+          <p className="text-xs text-slate-400 dark:text-slate-500">{total} transactions</p>
         </div>
         <div className="flex items-center gap-2">
           <select
             value={filter}
             onChange={(e) => { setFilter(e.target.value); setPage(1); }}
-            className="text-xs border border-slate-200 rounded-lg px-2 py-1.5 text-slate-600 focus:outline-none focus:ring-1 focus:ring-indigo-300"
+            className="text-xs border border-slate-200 dark:border-slate-600 rounded-lg px-2 py-1.5 text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-700 focus:outline-none focus:ring-1 focus:ring-indigo-300"
           >
             <option value="">All types</option>
             <option value="top_up">Top Ups</option>
@@ -77,26 +77,26 @@ export default function TransactionHistory() {
       </div>
 
       {loading ? (
-        <div className="py-12 text-center text-sm text-slate-400">Loading...</div>
+        <div className="py-12 text-center text-sm text-slate-400 dark:text-slate-500">Loading...</div>
       ) : transactions.length === 0 ? (
         <div className="py-12 text-center">
           <Filter className="h-8 w-8 text-slate-300 mx-auto mb-2" />
-          <p className="text-sm text-slate-500">No transactions yet</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400">No transactions yet</p>
         </div>
       ) : (
         <>
-          <div className="divide-y divide-slate-50">
+          <div className="divide-y divide-slate-50 dark:divide-slate-700">
             {transactions.map((tx) => {
               const config = typeConfig[tx.type] ?? typeConfig.lesson_charge;
               const Icon = config.icon;
               const isPositive = tx.amount > 0;
               return (
-                <div key={tx.id} className="flex items-center gap-3 px-5 py-3.5 hover:bg-slate-50 transition-colors">
+                <div key={tx.id} className="flex items-center gap-3 px-5 py-3.5 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
                   <div className={`h-8 w-8 rounded-lg flex items-center justify-center shrink-0 ${config.color}`}>
                     <Icon className="h-4 w-4" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-slate-800 truncate">
+                    <p className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate">
                       {tx.description || config.label}
                     </p>
                     <p className="text-xs text-slate-400">
@@ -118,7 +118,7 @@ export default function TransactionHistory() {
           </div>
 
           {totalPages > 1 && (
-            <div className="flex items-center justify-between px-5 py-3 border-t border-slate-50">
+            <div className="flex items-center justify-between px-5 py-3 border-t border-slate-50 dark:border-slate-700">
               <button
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
