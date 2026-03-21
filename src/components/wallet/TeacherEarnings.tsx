@@ -71,21 +71,21 @@ export default function TeacherEarnings() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <SummaryCard
           label="Total Earned"
-          value={`KES ${(summary?.total_earned ?? 0).toLocaleString("en-KE", { minimumFractionDigits: 2 })}`}
+          value={`$${(summary?.total_earned ?? 0).toLocaleString("en-US", { minimumFractionDigits: 2 })}`}
           icon={TrendingUp}
           iconBg="bg-emerald-50"
           iconColor="text-emerald-600"
         />
         <SummaryCard
           label="Pending Payout"
-          value={`KES ${(summary?.unpaid_balance ?? 0).toLocaleString("en-KE", { minimumFractionDigits: 2 })}`}
+          value={`$${(summary?.unpaid_balance ?? 0).toLocaleString("en-US", { minimumFractionDigits: 2 })}`}
           icon={Clock}
           iconBg="bg-amber-50"
           iconColor="text-amber-600"
         />
         <SummaryCard
           label="Already Paid"
-          value={`KES ${(summary?.paid_amount ?? 0).toLocaleString("en-KE", { minimumFractionDigits: 2 })}`}
+          value={`$${(summary?.paid_amount ?? 0).toLocaleString("en-US", { minimumFractionDigits: 2 })}`}
           icon={CheckCircle}
           iconBg="bg-blue-50"
           iconColor="text-blue-600"
@@ -165,7 +165,7 @@ export default function TeacherEarnings() {
                   </div>
                   <div className="text-right">
                     <p className="text-sm font-bold text-emerald-600">
-                      +KES {Number(e.amount).toLocaleString("en-KE", { minimumFractionDigits: 2 })}
+                      +${Number(e.amount).toLocaleString("en-US", { minimumFractionDigits: 2 })}
                     </p>
                     <p className={`text-xs font-medium ${
                       e.status === "paid" ? "text-emerald-500" : "text-amber-500"
@@ -206,7 +206,7 @@ export default function TeacherEarnings() {
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-bold text-slate-800">
-                    KES {Number(p.amount).toLocaleString("en-KE", { minimumFractionDigits: 2 })}
+                    ${Number(p.amount).toLocaleString("en-US", { minimumFractionDigits: 2 })}
                   </p>
                   <p className={`text-xs font-medium ${
                     p.status === "completed" ? "text-emerald-500" : p.status === "failed" ? "text-red-500" : "text-amber-500"

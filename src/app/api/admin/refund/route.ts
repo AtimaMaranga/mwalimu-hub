@@ -100,7 +100,7 @@ export async function POST(request: NextRequest) {
     receipt_number: generateReceiptNumber("refund"),
     type: "refund",
     amount: refundAmount,
-    currency: "KES",
+    currency: "USD",
     description: `Refund — ${body.reason || "Lesson refund"}`,
   });
 

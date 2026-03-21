@@ -53,7 +53,7 @@ export default function WalletCard() {
             </div>
             <p className="text-sm font-semibold text-indigo-100">My Wallet</p>
           </div>
-          <span className="text-xs bg-white/20 px-2 py-0.5 rounded-full">KES</span>
+          <span className="text-xs bg-white/20 px-2 py-0.5 rounded-full">USD</span>
         </div>
 
         {showSuccess && (
@@ -64,7 +64,7 @@ export default function WalletCard() {
         )}
 
         <p className="text-3xl font-bold mb-1">
-          {loading ? "—" : `KES ${(balance ?? 0).toLocaleString("en-KE", { minimumFractionDigits: 2 })}`}
+          {loading ? "—" : `$${(balance ?? 0).toLocaleString("en-US", { minimumFractionDigits: 2 })}`}
         </p>
         <p className="text-indigo-200 text-xs mb-4">Available balance</p>
 

@@ -21,10 +21,10 @@ export async function POST(request: NextRequest) {
 
   const amount = Number(body.amount);
 
-  // Validate amount: KES 100 – KES 50,000
-  if (!amount || !Number.isFinite(amount) || amount < 100 || amount > 50000) {
+  // Validate amount: $5 – $500
+  if (!amount || !Number.isFinite(amount) || amount < 5 || amount > 500) {
     return NextResponse.json(
-      { error: "Invalid amount (KES 100 – KES 50,000)" },
+      { error: "Invalid amount ($5 – $500)" },
       { status: 400 }
     );
   }
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
     user_id: user.id,
     reference,
     amount: roundedAmount,
-    currency: "KES",
+    currency: "USD",
     status: "pending",
   });
 
@@ -51,9 +51,9 @@ export async function POST(request: NextRequest) {
     // Initialize Paystack transaction (amount in kobo/cents)
     const paystackData = await initializeTransaction({
       email: user.email!,
-      amount: Math.round(roundedAmount * 100), // KES → cents
+      amount: Math.round(roundedAmount * 100), // USD → cents
       reference,
-      currency: "KES",
+      currency: "USD",
       callback_url: `${BASE}/dashboard/student?payment=success`,
       metadata: {
         user_id: user.id,

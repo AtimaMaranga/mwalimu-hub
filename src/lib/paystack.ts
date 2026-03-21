@@ -15,7 +15,7 @@ export function verifyWebhookSignature(body: string, signature: string): boolean
 /** Initialize a Paystack transaction */
 export async function initializeTransaction(params: {
   email: string;
-  amount: number; // in kobo (smallest unit)
+  amount: number; // in smallest unit (cents)
   reference: string;
   currency?: string;
   callback_url?: string;
@@ -31,7 +31,7 @@ export async function initializeTransaction(params: {
       email: params.email,
       amount: params.amount,
       reference: params.reference,
-      currency: params.currency || "KES",
+      currency: params.currency || "USD",
       callback_url: params.callback_url,
       metadata: params.metadata,
     }),
@@ -89,7 +89,7 @@ export async function createTransferRecipient(params: {
       name: params.name,
       account_number: params.account_number,
       bank_code: params.bank_code,
-      currency: params.currency || "KES",
+      currency: params.currency || "USD",
     }),
   });
 
@@ -102,7 +102,7 @@ export async function createTransferRecipient(params: {
 
 /** Initiate a Paystack transfer (payout) */
 export async function initiateTransfer(params: {
-  amount: number; // in kobo
+  amount: number; // in cents
   recipient: string; // recipient_code
   reason: string;
   reference: string;

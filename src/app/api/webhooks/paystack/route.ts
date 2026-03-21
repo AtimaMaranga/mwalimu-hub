@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     const data = event.data;
     const reference = data.reference as string;
     const amountInCents = data.amount as number;
-    const amount = amountInCents / 100; // Convert from kobo/cents to KES
+    const amount = amountInCents / 100; // Convert from cents to USD
 
     // Look up the payment reference
     const { data: payRef } = await admin
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
     if (!wallet) {
       const { data: newWallet } = await admin
         .from("wallets")
-        .insert({ user_id: payRef.user_id, balance: 0, currency: "KES" })
+        .insert({ user_id: payRef.user_id, balance: 0, currency: "USD" })
         .select()
         .single();
       wallet = newWallet;
@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
       wallet_id: wallet.id,
       amount: roundedAmount,
       type: "top_up",
-      description: `Wallet top-up via Paystack (KES ${roundedAmount.toFixed(2)})`,
+      description: `Wallet top-up via Paystack ($${roundedAmount.toFixed(2)})`,
       reference,
       payment_provider: "paystack",
       provider_reference: data.id?.toString(),
@@ -117,8 +117,8 @@ export async function POST(request: NextRequest) {
       receipt_number: generateReceiptNumber("top_up"),
       type: "top_up",
       amount: roundedAmount,
-      currency: "KES",
-      description: `Wallet top-up - KES ${roundedAmount.toFixed(2)}`,
+      currency: "USD",
+      description: `Wallet top-up - $${roundedAmount.toFixed(2)}`,
     });
   }
 

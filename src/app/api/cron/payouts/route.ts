@@ -70,8 +70,8 @@ export async function POST(request: NextRequest) {
   let payoutsCreated = 0;
 
   for (const [teacherId, { total, earningIds }] of Object.entries(teacherTotals)) {
-    // Minimum payout threshold: KES 500
-    if (total < 500) continue;
+    // Minimum payout threshold: $5
+    if (total < 5) continue;
 
     const reference = generateReference("PAY");
 
@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
       .insert({
         teacher_id: teacherId,
         amount: Math.round(total * 100) / 100,
-        currency: "KES",
+        currency: "USD",
         status: "pending",
         payout_period_start: periodStartStr,
         payout_period_end: periodEndStr,
@@ -122,7 +122,7 @@ export async function POST(request: NextRequest) {
           receipt_number: generateReceiptNumber("payout"),
           type: "payout",
           amount: Math.round(total * 100) / 100,
-          currency: "KES",
+          currency: "USD",
           description: `Payout for period ${periodStartStr} to ${periodEndStr}`,
         });
       }

@@ -146,7 +146,7 @@ export async function PATCH(
         receipt_number: generateReceiptNumber("lesson_charge"),
         type: "lesson_charge",
         amount: totalCharged,
-        currency: "KES",
+        currency: "USD",
         description: `Lesson charge — ${Math.ceil(actualDurationSeconds / 60)} minutes`,
       });
     }

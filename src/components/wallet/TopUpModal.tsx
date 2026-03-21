@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { X, CreditCard, Smartphone, Building2, Loader2 } from "lucide-react";
 
-const PRESET_AMOUNTS = [500, 1000, 2500, 5000]; // KES
+const PRESET_AMOUNTS = [10, 25, 50, 100]; // USD
 
 interface TopUpModalProps {
   onClose: () => void;
@@ -11,7 +11,7 @@ interface TopUpModalProps {
 }
 
 export default function TopUpModal({ onClose }: TopUpModalProps) {
-  const [amount, setAmount] = useState<number>(1000);
+  const [amount, setAmount] = useState<number>(25);
   const [customAmount, setCustomAmount] = useState("");
   const [isCustom, setIsCustom] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -20,12 +20,12 @@ export default function TopUpModal({ onClose }: TopUpModalProps) {
   const effectiveAmount = isCustom ? Number(customAmount) || 0 : amount;
 
   const handlePay = async () => {
-    if (effectiveAmount < 100) {
-      setError("Minimum amount is KES 100");
+    if (effectiveAmount < 5) {
+      setError("Minimum amount is $5");
       return;
     }
-    if (effectiveAmount > 50000) {
-      setError("Maximum amount is KES 50,000");
+    if (effectiveAmount > 500) {
+      setError("Maximum amount is $500");
       return;
     }
 
@@ -88,7 +88,7 @@ export default function TopUpModal({ onClose }: TopUpModalProps) {
                   : "bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200"
               }`}
             >
-              KES {preset.toLocaleString()}
+              ${preset.toLocaleString()}
             </button>
           ))}
         </div>
@@ -103,11 +103,11 @@ export default function TopUpModal({ onClose }: TopUpModalProps) {
           </button>
           {isCustom && (
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold text-sm">KES</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold text-sm">$</span>
               <input
                 type="number"
-                min="100"
-                max="50000"
+                min="5"
+                max="500"
                 step="1"
                 value={customAmount}
                 onChange={(e) => { setCustomAmount(e.target.value); setError(""); }}
@@ -141,7 +141,7 @@ export default function TopUpModal({ onClose }: TopUpModalProps) {
 
         <button
           onClick={handlePay}
-          disabled={loading || effectiveAmount < 100}
+          disabled={loading || effectiveAmount < 5}
           className="w-full bg-indigo-600 text-white font-semibold py-3 rounded-xl hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
         >
           {loading ? (
@@ -150,7 +150,7 @@ export default function TopUpModal({ onClose }: TopUpModalProps) {
               Redirecting to payment...
             </>
           ) : (
-            `Pay KES ${effectiveAmount.toLocaleString()}`
+            `Pay $${effectiveAmount.toLocaleString()}`
           )}
         </button>
 

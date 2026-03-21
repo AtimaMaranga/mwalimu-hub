@@ -57,7 +57,7 @@ export async function GET() {
     lesson_id: e.lesson_id,
     student_id: e.student_id,
     amount: Number(e.net_amount),
-    currency: "KES",
+    currency: "USD",
     status: e.status,
     created_at: e.created_at,
   }));

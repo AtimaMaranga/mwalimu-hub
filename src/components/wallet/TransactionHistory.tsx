@@ -110,7 +110,7 @@ export default function TransactionHistory() {
                     </p>
                   </div>
                   <p className={`text-sm font-bold ${isPositive ? "text-emerald-600" : "text-red-600"}`}>
-                    {isPositive ? "+" : ""}KES {Math.abs(tx.amount).toLocaleString("en-KE", { minimumFractionDigits: 2 })}
+                    {isPositive ? "+" : ""}${Math.abs(tx.amount).toLocaleString("en-US", { minimumFractionDigits: 2 })}
                   </p>
                 </div>
               );
